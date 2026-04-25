@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="See every modification on this vehicle — BuildBio">
+  <title>2019 Toyota 4Runner TRD Pro — BuildBio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #D85A30;
+      --olive: #5C6B3A;
+      --olive-light: #7A8C50;
+      --black: #000000;
+      --dark: #0D0D0D;
+      --card: #1A1A1A;
+      --border: #3A3A3A;
+      --text: #ffffff;
+      --text-muted: #B4B2A9;
+      --blue: #378ADD;
+      --green: #1D9E75;
+      --red: #E24B4A;
+      --max-width: 1200px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--black);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.5;
+      padding-bottom: 88px;
+    }
+
+    /* ─── NAV ─── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--dark);
+      border-bottom: 1px solid var(--border);
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+    }
+
+    .logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      line-height: 1;
+      text-decoration: none;
+    }
+    .logo .b-build { color: var(--orange); }
+    .logo .b-bio   { color: var(--olive-light); }
+
+    .nav-right { display: flex; align-items: center; gap: 14px; }
+
+    .nav-link {
+      color: var(--text-muted);
+      font-size: 13px;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-link:hover { color: var(--text); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      text-decoration: none;
+    }
+    .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    .btn-primary { background: var(--orange); color: #fff; font-size: 13px; padding: 8px 18px; }
+    .btn-ghost   { background: transparent; color: var(--text-muted); border: 1px solid var(--border); font-size: 13px; padding: 8px 18px; }
+    .btn-ghost:hover { border-color: var(--orange); color: var(--text); }
+
+    /* ─── HERO ─── */
+    .hero {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 32px 28px;
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .hero-photo {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-photo-placeholder {
+      color: var(--text-muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-family: 'DM Sans', sans-serif;
+      display: inline-block;
+    }
+    .badge-verified { background: var(--blue);  color: #fff; }
+    .badge-founder  { background: var(--green); color: #fff; }
+
+    .vehicle-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 1.1;
+      letter-spacing: 0.4px;
+      margin-bottom: 4px;
+    }
+    .vehicle-nick {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .owner-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .owner-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+    .owner-name { color: var(--text-muted); font-size: 13px; }
+
+    .stats-row {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+    .stat { text-align: center; }
+    .stat-n {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+    .stat-l { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .accuracy {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--card);
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+    .acc-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      flex-shrink: 0;
+    }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    /* ─── MODIFICATIONS ─── */
+    .mods-section {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 28px 28px 0;
+    }
+
+    .mods-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .mods-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .mods-count { font-size: 13px; color: var(--text-muted); }
+
+    .cat-label {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--olive-light);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+      margin-top: 24px;
+    }
+    .cat-label:first-of-type { margin-top: 0; }
+
+    .mod-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 8px;
+      transition: border-color 0.15s;
+    }
+    .mod-card:hover { border-color: #5A5A5A; }
+
+    .mod-name  { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 3px; }
+    .mod-brand { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+    .mod-spec  { font-size: 12px; color: var(--text-muted); line-height: 1.65; margin-bottom: 12px; }
+
+    .mod-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .stars-row { display: flex; align-items: center; gap: 2px; }
+    .star {
+      width: 11px;
+      height: 11px;
+      background: var(--orange);
+      border-radius: 2px;
+    }
+    .star.empty { background: var(--border); }
+    .review-count { font-size: 11px; color: var(--text-muted); margin-left: 5px; }
+
+    .mod-actions { display: flex; gap: 6px; }
+    .mod-btn {
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--olive);
+      color: var(--olive-light);
+      background: transparent;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.15s, color 0.15s;
+    }
+    .mod-btn:hover { background: rgba(92,107,58,0.15); color: #fff; }
+
+    /* ─── SOCIAL ─── */
+    .social-section {
+      max-width: var(--max-width);
+      margin: 28px auto 0;
+      padding: 20px 28px;
+      border-top: 1px solid var(--border);
+    }
+    .social-label { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+    .social-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .social-pill {
+      font-size: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 14px;
+      color: #fff;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.15s;
+    }
+    .social-pill:hover { border-color: var(--orange); }
+
+    /* ─── STICKY BAR ─── */
+    .sticky-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 100;
+    }
+    .sticky-text { font-size: 13px; color: var(--text-muted); }
+    .sticky-btn {
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: opacity 0.15s;
+    }
+    .sticky-btn:hover { opacity: 0.88; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .nav { padding: 0 16px; }
+      .nav-link { display: none; }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 20px 16px;
+        gap: 20px;
+      }
+
+      .vehicle-name { font-size: 24px; }
+      .stats-row { gap: 16px; }
+
+      .mods-section { padding: 20px 16px 0; }
+      .social-section { padding: 16px; }
+
+      .sticky-bar {
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 16px;
+      }
+      .sticky-text { font-size: 12px; text-align: center; }
+      .sticky-btn { width: 100%; }
+
+      .mod-bottom { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="/" class="logo">
+      <span class="b-build">BUILD</span><span class="b-bio">BIO</span>
+    </a>
+    <div class="nav-right">
+      <a href="/login" class="nav-link">Log in</a>
+      <a href="/signup" class="btn btn-primary">Create free profile</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-photo">
+      <div class="hero-photo-placeholder">Vehicle photo</div>
+    </div>
+    <div>
+      <div class="badge-row">
+        <span class="badge badge-verified">Verified Build</span>
+        <span class="badge badge-founder">Founder Premium</span>
+      </div>
+      <div class="vehicle-name">2019 Toyota 4Runner TRD Pro</div>
+      <div class="vehicle-nick">Desert Rat</div>
+      <div class="owner-row">
+        <div class="owner-avatar">BK</div>
+        <span class="owner-name">by Blakeley K. &middot; Westlake Village, CA</span>
+      </div>
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-n">24</div>
+          <div class="stat-l">Mods</div>
+        </div>
+        <div class="stat">
+          <div class="stat-n">1,847</div>
+          <div class="stat-l">Scans</div>
+        </div>
+        <div class="stat">
+          <div class="stat-n">4.8</div>
+          <div class="stat-l">Rating</div>
+        </div>
+      </div>
+      <div class="accuracy">
+        <div class="acc-dot"></div>
+        Last confirmed accurate: April 22, 2026
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- MODIFICATIONS -->
+  <section class="mods-section">
+    <div class="mods-header">
+      <div class="mods-title">Modifications</div>
+      <div class="mods-count">24 parts listed</div>
+    </div>
+
+    <div class="cat-label">Suspension</div>
+
+    <div class="mod-card">
+      <div class="mod-name">Fox 2.5 Performance Elite Coilovers</div>
+      <div class="mod-brand">Fox Racing Shox &middot; Part #883-02-144</div>
+      <div class="mod-spec">3-inch lift. Remote reservoir. Adjustable compression and rebound. Compatible with TRD Pro front knuckles. Installed at Alpha Auto Haus, Thousand Oaks CA.</div>
+      <div class="mod-bottom">
+        <div class="stars-row">
+          <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+          <span class="review-count">12 reviews</span>
+        </div>
+        <div class="mod-actions">
+          <button class="mod-btn">Leave a review</button>
+          <button class="mod-btn">View specs</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mod-card">
+      <div class="mod-name">Icon Vehicle Dynamics UCAs</div>
+      <div class="mod-brand">Icon Vehicle Dynamics &middot; TUBULAR-857-1</div>
+      <div class="mod-spec">Upper control arms for increased caster and improved alignment geometry. Boxed steel construction with Heim joint ends.</div>
+      <div class="mod-bottom">
+        <div class="stars-row">
+          <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star empty"></div>
+          <span class="review-count">7 reviews</span>
+        </div>
+        <div class="mod-actions">
+          <button class="mod-btn">Leave a review</button>
+          <button class="mod-btn">View specs</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-label">Wheels &amp; Tires</div>
+
+    <div class="mod-card">
+      <div class="mod-name">Nitto Ridge Grappler 275/70R17</div>
+      <div class="mod-brand">Nitto Tire &middot; 217-280</div>
+      <div class="mod-spec">Hybrid terrain tire. 3-ply sidewall. Load range E. DOT-compliant for all-weather use. 60,000 mile treadwear warranty.</div>
+      <div class="mod-bottom">
+        <div class="stars-row">
+          <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+          <span class="review-count">31 reviews</span>
+        </div>
+        <div class="mod-actions">
+          <button class="mod-btn">Leave a review</button>
+          <button class="mod-btn">View specs</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-label">Lighting</div>
+
+    <div class="mod-card">
+      <div class="mod-name">Baja Designs LP6 Pro LED Light Bar</div>
+      <div class="mod-brand">Baja Designs &middot; 381013</div>
+      <div class="mod-spec">10-inch dual row LED. 10,680 raw lumens. Spot/combo beam. IP68 waterproof. Wiring harness and relay included.</div>
+      <div class="mod-bottom">
+        <div class="stars-row">
+          <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star empty"></div>
+          <span class="review-count">18 reviews</span>
+        </div>
+        <div class="mod-actions">
+          <button class="mod-btn">Leave a review</button>
+          <button class="mod-btn">View specs</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cat-label">Exterior</div>
+
+    <div class="mod-card">
+      <div class="mod-name">ARB Deluxe Bull Bar</div>
+      <div class="mod-brand">ARB 4x4 Accessories &middot; 3423140</div>
+      <div class="mod-spec">Heavy-duty steel bull bar with integrated fog light provisions and winch mount compatibility. Powder-coated matte black. Includes airbag compatibility module.</div>
+      <div class="mod-bottom">
+        <div class="stars-row">
+          <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+          <span class="review-count">9 reviews</span>
+        </div>
+        <div class="mod-actions">
+          <button class="mod-btn">Leave a review</button>
+          <button class="mod-btn">View specs</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL -->
+  <section class="social-section">
+    <div class="social-label">Find Blakeley on</div>
+    <div class="social-pills">
+      <a href="#" class="social-pill">Instagram</a>
+      <a href="#" class="social-pill">YouTube</a>
+      <a href="#" class="social-pill">TikTok</a>
+    </div>
+  </section>
+
+  <!-- STICKY BAR -->
+  <div class="sticky-bar">
+    <span class="sticky-text">Create your own BuildBio profile &mdash; it's free</span>
+    <a href="/signup" class="sticky-btn">Create free profile</a>
+  </div>
+
+</body>
+</html>
