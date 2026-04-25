@@ -1,0 +1,103 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);padding:16px}
+.hdr{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+.sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:16px}
+.progress-text{font-size:11px;color:var(--color-text-secondary);margin-bottom:6px}
+.progress-bar{height:4px;background:var(--color-background-tertiary);border-radius:2px;margin-bottom:16px;overflow:hidden}
+.progress-fill{height:100%;background:#D85A30;border-radius:2px;transition:width 0.3s}
+.section-label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-secondary);font-weight:500;margin:14px 0 6px}
+.task-list{display:flex;flex-direction:column;gap:6px}
+.task-item{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border:0.5px solid var(--color-border-tertiary);border-radius:8px;background:var(--color-background-primary);cursor:pointer}
+.task-item:hover{background:var(--color-background-secondary)}
+.task-item.done{opacity:0.5}
+.task-item.done .task-text{text-decoration:line-through;color:var(--color-text-secondary)}
+.checkbox{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.checkbox.checked{background:#D85A30;border-color:#D85A30}
+.checkmark{font-size:11px;color:#fff;font-weight:700}
+.task-text{font-size:13px;color:var(--color-text-primary);line-height:1.5}
+.task-note{font-size:11px;color:var(--color-text-secondary);margin-top:3px;line-height:1.5}
+.badge{font-size:10px;background:#D85A30;color:#fff;padding:1px 7px;border-radius:10px;margin-right:6px;font-weight:500}
+.code{font-family:monospace;font-size:11px;background:var(--color-background-secondary);padding:2px 6px;border-radius:4px;border:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary)}
+.done-msg{display:none;margin-top:16px;padding:12px;background:#E1F5EE;border-radius:8px;font-size:13px;color:#085041;font-weight:500}
+</style>
+<div>
+  <div class="hdr">Deploy vehicle-profile.html to Vercel</div>
+  <div class="sub">No terminal needed — done entirely in the GitHub web editor</div>
+  <div class="progress-text" id="pt">0 of 7 done</div>
+  <div class="progress-bar"><div class="progress-fill" id="pf" style="width:0%"></div></div>
+
+  <div class="section-label">Step 1 — Download the file from Claude</div>
+  <div class="task-list">
+    <div class="task-item" onclick="toggle(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div>
+        <div class="task-text"><span class="badge">1</span>Download the vehicle-profile.html file Claude just generated</div>
+        <div class="task-note">Click the download button on the file above. Save it somewhere easy to find — Desktop is fine.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Step 2 — Add it to GitHub (web editor, no terminal)</div>
+  <div class="task-list">
+    <div class="task-item" onclick="toggle(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div>
+        <div class="task-text"><span class="badge">2</span>Go to github.com/BuildBioFounder/buildbio</div>
+        <div class="task-note">Your repository homepage</div>
+      </div>
+    </div>
+    <div class="task-item" onclick="toggle(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div>
+        <div class="task-text"><span class="badge">3</span>Click "Add file" → "Upload files"</div>
+        <div class="task-note">Button is near the top right of the file list, next to the green "Code" button</div>
+      </div>
+    </div>
+    <div class="task-item" onclick="toggle(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div>
+        <div class="task-text"><span class="badge">4</span>Drag vehicle-profile.html into the upload area (or click to browse)</div>
+      </div>
+    </div>
+    <div class="task-item" onclick="toggle(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div>
+        <div class="task-text"><span class="badge">5</span>Scroll down → click "Commit changes"</div>
+        <div class="task-note">Leave the commit message as default. This is the equivalent of "Save" — it triggers Vercel to auto-deploy.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Step 3 — Watch it go live</div>
+  <div class="task-list">
+    <div class="task-item" onclick="toggle(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div>
+        <div class="task-text"><span class="badge">6</span>Go to vercel.com → your BuildBio project → watch the deployment run (takes ~30 seconds)</div>
+        <div class="task-note">You'll see a spinning indicator, then a green checkmark when it's live</div>
+      </div>
+    </div>
+    <div class="task-item" onclick="toggle(this)">
+      <div class="checkbox"><span class="checkmark">✓</span></div>
+      <div>
+        <div class="task-text"><span class="badge">7</span>Visit https://buildbio-mu.vercel.app/vehicle-profile.html</div>
+        <div class="task-note">Your vehicle profile page is live on the internet. Tell Claude what you see.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="done-msg" id="dm">🚗 Vehicle profile page is LIVE! Tell Claude the URL and we move to building the landing page.</div>
+</div>
+<script>
+function toggle(el){
+  el.classList.toggle('done');
+  el.querySelector('.checkbox').classList.toggle('checked');
+  const done=document.querySelectorAll('.task-item.done').length;
+  const total=document.querySelectorAll('.task-item').length;
+  document.getElementById('pf').style.width=Math.round(done/total*100)+'%';
+  document.getElementById('pt').textContent=done+' of '+total+' done';
+  document.getElementById('dm').style.display=done===total?'block':'none';
+}
+</script>
