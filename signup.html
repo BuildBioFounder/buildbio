@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Your Account — BuildBio</title>
+  <meta name="description" content="Join BuildBio. Document every mod. Earn when others buy. Your Aftermarket Blueprint." />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+
+  <!-- Fonts: Bebas Neue (display, automotive condensed) + JetBrains Mono (technical/blueprint feel) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Supabase JS SDK v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --bb-orange: #E85D2C;
+      --bb-orange-hover: #FF6E3D;
+      --bb-olive: #6B7A3E;
+      --bb-black: #0A0A0A;
+      --bb-charcoal: #141414;
+      --bb-graphite: #1C1C1C;
+      --bb-line: #2A2A2A;
+      --bb-text: #F5F5F5;
+      --bb-text-dim: #8A8A8A;
+      --bb-text-faint: #555;
+      --bb-error: #FF4444;
+      --bb-success: #6FB867;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bb-black);
+      color: var(--bb-text);
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Blueprint grid background — subtle, evokes "Your Aftermarket Blueprint" */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(232, 93, 44, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232, 93, 44, 0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    /* LEFT: brand panel */
+    .brand-panel {
+      background: var(--bb-charcoal);
+      padding: 48px 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid var(--bb-line);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-panel::after {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(232, 93, 44, 0.12), transparent 70%);
+      pointer-events: none;
+    }
+
+    .logo-block {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logo-mark {
+      width: 56px;
+      height: 56px;
+      position: relative;
+    }
+
+    .logo-mark .b-back {
+      position: absolute;
+      inset: 0;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 64px;
+      color: var(--bb-olive);
+      line-height: 1;
+      transform: translate(6px, 4px);
+    }
+
+    .logo-mark .b-front {
+      position: absolute;
+      inset: 0;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 64px;
+      color: var(--bb-orange);
+      line-height: 1;
+    }
+
+    .logo-wordmark {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 2px;
+      color: var(--bb-text);
+    }
+
+    .hero-block {
+      position: relative;
+      z-index: 2;
+      max-width: 460px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: var(--bb-orange);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      font-weight: 700;
+    }
+
+    .hero-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 5vw, 76px);
+      line-height: 0.92;
+      letter-spacing: 1px;
+      margin-bottom: 28px;
+    }
+
+    .hero-headline .accent {
+      color: var(--bb-orange);
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--bb-text-dim);
+      margin-bottom: 36px;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 13px;
+      color: var(--bb-text);
+    }
+
+    .feature-list .chk {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid var(--bb-orange);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--bb-orange);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .brand-foot {
+      position: relative;
+      z-index: 2;
+      font-size: 11px;
+      color: var(--bb-text-faint);
+      letter-spacing: 1px;
+    }
+
+    /* RIGHT: form panel */
+    .form-panel {
+      padding: 56px 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .form-wrapper {
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .form-header {
+      margin-bottom: 36px;
+    }
+
+    .form-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 42px;
+      letter-spacing: 1px;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .form-sub {
+      font-size: 13px;
+      color: var(--bb-text-dim);
+    }
+
+    .form-sub a {
+      color: var(--bb-orange);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+
+    .form-sub a:hover { border-bottom-color: var(--bb-orange); }
+
+    .free-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: rgba(111, 184, 103, 0.08);
+      border: 1px solid rgba(111, 184, 103, 0.3);
+      color: var(--bb-success);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    .free-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--bb-success);
+      box-shadow: 0 0 8px var(--bb-success);
+    }
+
+    .field-group { margin-bottom: 20px; }
+
+    .field-label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--bb-text-dim);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .field-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--bb-graphite);
+      border: 1px solid var(--bb-line);
+      color: var(--bb-text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .field-input:focus {
+      outline: none;
+      border-color: var(--bb-orange);
+      background: var(--bb-charcoal);
+    }
+
+    .field-input::placeholder { color: var(--bb-text-faint); }
+
+    .field-hint {
+      font-size: 11px;
+      color: var(--bb-text-faint);
+      margin-top: 6px;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 24px 0;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--bb-text-dim);
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: var(--bb-orange);
+      cursor: pointer;
+    }
+
+    .checkbox-row a {
+      color: var(--bb-orange);
+      text-decoration: none;
+    }
+
+    .checkbox-row a:hover { text-decoration: underline; }
+
+    .btn-primary {
+      width: 100%;
+      padding: 16px;
+      background: var(--bb-orange);
+      color: var(--bb-black);
+      border: none;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--bb-orange-hover);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .status-msg {
+      margin-top: 16px;
+      padding: 12px 14px;
+      font-size: 12px;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .status-msg.error {
+      display: block;
+      background: rgba(255, 68, 68, 0.08);
+      border-left: 3px solid var(--bb-error);
+      color: var(--bb-error);
+    }
+
+    .status-msg.success {
+      display: block;
+      background: rgba(111, 184, 103, 0.08);
+      border-left: 3px solid var(--bb-success);
+      color: var(--bb-success);
+    }
+
+    .footer-links {
+      margin-top: 32px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--bb-text-faint);
+      letter-spacing: 1px;
+    }
+
+    .footer-links a {
+      color: var(--bb-text-dim);
+      text-decoration: none;
+      margin: 0 8px;
+    }
+
+    .footer-links a:hover { color: var(--bb-orange); }
+
+    /* Mobile */
+    @media (max-width: 900px) {
+      .container { grid-template-columns: 1fr; }
+      .brand-panel {
+        padding: 32px;
+        min-height: auto;
+      }
+      .hero-headline { font-size: 44px; }
+      .form-panel { padding: 32px; }
+      .feature-list { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- LEFT: brand -->
+    <aside class="brand-panel">
+      <div class="logo-block">
+        <div class="logo-mark">
+          <span class="b-back">B</span>
+          <span class="b-front">B</span>
+        </div>
+        <span class="logo-wordmark">BUILDBIO</span>
+      </div>
+
+      <div class="hero-block">
+        <div class="eyebrow">Your Aftermarket Blueprint</div>
+        <h1 class="hero-headline">
+          Every mod.<br/>
+          Every spec.<br/>
+          <span class="accent">One scan.</span>
+        </h1>
+        <p class="hero-sub">
+          The social platform for the modified vehicle community.
+          Document your build, earn revenue when others buy what you ran,
+          and turn every vehicle in the wild into a discovery portal.
+        </p>
+        <ul class="feature-list">
+          <li><span class="chk">&#10003;</span>Free forever — no card required</li>
+          <li><span class="chk">&#10003;</span>Unlimited mods on your first vehicle</li>
+          <li><span class="chk">&#10003;</span>QR sticker delivered to your door</li>
+          <li><span class="chk">&#10003;</span>Earn affiliate revenue on every scan</li>
+        </ul>
+      </div>
+
+      <div class="brand-foot">
+        WESTLAKE VILLAGE · CA &nbsp;|&nbsp; PRE-LAUNCH
+      </div>
+    </aside>
+
+    <!-- RIGHT: form -->
+    <main class="form-panel">
+      <div class="form-wrapper">
+        <div class="form-header">
+          <div class="free-badge">Free Forever Tier</div>
+          <h2 class="form-title">Create your account</h2>
+          <p class="form-sub">
+            Already have one? <a href="/login.html">Sign in instead</a>
+          </p>
+        </div>
+
+        <form id="signup-form" autocomplete="on" novalidate>
+
+          <div class="field-group">
+            <label class="field-label" for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              class="field-input"
+              placeholder="e.g. tacoma_blake"
+              autocomplete="username"
+              required
+              minlength="3"
+              maxlength="24"
+              pattern="^[a-zA-Z0-9_]+$"
+            />
+            <div class="field-hint">3–24 chars · letters, numbers, underscores</div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="field-input"
+              placeholder="you@domain.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="field-input"
+              placeholder="At least 8 characters"
+              autocomplete="new-password"
+              required
+              minlength="8"
+            />
+            <div class="field-hint">Min 8 chars. Use a passphrase you'll remember.</div>
+          </div>
+
+          <div class="checkbox-row">
+            <input type="checkbox" id="terms" required />
+            <label for="terms">
+              I agree to the <a href="/terms.html" target="_blank">Terms of Service</a>,
+              <a href="/privacy.html" target="_blank">Privacy Policy</a>, and
+              <a href="/affiliate-disclosure.html" target="_blank">Affiliate Disclosure</a>.
+              I understand BuildBio profiles contain peer-submitted information and may include affiliate links.
+            </label>
+          </div>
+
+          <button type="submit" id="submit-btn" class="btn-primary">
+            Create Account
+          </button>
+
+          <div id="status-msg" class="status-msg"></div>
+
+        </form>
+
+        <div class="footer-links">
+          <a href="/">Home</a> · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a> · <a href="/contact.html">Contact</a>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <script>
+    // ====================================================================
+    // BuildBio signup — Supabase Auth integration
+    // ====================================================================
+    // BEFORE PRODUCTION:
+    //   1. Replace SUPABASE_ANON_KEY with the public anon key from
+    //      Supabase Dashboard → Project Settings → API → "anon public" key.
+    //      (Safe to embed — this is the public key, NOT service_role.)
+    //   2. After signup, Supabase will send confirmation email via the
+    //      configured email provider (MailerSend once DKIM is fixed).
+    //   3. On success, user is redirected to /dashboard.html (build pending).
+    // ====================================================================
+
+    const SUPABASE_URL = 'https://bicmwjtkncjkguumbidq.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpY213anRrbmNqa2d1dW1iaWRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMzY3MTYsImV4cCI6MjA5MjkxMjcxNn0.RdLFicGLAoddIfD5IDMNCQ1ocIyoSGEcL9Y9zOzjs_0';
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const form = document.getElementById('signup-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const statusMsg = document.getElementById('status-msg');
+
+    function showStatus(msg, type) {
+      statusMsg.textContent = msg;
+      statusMsg.className = 'status-msg ' + type;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const terms = document.getElementById('terms').checked;
+
+      if (!terms) {
+        showStatus('You must agree to the Terms, Privacy, and Affiliate Disclosure to continue.', 'error');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating...';
+      statusMsg.className = 'status-msg';
+
+      try {
+        // Step 1: check username availability in profiles table
+        const { data: existing, error: checkErr } = await supabaseClient
+          .from('profiles')
+          .select('username')
+          .eq('username', username)
+          .maybeSingle();
+
+        if (checkErr && checkErr.code !== 'PGRST116') {
+          throw new Error('Could not verify username. Try again.');
+        }
+        if (existing) {
+          throw new Error('Username already taken. Pick a different one.');
+        }
+
+        // Step 2: create the auth user
+        const { data, error } = await supabaseClient.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: { username: username },
+            emailRedirectTo: window.location.origin + '/welcome.html'
+          }
+        });
+
+        if (error) throw error;
+
+        // Step 3: success
+        showStatus(
+          'Account created. Check ' + email + ' to confirm your email — then you\'re in.',
+          'success'
+        );
+        form.reset();
+        submitBtn.textContent = 'Check your email';
+
+      } catch (err) {
+        showStatus(err.message || 'Signup failed. Try again.', 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Account';
+      }
+    });
+  </script>
+</body>
+</html>
