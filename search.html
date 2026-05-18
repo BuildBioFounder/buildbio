@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BuildBio Search — Find vehicles, brands, and parts across the BuildBio database.">
+  <title>BuildBio — Search</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-192.png">
+  <link rel="apple-touch-icon" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-192.png">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--orange:#D85A30;--olive:#5C6B3A;--olive-light:#7A8C50;--black:#000;--dark:#0D0D0D;--dark2:#111;--card:#1A1A1A;--border:#2E2E2E;--border-l:#3A3A3A;--text:#fff;--muted:#B4B2A9;--dim:#6B6B6B;--green:#1D9E75;--blue:#378ADD;--max:1160px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--black);color:var(--text);font-size:15px;line-height:1.6;overflow-x:hidden}
+    .container{max-width:var(--max);margin:0 auto;padding:0 28px}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    .fu{animation:fadeUp .7s ease both}
+    .d1{animation-delay:.1s}.d2{animation-delay:.22s}.d3{animation-delay:.36s}
+
+    /* NAV */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .logo{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;letter-spacing:.3px;line-height:1;text-decoration:none;display:flex;align-items:baseline}
+    .logo .BL{font-size:28px;color:var(--orange)}.logo .rb{color:var(--orange)}.logo .BL2{font-size:28px;color:var(--olive-light)}.logo .rb2{color:var(--olive-light)}
+    .nav-r{display:flex;align-items:center;gap:24px}
+    .nl{color:var(--muted);font-size:13px;text-decoration:none;transition:color .15s}.nl:hover{color:var(--text)}
+    .ncta{background:var(--orange);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;transition:opacity .15s,transform .1s;display:inline-flex;align-items:center}.ncta:hover{opacity:.88;transform:translateY(-1px)}
+
+    /* SEARCH HEADER */
+    .search-header{padding:100px 28px 32px;background:var(--dark);border-bottom:1px solid var(--border)}
+    .search-header-inner{max-width:var(--max);margin:0 auto}
+    .search-form{display:flex;gap:10px;max-width:640px}
+    .search-input{flex:1;padding:14px 18px;border-radius:10px;border:1px solid var(--border-l);background:var(--card);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s}
+    .search-input::placeholder{color:var(--dim)}
+    .search-input:focus{border-color:var(--orange)}
+    .search-btn{background:var(--orange);color:#fff;border:none;padding:14px 28px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:opacity .15s;white-space:nowrap}
+    .search-btn:hover{opacity:.88}
+    .search-context{margin-top:16px;font-size:14px;color:var(--muted)}
+    .search-context strong{color:var(--text);font-weight:500}
+    .search-context em{font-style:normal;color:var(--orange)}
+
+    /* FILTER PILLS */
+    .filter-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+    .filter-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid var(--border-l);background:var(--card);color:var(--muted);transition:all .15s}
+    .filter-pill.active{border-color:var(--orange);color:var(--orange);background:rgba(216,90,48,.08)}
+    .filter-pill-remove{cursor:pointer;font-size:14px;line-height:1;opacity:.6;transition:opacity .15s}
+    .filter-pill-remove:hover{opacity:1}
+
+    /* RESULTS */
+    .results-section{max-width:var(--max);margin:0 auto;padding:32px 28px 96px}
+
+    /* RESULT GROUP */
+    .result-group{margin-bottom:40px}
+    .result-group-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+    .result-group-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;color:var(--text)}
+    .result-group-count{font-size:12px;color:var(--dim);background:rgba(255,255,255,.06);padding:2px 10px;border-radius:10px}
+
+    /* VEHICLE CARD */
+    .vehicle-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;margin-bottom:10px;transition:border-color .2s}
+    .vehicle-card:hover{border-color:rgba(216,90,48,.35)}
+    .vehicle-icon{width:44px;height:44px;border-radius:10px;background:rgba(55,138,221,.1);border:1px solid rgba(55,138,221,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px}
+    .vehicle-info{flex:1;min-width:0}
+    .vehicle-name{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;color:var(--text);letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .vehicle-meta{font-size:12px;color:var(--dim);margin-top:2px}
+    .vehicle-link{font-size:12px;color:var(--olive-light);text-decoration:none;flex-shrink:0;transition:color .15s}
+    .vehicle-link:hover{color:var(--orange)}
+
+    /* BRAND CARD (reuse from brands page) */
+    .brand-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;margin-bottom:10px;transition:border-color .2s}
+    .brand-card:hover{border-color:rgba(216,90,48,.35)}
+    .brand-icon{width:44px;height:44px;border-radius:10px;background:rgba(216,90,48,.08);border:1px solid rgba(216,90,48,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+    .brand-icon img{width:100%;height:100%;object-fit:contain;border-radius:8px}
+    .brand-icon .letter-fb{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:var(--orange)}
+    .brand-name-r{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;color:var(--text);letter-spacing:.2px}
+    .brand-desc-r{font-size:12px;color:var(--dim);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:400px}
+    .brand-info-r{flex:1;min-width:0}
+
+    /* PART CARD */
+    .part-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;margin-bottom:10px;transition:border-color .2s}
+    .part-card:hover{border-color:rgba(216,90,48,.35)}
+    .part-icon{width:44px;height:44px;border-radius:10px;background:rgba(122,140,80,.1);border:1px solid rgba(122,140,80,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+    .part-info{flex:1;min-width:0}
+    .part-name-r{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;color:var(--text);letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .part-meta-r{font-size:12px;color:var(--dim);margin-top:2px}
+
+    /* LOADING */
+    .loading{text-align:center;padding:80px 28px}
+    .loading-spinner{width:32px;height:32px;border:3px solid var(--border-l);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading-text{font-size:14px;color:var(--dim)}
+
+    /* EMPTY STATE */
+    .empty-state{text-align:center;padding:80px 28px}
+    .empty-state-icon{font-size:48px;margin-bottom:16px;opacity:.2}
+    .empty-state-title{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;text-transform:uppercase;color:var(--text);margin-bottom:8px}
+    .empty-state-text{font-size:15px;color:var(--dim);max-width:400px;margin:0 auto}
+
+    /* INITIAL STATE (no query yet) */
+    .initial-state{text-align:center;padding:96px 28px}
+    .initial-icon{font-size:56px;margin-bottom:20px;opacity:.15}
+    .initial-title{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;text-transform:uppercase;color:var(--text);margin-bottom:10px}
+    .initial-text{font-size:15px;color:var(--dim);max-width:440px;margin:0 auto 28px}
+    .initial-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .initial-link{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:500;color:var(--muted);border:1px solid var(--border-l);background:var(--card);text-decoration:none;transition:border-color .2s,color .2s}
+    .initial-link:hover{border-color:var(--orange);color:var(--orange)}
+
+    /* FOOTER */
+    .footer{background:var(--dark);border-top:1px solid var(--border);padding:38px 28px}
+    .footer-in{max-width:var(--max);margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+    .fl2{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;text-decoration:none}.fl2 .f1{color:var(--orange)}.fl2 .f2{color:var(--olive-light)}
+    .flinks{display:flex;gap:22px;flex-wrap:wrap}
+    .flink{font-size:13px;color:var(--dim);text-decoration:none;transition:color .15s}.flink:hover{color:var(--muted)}
+    .fcp{font-size:12px;color:var(--dim)}
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      .brand-desc-r{max-width:220px}
+    }
+    @media(max-width:640px){
+      .nav{padding:0 16px}.nav-r .nl{display:none}
+      .search-header{padding:80px 16px 24px}
+      .search-form{flex-direction:column}
+      .results-section{padding:24px 16px 64px}
+      .footer-in{flex-direction:column;align-items:flex-start}
+      .initial-state{padding:64px 16px}
+      .brand-desc-r{max-width:160px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="logo"><span class="BL">B</span><span class="rb">UILD</span><span class="BL2">B</span><span class="rb2">IO</span></a>
+  <div class="nav-r">
+    <a href="/brands.html" class="nl">Brands</a>
+    <a href="/categories.html" class="nl">Categories</a>
+    <a href="/disciplines.html" class="nl">Disciplines</a>
+    <a href="/search.html" class="nl" style="color:var(--text)">Search</a>
+    <a href="/login" class="nl">Log in</a>
+    <a href="/signup" class="ncta">Create Your Free Profile Now!</a>
+  </div>
+</nav>
+
+<!-- SEARCH HEADER -->
+<div class="search-header">
+  <div class="search-header-inner">
+    <form class="search-form" id="searchForm" onsubmit="return handleSearch(event)">
+      <input class="search-input" type="text" id="searchInput" placeholder="Search vehicles, brands, parts..." autocomplete="off">
+      <button class="search-btn" type="submit">Search</button>
+    </form>
+    <div class="search-context" id="searchContext"></div>
+    <div class="filter-pills" id="filterPills"></div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="results-section" id="resultsSection">
+  <div class="initial-state" id="initialState">
+    <div class="initial-icon">&#128269;</div>
+    <div class="initial-title">Search BuildBio</div>
+    <div class="initial-text">Search for vehicles, aftermarket brands, or parts. Or browse by directory.</div>
+    <div class="initial-links">
+      <a href="/brands.html" class="initial-link">Browse Brands</a>
+      <a href="/categories.html" class="initial-link">Browse Categories</a>
+      <a href="/disciplines.html" class="initial-link">Browse Disciplines</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-in">
+    <a href="/" class="fl2"><span class="f1">BUILD</span><span class="f2">BIO</span></a>
+    <div class="flinks">
+      <a href="/brands.html" class="flink">Brands</a>
+      <a href="/categories.html" class="flink">Categories</a>
+      <a href="/disciplines.html" class="flink">Disciplines</a>
+      <a href="/search.html" class="flink">Search</a>
+      <a href="/privacy" class="flink">Privacy</a>
+      <a href="/terms" class="flink">Terms</a>
+    </div>
+    <div class="fcp">&copy; 2026 BuildBio. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://bicmwjtkncjkguumbidq.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpY213anRrbmNqa2d1dW1iaWRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMzY3MTYsImV4cCI6MjA5MjkxMjcxNn0.RdLFicGLAoddIfD5IDMNCQ1ocIyoSGEcL9Y9zOzjs_0';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  // Parse URL params
+  const params = new URLSearchParams(window.location.search);
+  const initQ = params.get('q') || '';
+  const initCategory = params.get('category') || '';
+  const initDiscipline = params.get('discipline') || '';
+
+  // Pre-fill search input
+  if (initQ) {
+    document.getElementById('searchInput').value = initQ;
+  }
+
+  // Auto-run on load if we have params
+  if (initQ || initCategory || initDiscipline) {
+    runSearch(initQ, initCategory, initDiscipline);
+  }
+
+  function handleSearch(e) {
+    e.preventDefault();
+    const q = document.getElementById('searchInput').value.trim();
+    if (!q) return;
+
+    // Update URL
+    const url = new URL(window.location);
+    url.searchParams.set('q', q);
+    url.searchParams.delete('category');
+    url.searchParams.delete('discipline');
+    window.history.pushState({}, '', url);
+
+    runSearch(q, '', '');
+  }
+
+  async function runSearch(q, category, discipline) {
+    const section = document.getElementById('resultsSection');
+    section.innerHTML = '<div class="loading"><div class="loading-spinner"></div><div class="loading-text">Searching...</div></div>';
+
+    // Build context message and filter pills
+    let contextHtml = '';
+    let pillsHtml = '';
+
+    if (q) {
+      contextHtml = 'Results for <strong>"' + escapeHtml(q) + '"</strong>';
+    }
+    if (category) {
+      contextHtml = 'Browsing vehicles in category: <em>' + escapeHtml(category) + '</em>';
+      pillsHtml += '<span class="filter-pill active">Category: ' + escapeHtml(category) + ' <span class="filter-pill-remove" onclick="clearFilter(\'category\')">&times;</span></span>';
+    }
+    if (discipline) {
+      contextHtml = 'Browsing vehicles in discipline: <em>' + escapeHtml(discipline) + '</em>';
+      pillsHtml += '<span class="filter-pill active">Discipline: ' + escapeHtml(discipline) + ' <span class="filter-pill-remove" onclick="clearFilter(\'discipline\')">&times;</span></span>';
+    }
+
+    document.getElementById('searchContext').innerHTML = contextHtml;
+    document.getElementById('filterPills').innerHTML = pillsHtml;
+
+    // Run queries in parallel
+    const results = {};
+
+    if (category) {
+      // Category filter: get vehicles that have mods in this category
+      results.vehicles = await searchVehiclesByCategory(category);
+      results.brands = [];
+      results.parts = [];
+    } else if (discipline) {
+      // Discipline filter: get vehicles with this discipline
+      results.vehicles = await searchVehiclesByDiscipline(discipline);
+      results.brands = [];
+      results.parts = [];
+    } else if (q) {
+      // Free text search across all three
+      const [vehicles, brands, parts] = await Promise.all([
+        searchVehicles(q),
+        searchBrands(q),
+        searchParts(q)
+      ]);
+      results.vehicles = vehicles;
+      results.brands = brands;
+      results.parts = parts;
+    }
+
+    renderResults(results, section);
+  }
+
+  async function searchVehicles(q) {
+    // Search vehicles by year, make, model using ilike
+    const term = '%' + q + '%';
+    const { data, error } = await sb
+      .from('vehicles')
+      .select('id, year, make, model, nickname, slug')
+      .or('make.ilike.' + term + ',model.ilike.' + term + ',year.ilike.' + term + ',nickname.ilike.' + term)
+      .limit(20);
+    return error ? [] : (data || []);
+  }
+
+  async function searchBrands(q) {
+    const term = '%' + q + '%';
+    const { data, error } = await sb
+      .from('brands')
+      .select('id, name, slug, logo_url, description')
+      .ilike('name', term)
+      .limit(20);
+    return error ? [] : (data || []);
+  }
+
+  async function searchParts(q) {
+    const term = '%' + q + '%';
+    const { data, error } = await sb
+      .from('parts')
+      .select('id, name, part_number, brand_id')
+      .ilike('name', term)
+      .limit(20);
+    return error ? [] : (data || []);
+  }
+
+  async function searchVehiclesByCategory(categorySlug) {
+    // First get the category ID
+    const { data: cat } = await sb
+      .from('mod_categories')
+      .select('id, name')
+      .eq('slug', categorySlug)
+      .single();
+
+    if (!cat) return [];
+
+    // Get vehicles that have modifications in this category
+    const { data, error } = await sb
+      .from('modifications')
+      .select('vehicle_id, vehicles(id, year, make, model, nickname, slug)')
+      .eq('category_id', cat.id)
+      .limit(50);
+
+    if (error || !data) return [];
+
+    // Deduplicate by vehicle_id
+    const seen = new Set();
+    const vehicles = [];
+    data.forEach(row => {
+      if (row.vehicles && !seen.has(row.vehicles.id)) {
+        seen.add(row.vehicles.id);
+        vehicles.push(row.vehicles);
+      }
+    });
+    return vehicles;
+  }
+
+  async function searchVehiclesByDiscipline(disciplineSlug) {
+    // First get the discipline ID
+    const { data: disc } = await sb
+      .from('disciplines')
+      .select('id, name')
+      .eq('slug', disciplineSlug)
+      .single();
+
+    if (!disc) return [];
+
+    // Get vehicles with this discipline
+    const { data, error } = await sb
+      .from('vehicle_disciplines')
+      .select('vehicle_id, vehicles(id, year, make, model, nickname, slug)')
+      .eq('discipline_id', disc.id)
+      .limit(50);
+
+    if (error || !data) return [];
+
+    const seen = new Set();
+    const vehicles = [];
+    data.forEach(row => {
+      if (row.vehicles && !seen.has(row.vehicles.id)) {
+        seen.add(row.vehicles.id);
+        vehicles.push(row.vehicles);
+      }
+    });
+    return vehicles;
+  }
+
+  function renderResults(results, section) {
+    const totalCount = (results.vehicles || []).length + (results.brands || []).length + (results.parts || []).length;
+
+    if (totalCount === 0) {
+      section.innerHTML = '<div class="empty-state">'
+        + '<div class="empty-state-icon">&#128269;</div>'
+        + '<div class="empty-state-title">No results found</div>'
+        + '<div class="empty-state-text">Try a different search term, or browse the directories below.</div>'
+        + '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px">'
+        + '<a href="/brands.html" class="initial-link">Browse Brands</a>'
+        + '<a href="/categories.html" class="initial-link">Browse Categories</a>'
+        + '<a href="/disciplines.html" class="initial-link">Browse Disciplines</a>'
+        + '</div></div>';
+      return;
+    }
+
+    let html = '';
+
+    // Vehicles
+    if (results.vehicles && results.vehicles.length > 0) {
+      html += '<div class="result-group">';
+      html += '<div class="result-group-header">'
+        + '<div class="result-group-title">Vehicles</div>'
+        + '<div class="result-group-count">' + results.vehicles.length + '</div>'
+        + '</div>';
+      results.vehicles.forEach(v => {
+        const name = [v.year, v.make, v.model].filter(Boolean).join(' ');
+        const nick = v.nickname ? v.nickname : '';
+        const profileUrl = v.slug ? '/vehicle-profile.html?slug=' + encodeURIComponent(v.slug) : '#';
+        html += '<div class="vehicle-card">'
+          + '<div class="vehicle-icon">&#128663;</div>'
+          + '<div class="vehicle-info">'
+          + '<div class="vehicle-name">' + escapeHtml(name) + '</div>'
+          + (nick ? '<div class="vehicle-meta">' + escapeHtml(nick) + '</div>' : '')
+          + '</div>'
+          + '<a href="' + profileUrl + '" class="vehicle-link">View profile &#8594;</a>'
+          + '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Brands
+    if (results.brands && results.brands.length > 0) {
+      html += '<div class="result-group">';
+      html += '<div class="result-group-header">'
+        + '<div class="result-group-title">Brands</div>'
+        + '<div class="result-group-count">' + results.brands.length + '</div>'
+        + '</div>';
+      results.brands.forEach(b => {
+        const logoHtml = b.logo_url
+          ? '<img src="' + escapeHtml(b.logo_url) + '" alt="' + escapeHtml(b.name) + '" loading="lazy">'
+          : '<span class="letter-fb">' + escapeHtml(b.name.charAt(0)) + '</span>';
+        const desc = b.description ? b.description.substring(0, 80) : '';
+        html += '<div class="brand-card">'
+          + '<div class="brand-icon">' + logoHtml + '</div>'
+          + '<div class="brand-info-r">'
+          + '<div class="brand-name-r">' + escapeHtml(b.name) + '</div>'
+          + (desc ? '<div class="brand-desc-r">' + escapeHtml(desc) + '</div>' : '')
+          + '</div></div>';
+      });
+      html += '</div>';
+    }
+
+    // Parts
+    if (results.parts && results.parts.length > 0) {
+      html += '<div class="result-group">';
+      html += '<div class="result-group-header">'
+        + '<div class="result-group-title">Parts</div>'
+        + '<div class="result-group-count">' + results.parts.length + '</div>'
+        + '</div>';
+      results.parts.forEach(p => {
+        const pn = p.part_number ? 'Part #' + p.part_number : '';
+        html += '<div class="part-card">'
+          + '<div class="part-icon">&#9881;</div>'
+          + '<div class="part-info">'
+          + '<div class="part-name-r">' + escapeHtml(p.name) + '</div>'
+          + (pn ? '<div class="part-meta-r">' + escapeHtml(pn) + '</div>' : '')
+          + '</div></div>';
+      });
+      html += '</div>';
+    }
+
+    section.innerHTML = html;
+  }
+
+  function clearFilter(type) {
+    const url = new URL(window.location);
+    url.searchParams.delete(type);
+    window.history.pushState({}, '', url);
+
+    // Reset to initial state
+    document.getElementById('searchContext').innerHTML = '';
+    document.getElementById('filterPills').innerHTML = '';
+    document.getElementById('resultsSection').innerHTML = document.getElementById('initialState') ? '' : '';
+    location.reload();
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+</script>
+</body>
+</html>

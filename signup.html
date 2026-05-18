@@ -435,6 +435,17 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    /* ─── FIELD HINT ─── */
+    .field-hint {
+      font-size: 11px;
+      margin-top: 4px;
+      min-height: 16px;
+      transition: color 0.2s;
+    }
+    .field-hint.valid { color: var(--olive); }
+    .field-hint.invalid { color: #e05555; }
+    .field-hint.checking { color: var(--text-dim); }
+
     /* ─── HIDDEN PANELS ─── */
     .auth-panel { display: none; }
     .auth-panel.active { display: block; }
@@ -524,6 +535,11 @@
         </div>
 
         <form id="form-signup" novalidate>
+          <div class="field">
+            <label for="signup-username">Username</label>
+            <input type="text" id="signup-username" placeholder="3-24 chars, letters/numbers/underscore" autocomplete="username" maxlength="24">
+            <div class="field-hint" id="username-hint"></div>
+          </div>
           <div class="field">
             <label for="signup-email">Email</label>
             <input type="email" id="signup-email" placeholder="your@email.com" autocomplete="email">
@@ -668,19 +684,56 @@ async function signInWithApple() {
 document.getElementById('btn-apple-signup').addEventListener('click', signInWithApple);
 document.getElementById('btn-apple-login').addEventListener('click', signInWithApple);
 
+// ── Username validation ──
+const usernameRe = /^[a-zA-Z0-9_]{3,24}$/;
+let usernameTimer = null;
+const usernameInput = document.getElementById('signup-username');
+const usernameHint  = document.getElementById('username-hint');
+
+usernameInput.addEventListener('input', () => {
+  const val = usernameInput.value.trim();
+  clearTimeout(usernameTimer);
+  if (!val) { usernameHint.textContent = ''; usernameHint.className = 'field-hint'; return; }
+  if (!usernameRe.test(val)) {
+    usernameHint.textContent = '3-24 characters: letters, numbers, underscore only';
+    usernameHint.className = 'field-hint invalid';
+    return;
+  }
+  usernameHint.textContent = 'Checking availability...';
+  usernameHint.className = 'field-hint checking';
+  usernameTimer = setTimeout(async () => {
+    const { data, error } = await sb.from('profiles').select('username').ilike('username', val).limit(1);
+    if (error) { usernameHint.textContent = ''; return; }
+    if (data.length > 0) {
+      usernameHint.textContent = 'Username taken';
+      usernameHint.className = 'field-hint invalid';
+    } else {
+      usernameHint.textContent = 'Available';
+      usernameHint.className = 'field-hint valid';
+    }
+  }, 400);
+});
+
 // ── Sign Up ──
 document.getElementById('form-signup').addEventListener('submit', async e => {
   e.preventDefault();
   clearMsg();
+  const username = document.getElementById('signup-username').value.trim();
   const email    = document.getElementById('signup-email').value.trim();
   const password = document.getElementById('signup-password').value;
   const btn      = document.getElementById('btn-signup');
 
+  if (!username) return showMsg('Please choose a username.');
+  if (!usernameRe.test(username)) return showMsg('Username must be 3-24 characters: letters, numbers, or underscore.');
   if (!email || !password) return showMsg('Please enter your email and password.');
   if (password.length < 8)  return showMsg('Password must be at least 8 characters.');
 
   setLoading(btn, true);
-  const { data, error } = await sb.auth.signUp({ email, password });
+  const { data, error } = await sb.auth.signUp({
+    email,
+    password,
+    options: { data: { username } }
+  });
   setLoading(btn, false);
 
   if (error) return showMsg(error.message);
@@ -690,6 +743,8 @@ document.getElementById('form-signup').addEventListener('submit', async e => {
   } else {
     showMsg('Check your email to confirm your account, then come back to sign in.', 'success');
     document.getElementById('form-signup').reset();
+    usernameHint.textContent = '';
+    usernameHint.className = 'field-hint';
   }
 });
 

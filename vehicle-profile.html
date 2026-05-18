@@ -4,540 +4,293 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="See every modification on this vehicle — BuildBio">
-  <title>2019 Toyota 4Runner TRD Pro — BuildBio</title>
+  <title id="page-title">Vehicle Profile — BuildBio</title>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-32.png">
   <style>
     :root {
-      --orange: #D85A30;
-      --olive: #5C6B3A;
-      --olive-light: #7A8C50;
-      --black: #000000;
-      --dark: #0D0D0D;
-      --card: #1A1A1A;
-      --border: #3A3A3A;
-      --text: #ffffff;
-      --text-muted: #B4B2A9;
-      --blue: #378ADD;
-      --green: #1D9E75;
-      --red: #E24B4A;
+      --orange: #D85A30; --olive: #5C6B3A; --olive-light: #7A8C50;
+      --black: #000000; --dark: #0D0D0D; --card: #1A1A1A; --border: #3A3A3A;
+      --text: #ffffff; --text-muted: #B4B2A9; --blue: #378ADD; --green: #1D9E75; --red: #E24B4A;
       --max-width: 1200px;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--black); color: var(--text); font-size: 14px; line-height: 1.5; padding-bottom: 88px; }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--black);
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.5;
-      padding-bottom: 88px;
-    }
-
-    /* ─── NAV ─── */
-    .nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--dark);
-      border-bottom: 1px solid var(--border);
-      height: 58px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 28px;
-    }
-
-    .logo {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      line-height: 1;
-      text-decoration: none;
-    }
-    .logo .b-build { color: var(--orange); }
-    .logo .b-bio   { color: var(--olive-light); }
-
+    .nav { position: sticky; top: 0; z-index: 100; background: var(--dark); border-bottom: 1px solid var(--border); height: 58px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; }
+    .logo { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 0.3px; line-height: 1; text-decoration: none; }
+    .logo .b-build { color: var(--orange); } .logo .b-bio { color: var(--olive-light); }
     .nav-right { display: flex; align-items: center; gap: 14px; }
-
-    .nav-link {
-      color: var(--text-muted);
-      font-size: 13px;
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .nav-link:hover { color: var(--text); }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 500;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: opacity 0.15s, transform 0.1s;
-      text-decoration: none;
-    }
+    .nav-link { color: var(--text-muted); font-size: 13px; text-decoration: none; transition: color 0.15s; } .nav-link:hover { color: var(--text); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; font-family: 'DM Sans', sans-serif; font-weight: 500; border: none; border-radius: 8px; cursor: pointer; transition: opacity 0.15s, transform 0.1s; text-decoration: none; }
     .btn:hover { opacity: 0.88; transform: translateY(-1px); }
-    .btn:active { transform: translateY(0); }
-
     .btn-primary { background: var(--orange); color: #fff; font-size: 13px; padding: 8px 18px; }
-    .btn-ghost   { background: transparent; color: var(--text-muted); border: 1px solid var(--border); font-size: 13px; padding: 8px 18px; }
-    .btn-ghost:hover { border-color: var(--orange); color: var(--text); }
+    .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); font-size: 13px; padding: 8px 18px; } .btn-ghost:hover { border-color: var(--orange); color: var(--text); }
 
-    /* ─── HERO ─── */
-    .hero {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 32px 28px;
-      display: grid;
-      grid-template-columns: 2fr 3fr;
-      gap: 28px;
-      align-items: start;
-    }
-
-    .hero-photo {
-      width: 100%;
-      aspect-ratio: 4/3;
-      background: var(--card);
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      position: relative;
-    }
+    .hero { max-width: var(--max-width); margin: 0 auto; padding: 32px 28px; display: grid; grid-template-columns: 2fr 3fr; gap: 28px; align-items: start; }
+    .hero-photo { width: 100%; aspect-ratio: 4/3; background: var(--card); border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; }
     .hero-photo img { width: 100%; height: 100%; object-fit: cover; }
-    .hero-photo-placeholder {
-      color: var(--text-muted);
-      font-size: 13px;
-      text-align: center;
-    }
+    .hero-photo-placeholder { color: var(--text-muted); font-size: 13px; text-align: center; }
 
-    .badge-row {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
+    .badge-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; display: inline-block; }
+    .badge-verified { background: var(--blue); color: #fff; } .badge-founder { background: var(--green); color: #fff; }
 
-    .badge {
-      font-size: 11px;
-      font-weight: 500;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-family: 'DM Sans', sans-serif;
-      display: inline-block;
-    }
-    .badge-verified { background: var(--blue);  color: #fff; }
-    .badge-founder  { background: var(--green); color: #fff; }
-
-    .vehicle-name {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 30px;
-      font-weight: 700;
-      text-transform: uppercase;
-      line-height: 1.1;
-      letter-spacing: 0.4px;
-      margin-bottom: 4px;
-    }
-    .vehicle-nick {
-      color: var(--text-muted);
-      font-size: 14px;
-      margin-bottom: 16px;
-    }
-
-    .owner-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 18px;
-    }
-    .owner-avatar {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: var(--orange);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 500;
-      flex-shrink: 0;
-    }
+    .vehicle-name { font-family: 'Barlow Condensed', sans-serif; font-size: 30px; font-weight: 700; text-transform: uppercase; line-height: 1.1; letter-spacing: 0.4px; margin-bottom: 4px; }
+    .vehicle-nick { color: var(--text-muted); font-size: 14px; margin-bottom: 16px; }
+    .owner-row { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; }
+    .owner-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
     .owner-name { color: var(--text-muted); font-size: 13px; }
+    .stats-row { display: flex; gap: 24px; margin-bottom: 16px; }
+    .stat { text-align: center; } .stat-n { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 700; color: #fff; line-height: 1; } .stat-l { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .accuracy { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-muted); background: var(--card); padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 12px; }
+    .acc-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
 
-    .stats-row {
-      display: flex;
-      gap: 24px;
-      margin-bottom: 16px;
-    }
-    .stat { text-align: center; }
-    .stat-n {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 26px;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1;
-    }
-    .stat-l { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .qr-section { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+    .qr-img { width: 80px; height: 80px; border-radius: 8px; background: #fff; padding: 4px; }
+    .qr-img img { width: 100%; height: 100%; }
+    .qr-text { font-size: 12px; color: var(--text-muted); }
+    .qr-text a { color: var(--orange); text-decoration: none; }
 
-    .accuracy {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      color: var(--text-muted);
-      background: var(--card);
-      padding: 5px 10px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-    }
-    .acc-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      flex-shrink: 0;
-    }
+    .owner-actions { display: flex; gap: 8px; margin-top: 16px; }
 
-    /* ─── DIVIDER ─── */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
+    .divider { height: 1px; background: var(--border); max-width: var(--max-width); margin: 0 auto; }
 
-    /* ─── MODIFICATIONS ─── */
-    .mods-section {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 28px 28px 0;
-    }
-
-    .mods-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .mods-title {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 20px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
+    .mods-section { max-width: var(--max-width); margin: 0 auto; padding: 28px 28px 0; }
+    .mods-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .mods-title { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; }
     .mods-count { font-size: 13px; color: var(--text-muted); }
-
-    .cat-label {
-      font-size: 10px;
-      font-weight: 500;
-      color: var(--olive-light);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 8px;
-      margin-top: 24px;
-    }
+    .cat-label { font-size: 10px; font-weight: 500; color: var(--olive-light); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; margin-top: 24px; }
     .cat-label:first-of-type { margin-top: 0; }
 
-    .mod-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 8px;
-      transition: border-color 0.15s;
-    }
+    .mod-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 8px; transition: border-color 0.15s; }
     .mod-card:hover { border-color: #5A5A5A; }
-
-    .mod-name  { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 3px; }
+    .mod-name { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 3px; }
     .mod-brand { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
-    .mod-spec  { font-size: 12px; color: var(--text-muted); line-height: 1.65; margin-bottom: 12px; }
-
-    .mod-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
+    .mod-spec { font-size: 12px; color: var(--text-muted); line-height: 1.65; margin-bottom: 12px; }
+    .mod-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
     .stars-row { display: flex; align-items: center; gap: 2px; }
-    .star {
-      width: 11px;
-      height: 11px;
-      background: var(--orange);
-      border-radius: 2px;
-    }
-    .star.empty { background: var(--border); }
+    .star { width: 11px; height: 11px; background: var(--orange); border-radius: 2px; } .star.empty { background: var(--border); }
     .review-count { font-size: 11px; color: var(--text-muted); margin-left: 5px; }
-
     .mod-actions { display: flex; gap: 6px; }
-    .mod-btn {
-      font-size: 12px;
-      padding: 5px 12px;
-      border-radius: 6px;
-      border: 1px solid var(--olive);
-      color: var(--olive-light);
-      background: transparent;
-      cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      transition: background 0.15s, color 0.15s;
-    }
+    .mod-btn { font-size: 12px; padding: 5px 12px; border-radius: 6px; border: 1px solid var(--olive); color: var(--olive-light); background: transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.15s, color 0.15s; }
     .mod-btn:hover { background: rgba(92,107,58,0.15); color: #fff; }
 
-    /* ─── SOCIAL ─── */
-    .social-section {
-      max-width: var(--max-width);
-      margin: 28px auto 0;
-      padding: 20px 28px;
-      border-top: 1px solid var(--border);
-    }
+    .social-section { max-width: var(--max-width); margin: 28px auto 0; padding: 20px 28px; border-top: 1px solid var(--border); }
     .social-label { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
     .social-pills { display: flex; gap: 8px; flex-wrap: wrap; }
-    .social-pill {
-      font-size: 12px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 4px 14px;
-      color: #fff;
-      cursor: pointer;
-      text-decoration: none;
-      transition: border-color 0.15s;
-    }
+    .social-pill { font-size: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 4px 14px; color: #fff; text-decoration: none; transition: border-color 0.15s; }
     .social-pill:hover { border-color: var(--orange); }
 
-    /* ─── STICKY BAR ─── */
-    .sticky-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--dark);
-      border-top: 1px solid var(--border);
-      padding: 12px 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      z-index: 100;
-    }
+    .empty-mods { text-align: center; padding: 48px 20px; color: var(--text-muted); }
+    .empty-mods-title { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+
+    .sticky-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--dark); border-top: 1px solid var(--border); padding: 12px 28px; display: flex; align-items: center; justify-content: center; gap: 16px; z-index: 100; }
     .sticky-text { font-size: 13px; color: var(--text-muted); }
-    .sticky-btn {
-      background: var(--orange);
-      color: #fff;
-      border: none;
-      padding: 10px 24px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      transition: opacity 0.15s;
-    }
+    .sticky-btn { background: var(--orange); color: #fff; border: none; padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.15s; text-decoration: none; }
     .sticky-btn:hover { opacity: 0.88; }
 
-    /* ─── RESPONSIVE ─── */
+    .loading-state { text-align: center; padding: 80px 20px; color: var(--text-muted); font-size: 15px; }
+
     @media (max-width: 768px) {
-      .nav { padding: 0 16px; }
-      .nav-link { display: none; }
-
-      .hero {
-        grid-template-columns: 1fr;
-        padding: 20px 16px;
-        gap: 20px;
-      }
-
-      .vehicle-name { font-size: 24px; }
-      .stats-row { gap: 16px; }
-
-      .mods-section { padding: 20px 16px 0; }
-      .social-section { padding: 16px; }
-
-      .sticky-bar {
-        flex-direction: column;
-        gap: 8px;
-        padding: 12px 16px;
-      }
-      .sticky-text { font-size: 12px; text-align: center; }
-      .sticky-btn { width: 100%; }
-
+      .nav { padding: 0 16px; } .nav-link { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 20px 16px; gap: 20px; }
+      .vehicle-name { font-size: 24px; } .stats-row { gap: 16px; }
+      .mods-section { padding: 20px 16px 0; } .social-section { padding: 16px; }
+      .sticky-bar { flex-direction: column; gap: 8px; padding: 12px 16px; }
+      .sticky-text { font-size: 12px; text-align: center; } .sticky-btn { width: 100%; text-align: center; }
       .mod-bottom { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav class="nav">
-    <a href="/" class="logo">
-      <span class="b-build">BUILD</span><span class="b-bio">BIO</span>
-    </a>
-    <div class="nav-right">
-      <a href="/login" class="nav-link">Log in</a>
-      <a href="/signup" class="btn btn-primary">Create free profile</a>
-    </div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-photo">
-      <div class="hero-photo-placeholder">Vehicle photo</div>
-    </div>
-    <div>
-      <div class="badge-row">
-        <span class="badge badge-verified">Verified Build</span>
-        <span class="badge badge-founder">Founder Premium</span>
-      </div>
-      <div class="vehicle-name">2019 Toyota 4Runner TRD Pro</div>
-      <div class="vehicle-nick">Desert Rat</div>
-      <div class="owner-row">
-        <div class="owner-avatar">BK</div>
-        <span class="owner-name">by Blakeley K. &middot; Westlake Village, CA</span>
-      </div>
-      <div class="stats-row">
-        <div class="stat">
-          <div class="stat-n">24</div>
-          <div class="stat-l">Mods</div>
-        </div>
-        <div class="stat">
-          <div class="stat-n">1,847</div>
-          <div class="stat-l">Scans</div>
-        </div>
-        <div class="stat">
-          <div class="stat-n">4.8</div>
-          <div class="stat-l">Rating</div>
-        </div>
-      </div>
-      <div class="accuracy">
-        <div class="acc-dot"></div>
-        Last confirmed accurate: April 22, 2026
-      </div>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- MODIFICATIONS -->
-  <section class="mods-section">
-    <div class="mods-header">
-      <div class="mods-title">Modifications</div>
-      <div class="mods-count">24 parts listed</div>
-    </div>
-
-    <div class="cat-label">Suspension</div>
-
-    <div class="mod-card">
-      <div class="mod-name">Fox 2.5 Performance Elite Coilovers</div>
-      <div class="mod-brand">Fox Racing Shox &middot; Part #883-02-144</div>
-      <div class="mod-spec">3-inch lift. Remote reservoir. Adjustable compression and rebound. Compatible with TRD Pro front knuckles. Installed at Alpha Auto Haus, Thousand Oaks CA.</div>
-      <div class="mod-bottom">
-        <div class="stars-row">
-          <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
-          <span class="review-count">12 reviews</span>
-        </div>
-        <div class="mod-actions">
-          <button class="mod-btn">Leave a review</button>
-          <button class="mod-btn">View specs</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="mod-card">
-      <div class="mod-name">Icon Vehicle Dynamics UCAs</div>
-      <div class="mod-brand">Icon Vehicle Dynamics &middot; TUBULAR-857-1</div>
-      <div class="mod-spec">Upper control arms for increased caster and improved alignment geometry. Boxed steel construction with Heim joint ends.</div>
-      <div class="mod-bottom">
-        <div class="stars-row">
-          <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star empty"></div>
-          <span class="review-count">7 reviews</span>
-        </div>
-        <div class="mod-actions">
-          <button class="mod-btn">Leave a review</button>
-          <button class="mod-btn">View specs</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="cat-label">Wheels &amp; Tires</div>
-
-    <div class="mod-card">
-      <div class="mod-name">Nitto Ridge Grappler 275/70R17</div>
-      <div class="mod-brand">Nitto Tire &middot; 217-280</div>
-      <div class="mod-spec">Hybrid terrain tire. 3-ply sidewall. Load range E. DOT-compliant for all-weather use. 60,000 mile treadwear warranty.</div>
-      <div class="mod-bottom">
-        <div class="stars-row">
-          <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
-          <span class="review-count">31 reviews</span>
-        </div>
-        <div class="mod-actions">
-          <button class="mod-btn">Leave a review</button>
-          <button class="mod-btn">View specs</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="cat-label">Lighting</div>
-
-    <div class="mod-card">
-      <div class="mod-name">Baja Designs LP6 Pro LED Light Bar</div>
-      <div class="mod-brand">Baja Designs &middot; 381013</div>
-      <div class="mod-spec">10-inch dual row LED. 10,680 raw lumens. Spot/combo beam. IP68 waterproof. Wiring harness and relay included.</div>
-      <div class="mod-bottom">
-        <div class="stars-row">
-          <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star empty"></div>
-          <span class="review-count">18 reviews</span>
-        </div>
-        <div class="mod-actions">
-          <button class="mod-btn">Leave a review</button>
-          <button class="mod-btn">View specs</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="cat-label">Exterior</div>
-
-    <div class="mod-card">
-      <div class="mod-name">ARB Deluxe Bull Bar</div>
-      <div class="mod-brand">ARB 4x4 Accessories &middot; 3423140</div>
-      <div class="mod-spec">Heavy-duty steel bull bar with integrated fog light provisions and winch mount compatibility. Powder-coated matte black. Includes airbag compatibility module.</div>
-      <div class="mod-bottom">
-        <div class="stars-row">
-          <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
-          <span class="review-count">9 reviews</span>
-        </div>
-        <div class="mod-actions">
-          <button class="mod-btn">Leave a review</button>
-          <button class="mod-btn">View specs</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SOCIAL -->
-  <section class="social-section">
-    <div class="social-label">Find Blakeley on</div>
-    <div class="social-pills">
-      <a href="#" class="social-pill">Instagram</a>
-      <a href="#" class="social-pill">YouTube</a>
-      <a href="#" class="social-pill">TikTok</a>
-    </div>
-  </section>
-
-  <!-- STICKY BAR -->
-  <div class="sticky-bar">
-    <span class="sticky-text">Create your own BuildBio profile &mdash; it's free</span>
-    <a href="/signup" class="sticky-btn">Create free profile</a>
+<nav class="nav">
+  <a href="/" class="logo"><span class="b-build">BUILD</span><span class="b-bio">BIO</span></a>
+  <div class="nav-right">
+    <a href="/login.html" class="nav-link" id="nav-login">Log in</a>
+    <a href="/signup.html" class="btn btn-primary" id="nav-cta">Create free profile</a>
   </div>
+</nav>
 
+<div id="content">
+  <div class="loading-state">Loading vehicle profile...</div>
+</div>
+
+<div class="sticky-bar" id="sticky-bar">
+  <span class="sticky-text">Create your own BuildBio profile — it's free</span>
+  <a href="/signup.html" class="sticky-btn">Create free profile</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL  = 'https://bicmwjtkncjkguumbidq.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpY213anRrbmNqa2d1dW1iaWRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMzY3MTYsImV4cCI6MjA5MjkxMjcxNn0.RdLFicGLAoddIfD5IDMNCQ1ocIyoSGEcL9Y9zOzjs_0';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+const params = new URLSearchParams(window.location.search);
+const vehicleId = params.get('id');
+
+function stars(rating, count) {
+  const full = Math.round(rating || 0);
+  let html = '<div class="stars-row">';
+  for (let i = 1; i <= 5; i++) html += `<div class="star${i > full ? ' empty' : ''}"></div>`;
+  html += `<span class="review-count">${count} review${count !== 1 ? 's' : ''}</span></div>`;
+  return html;
+}
+
+function initials(first, last, username) {
+  if (first && last) return (first[0] + last[0]).toUpperCase();
+  if (username) return username.substring(0, 2).toUpperCase();
+  return 'BB';
+}
+
+(async () => {
+  if (!vehicleId) {
+    document.getElementById('content').innerHTML = '<div class="loading-state">No vehicle specified. <a href="/" style="color:var(--orange)">Go home</a></div>';
+    return;
+  }
+
+  const { data: v, error: vErr } = await sb.from('vehicles').select('*').eq('id', vehicleId).single();
+  if (vErr || !v) {
+    document.getElementById('content').innerHTML = '<div class="loading-state">Vehicle not found. <a href="/" style="color:var(--orange)">Go home</a></div>';
+    return;
+  }
+
+  const { data: owner } = await sb.from('profiles').select('*').eq('id', v.owner_id).single();
+  const { data: mods } = await sb.from('modifications').select('*').eq('vehicle_id', v.id).order('category').order('created_at');
+  const { data: scans } = await sb.from('qr_scans').select('id').eq('vehicle_id', v.id);
+  const scanCount = scans ? scans.length : 0;
+  const modCount = mods ? mods.length : 0;
+
+  // Get reviews for all mods
+  const modIds = (mods || []).map(m => m.id);
+  let reviewMap = {};
+  if (modIds.length > 0) {
+    const { data: reviews } = await sb.from('reviews').select('modification_id, star_rating').in('modification_id', modIds);
+    if (reviews) {
+      reviews.forEach(r => {
+        if (!reviewMap[r.modification_id]) reviewMap[r.modification_id] = [];
+        reviewMap[r.modification_id].push(r.star_rating);
+      });
+    }
+  }
+
+  const avgRating = modIds.length > 0 ? Object.values(reviewMap).flat().reduce((a, b) => a + b, 0) / Math.max(Object.values(reviewMap).flat().length, 1) : 0;
+  const totalReviews = Object.values(reviewMap).flat().length;
+
+  const title = `${v.year} ${v.make} ${v.model}${v.trim ? ' ' + v.trim : ''}`;
+  document.getElementById('page-title').textContent = title + ' — BuildBio';
+
+  const ownerName = owner ? ((owner.first_name || '') + ' ' + (owner.last_name ? owner.last_name[0] + '.' : '')).trim() : 'Owner';
+  const location = [owner?.location_city, owner?.location_state].filter(Boolean).join(', ');
+  const ini = owner ? initials(owner.first_name, owner.last_name, owner.username) : 'BB';
+
+  const qrUrl = `${SUPABASE_URL}/functions/v1/generate-qr?url=${encodeURIComponent(window.location.href)}&size=200`;
+
+  // Check if current user is owner
+  const { data: { session } } = await sb.auth.getSession();
+  const isOwner = session && session.user.id === v.owner_id;
+
+  if (isOwner) {
+    document.getElementById('nav-login').style.display = 'none';
+    document.getElementById('nav-cta').textContent = 'Account';
+    document.getElementById('nav-cta').href = '/account.html';
+    document.getElementById('nav-cta').className = 'btn btn-ghost';
+    document.getElementById('sticky-bar').innerHTML = `
+      <a href="/vehicle/mod/new.html?vehicle=${v.id}" class="sticky-btn">+ Add Modification</a>
+    `;
+  }
+
+  // Group mods by category
+  const modsByCategory = {};
+  (mods || []).forEach(m => {
+    if (!modsByCategory[m.category]) modsByCategory[m.category] = [];
+    modsByCategory[m.category].push(m);
+  });
+
+  let modsHtml = '';
+  if (modCount === 0) {
+    modsHtml = `<div class="empty-mods"><div class="empty-mods-title">No modifications yet</div><p>${isOwner ? 'Add your first mod to start building your profile.' : 'This build hasn\'t added any mods yet.'}</p>${isOwner ? '<a href="/vehicle/mod/new.html?vehicle=' + v.id + '" class="btn btn-primary" style="margin-top:16px;padding:12px 24px;">+ Add First Mod</a>' : ''}</div>`;
+  } else {
+    for (const [cat, catMods] of Object.entries(modsByCategory)) {
+      modsHtml += `<div class="cat-label">${cat}</div>`;
+      for (const m of catMods) {
+        const r = reviewMap[m.id] || [];
+        const avg = r.length > 0 ? r.reduce((a, b) => a + b, 0) / r.length : 0;
+        modsHtml += `
+          <div class="mod-card">
+            <div class="mod-name">${m.product_name}</div>
+            <div class="mod-brand">${m.brand || 'Unknown brand'}${m.part_number ? ' &middot; Part #' + m.part_number : ''}</div>
+            ${m.ai_spec_description ? '<div class="mod-spec">' + m.ai_spec_description + '</div>' : ''}
+            <div class="mod-bottom">
+              ${r.length > 0 ? stars(avg, r.length) : '<span style="font-size:11px;color:var(--text-muted)">No reviews yet</span>'}
+              <div class="mod-actions">
+                <button class="mod-btn">Leave a review</button>
+              </div>
+            </div>
+          </div>`;
+      }
+    }
+  }
+
+  // Social links
+  let socialHtml = '';
+  const socials = [];
+  if (owner?.social_instagram) socials.push(`<a href="https://instagram.com/${owner.social_instagram.replace('@','')}" class="social-pill" target="_blank">Instagram</a>`);
+  if (owner?.social_youtube) socials.push(`<a href="${owner.social_youtube.startsWith('http') ? owner.social_youtube : 'https://youtube.com/' + owner.social_youtube}" class="social-pill" target="_blank">YouTube</a>`);
+  if (owner?.social_tiktok) socials.push(`<a href="https://tiktok.com/@${owner.social_tiktok.replace('@','')}" class="social-pill" target="_blank">TikTok</a>`);
+  if (socials.length > 0) {
+    socialHtml = `<section class="social-section"><div class="social-label">Find ${owner?.first_name || owner?.username || 'the owner'} on</div><div class="social-pills">${socials.join('')}</div></section>`;
+  }
+
+  document.getElementById('content').innerHTML = `
+    <section class="hero">
+      <div class="hero-photo">
+        ${v.primary_photo ? '<img src="' + v.primary_photo + '" alt="' + title + '">' : '<div class="hero-photo-placeholder">No photo yet</div>'}
+      </div>
+      <div>
+        <div class="badge-row">
+          ${v.verified_build_badge ? '<span class="badge badge-verified">Verified Build</span>' : ''}
+          ${owner?.founder_member ? '<span class="badge badge-founder">Founder</span>' : ''}
+          ${owner?.membership_tier === 'premium' ? '<span class="badge badge-founder">Premium</span>' : ''}
+        </div>
+        <div class="vehicle-name">${title}</div>
+        ${v.nickname ? '<div class="vehicle-nick">' + v.nickname + '</div>' : ''}
+        <div class="owner-row">
+          <div class="owner-avatar">${ini}</div>
+          <span class="owner-name">by ${ownerName}${location ? ' &middot; ' + location : ''}</span>
+        </div>
+        <div class="stats-row">
+          <div class="stat"><div class="stat-n">${modCount}</div><div class="stat-l">Mods</div></div>
+          <div class="stat"><div class="stat-n">${scanCount.toLocaleString()}</div><div class="stat-l">Scans</div></div>
+          ${totalReviews > 0 ? '<div class="stat"><div class="stat-n">' + avgRating.toFixed(1) + '</div><div class="stat-l">Rating</div></div>' : ''}
+        </div>
+        ${v.accuracy_confirmed_date ? '<div class="accuracy"><div class="acc-dot"></div>Last confirmed accurate: ' + new Date(v.accuracy_confirmed_date).toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'}) + '</div>' : ''}
+        <div class="qr-section">
+          <div class="qr-img"><img src="${qrUrl}" alt="QR Code"></div>
+          <div class="qr-text">Scan this code to view this profile<br>on any device.</div>
+        </div>
+        ${isOwner ? '<div class="owner-actions"><a href="/vehicle/mod/new.html?vehicle=' + v.id + '" class="btn btn-primary" style="padding:10px 20px;font-size:13px;">+ Add Mod</a><a href="/account.html" class="btn btn-ghost" style="padding:10px 20px;font-size:13px;">Edit Vehicle</a></div>' : ''}
+      </div>
+    </section>
+    <div class="divider"></div>
+    <section class="mods-section">
+      <div class="mods-header">
+        <div class="mods-title">Modifications</div>
+        <div class="mods-count">${modCount} part${modCount !== 1 ? 's' : ''} listed</div>
+      </div>
+      ${modsHtml}
+    </section>
+    ${socialHtml}
+  `;
+
+  // Record scan (only for non-owners)
+  if (!isOwner) {
+    await sb.from('qr_scans').insert({ vehicle_id: v.id });
+  }
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BuildBio Mod Categories — Browse modification categories from suspension to lighting, wheels, armor, and more.">
+  <title>BuildBio — Mod Categories</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-192.png">
+  <link rel="apple-touch-icon" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-192.png">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--orange:#D85A30;--olive:#5C6B3A;--olive-light:#7A8C50;--black:#000;--dark:#0D0D0D;--dark2:#111;--card:#1A1A1A;--border:#2E2E2E;--border-l:#3A3A3A;--text:#fff;--muted:#B4B2A9;--dim:#6B6B6B;--green:#1D9E75;--blue:#378ADD;--max:1160px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--black);color:var(--text);font-size:15px;line-height:1.6;overflow-x:hidden}
+    .container{max-width:var(--max);margin:0 auto;padding:0 28px}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    .fu{animation:fadeUp .7s ease both}
+    .d1{animation-delay:.1s}.d2{animation-delay:.22s}.d3{animation-delay:.36s}
+
+    /* NAV */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .logo{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;letter-spacing:.3px;line-height:1;text-decoration:none;display:flex;align-items:baseline}
+    .logo .BL{font-size:28px;color:var(--orange)}.logo .rb{color:var(--orange)}.logo .BL2{font-size:28px;color:var(--olive-light)}.logo .rb2{color:var(--olive-light)}
+    .nav-r{display:flex;align-items:center;gap:24px}
+    .nl{color:var(--muted);font-size:13px;text-decoration:none;transition:color .15s}.nl:hover{color:var(--text)}
+    .ncta{background:var(--orange);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;transition:opacity .15s,transform .1s;display:inline-flex;align-items:center}.ncta:hover{opacity:.88;transform:translateY(-1px)}
+
+    /* PAGE HEADER */
+    .page-header{padding:120px 28px 48px;text-align:center;background:var(--dark);border-bottom:1px solid var(--border)}
+    .page-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--olive-light);margin-bottom:14px}
+    .page-h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,6vw,64px);font-weight:700;text-transform:uppercase;line-height:1;margin-bottom:16px}
+    .page-h1 em{font-style:normal;color:var(--orange)}
+    .page-sub{font-size:16px;color:var(--muted);max-width:560px;margin:0 auto 0}
+
+    /* COUNT BADGE */
+    .count-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(216,90,48,.1);border:1px solid rgba(216,90,48,.25);border-radius:16px;padding:4px 12px;font-size:12px;color:var(--orange);font-weight:500;margin-top:16px}
+
+    /* CATEGORY GRID */
+    .cat-section{max-width:var(--max);margin:0 auto;padding:48px 28px 96px}
+    .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .cat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px 24px;display:flex;flex-direction:column;gap:12px;transition:border-color .2s,transform .2s;text-decoration:none;color:inherit;cursor:pointer}
+    .cat-card:hover{border-color:rgba(216,90,48,.4);transform:translateY(-3px)}
+    .cat-icon{width:48px;height:48px;border-radius:12px;background:rgba(216,90,48,.1);border:1px solid rgba(216,90,48,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+    .cat-icon-text{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--orange)}
+    .cat-name{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;color:var(--text);letter-spacing:.3px}
+    .cat-desc{font-size:13px;color:var(--muted);line-height:1.6;flex:1}
+    .cat-link-hint{font-size:12px;color:var(--olive-light);display:flex;align-items:center;gap:4px;margin-top:auto;transition:color .15s}
+    .cat-card:hover .cat-link-hint{color:var(--orange)}
+
+    /* LOADING */
+    .loading{text-align:center;padding:80px 28px}
+    .loading-spinner{width:32px;height:32px;border:3px solid var(--border-l);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading-text{font-size:14px;color:var(--dim)}
+
+    /* EMPTY STATE */
+    .empty-state{text-align:center;padding:80px 28px}
+    .empty-state-icon{font-size:40px;margin-bottom:16px;opacity:.3}
+    .empty-state-text{font-size:16px;color:var(--dim)}
+
+    /* FOOTER */
+    .footer{background:var(--dark);border-top:1px solid var(--border);padding:38px 28px}
+    .footer-in{max-width:var(--max);margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+    .fl2{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;text-decoration:none}.fl2 .f1{color:var(--orange)}.fl2 .f2{color:var(--olive-light)}
+    .flinks{display:flex;gap:22px;flex-wrap:wrap}
+    .flink{font-size:13px;color:var(--dim);text-decoration:none;transition:color .15s}.flink:hover{color:var(--muted)}
+    .fcp{font-size:12px;color:var(--dim)}
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      .cat-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:640px){
+      .nav{padding:0 16px}.nav-r .nl{display:none}
+      .cat-grid{grid-template-columns:1fr}
+      .page-header{padding:100px 16px 32px}
+      .cat-section{padding:32px 16px 64px}
+      .footer-in{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="logo"><span class="BL">B</span><span class="rb">UILD</span><span class="BL2">B</span><span class="rb2">IO</span></a>
+  <div class="nav-r">
+    <a href="/brands.html" class="nl">Brands</a>
+    <a href="/categories.html" class="nl" style="color:var(--text)">Categories</a>
+    <a href="/disciplines.html" class="nl">Disciplines</a>
+    <a href="/search.html" class="nl">Search</a>
+    <a href="/login" class="nl">Log in</a>
+    <a href="/signup" class="ncta">Create Your Free Profile Now!</a>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<section class="page-header">
+  <div class="page-eyebrow">Mod Categories</div>
+  <h1 class="page-h1 fu">Browse by <em>Category</em></h1>
+  <p class="page-sub fu d1">Every modification type in the BuildBio database. Find the category that matches what you are building.</p>
+  <div class="count-badge fu d2" id="catCount" style="display:none"></div>
+</section>
+
+<!-- CATEGORY GRID -->
+<div class="cat-section" id="catSection">
+  <div class="loading" id="loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading categories...</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-in">
+    <a href="/" class="fl2"><span class="f1">BUILD</span><span class="f2">BIO</span></a>
+    <div class="flinks">
+      <a href="/brands.html" class="flink">Brands</a>
+      <a href="/categories.html" class="flink">Categories</a>
+      <a href="/disciplines.html" class="flink">Disciplines</a>
+      <a href="/search.html" class="flink">Search</a>
+      <a href="/privacy" class="flink">Privacy</a>
+      <a href="/terms" class="flink">Terms</a>
+    </div>
+    <div class="fcp">&copy; 2026 BuildBio. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://bicmwjtkncjkguumbidq.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpY213anRrbmNqa2d1dW1iaWRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMzY3MTYsImV4cCI6MjA5MjkxMjcxNn0.RdLFicGLAoddIfD5IDMNCQ1ocIyoSGEcL9Y9zOzjs_0';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  // Icon mapping — maps common category names to simple Unicode symbols
+  const iconMap = {
+    'suspension': '&#9878;',
+    'lighting': '&#9728;',
+    'wheels': '&#9881;',
+    'tires': '&#9881;',
+    'wheels & tires': '&#9881;',
+    'engine': '&#9889;',
+    'exhaust': '&#9836;',
+    'armor': '&#128737;',
+    'body': '&#9632;',
+    'interior': '&#9632;',
+    'electronics': '&#9889;',
+    'audio': '&#9836;',
+    'roof': '&#9650;',
+    'bumpers': '&#9632;',
+    'winch': '&#8693;',
+    'recovery': '&#8693;',
+    'storage': '&#9645;',
+    'drivetrain': '&#9881;',
+    'brakes': '&#9673;',
+    'fuel': '&#9879;',
+  };
+
+  function getIcon(name, icon) {
+    if (icon) return icon;
+    const lower = (name || '').toLowerCase();
+    for (const [key, val] of Object.entries(iconMap)) {
+      if (lower.includes(key)) return val;
+    }
+    return '&#9632;';
+  }
+
+  async function loadCategories() {
+    const { data, error } = await sb
+      .from('mod_categories')
+      .select('id, name, slug, description, icon')
+      .order('sort_order');
+
+    document.getElementById('loading').style.display = 'none';
+
+    if (error || !data || data.length === 0) {
+      document.getElementById('catSection').innerHTML = '<div class="empty-state"><div class="empty-state-icon">&#9898;</div><div class="empty-state-text">No categories found.</div></div>';
+      return;
+    }
+
+    document.getElementById('catCount').textContent = data.length + ' categories';
+    document.getElementById('catCount').style.display = 'inline-flex';
+
+    let html = '<div class="cat-grid">';
+    data.forEach((cat, i) => {
+      const desc = cat.description ? escapeHtml(cat.description.substring(0, 120)) + (cat.description.length > 120 ? '...' : '') : 'Explore modifications in this category.';
+      const iconHtml = cat.icon
+        ? '<span style="font-size:20px">' + cat.icon + '</span>'
+        : '<span class="cat-icon-text">' + escapeHtml(cat.name.charAt(0)) + '</span>';
+
+      html += '<a class="cat-card fu" style="animation-delay:' + (0.05 * Math.min(i, 12)) + 's" href="/search.html?category=' + encodeURIComponent(cat.slug) + '">'
+        + '<div class="cat-icon">' + iconHtml + '</div>'
+        + '<div class="cat-name">' + escapeHtml(cat.name) + '</div>'
+        + '<div class="cat-desc">' + desc + '</div>'
+        + '<div class="cat-link-hint">Browse parts &#8594;</div>'
+        + '</a>';
+    });
+    html += '</div>';
+    document.getElementById('catSection').innerHTML = html;
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  loadCategories();
+</script>
+</body>
+</html>

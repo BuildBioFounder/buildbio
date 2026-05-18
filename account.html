@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildBio — Account Settings</title>
+  <link rel="icon" type="image/png" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #D85A30; --orange-dim: #B84820; --olive: #5C6B3A; --olive-light: #7A8C50;
+      --dark: #0F0F0F; --dark-2: #161616; --dark-3: #1E1E1E; --dark-4: #2A2A2A;
+      --border: rgba(255,255,255,0.08); --border-l: #3A3A3A;
+      --text: #F0EDE8; --text-dim: #888; --green: #1D9E75; --red: #e05555;
+      --font-display: 'Barlow Condensed', sans-serif; --font-body: 'Barlow', sans-serif;
+    }
+    html { background: var(--dark); color: var(--text); font-family: var(--font-body); }
+    body { padding-bottom: 60px; }
+
+    .nav { position: sticky; top: 0; z-index: 100; background: rgba(15,15,15,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); height: 58px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; }
+    .logo { font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: 0.3px; text-decoration: none; }
+    .logo .b1 { color: var(--orange); } .logo .b2 { color: var(--olive-light); }
+    .nav-r { display: flex; gap: 14px; align-items: center; }
+    .nav-link { color: var(--text-dim); font-size: 13px; text-decoration: none; cursor: pointer; } .nav-link:hover { color: var(--text); }
+
+    .container { max-width: 640px; margin: 0 auto; padding: 32px 20px; }
+    .page-title { font-family: var(--font-display); font-size: 32px; font-weight: 800; margin-bottom: 6px; }
+    .page-sub { font-size: 14px; color: var(--text-dim); margin-bottom: 32px; }
+
+    .section { background: var(--dark-3); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 20px; }
+    .section-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--olive-light); margin-bottom: 16px; }
+
+    .field { margin-bottom: 16px; }
+    .field:last-child { margin-bottom: 0; }
+    .field label { display: block; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); margin-bottom: 6px; }
+    .field input, .field textarea {
+      width: 100%; padding: 12px 14px; background: var(--dark-4); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text); font-family: var(--font-body); font-size: 15px;
+      transition: all 0.2s; outline: none;
+    }
+    .field input::placeholder, .field textarea::placeholder { color: #555; }
+    .field input:focus, .field textarea:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(216,90,48,0.1); }
+    .field textarea { resize: vertical; min-height: 80px; }
+    .field-static { font-size: 14px; color: var(--text-dim); padding: 10px 0; }
+
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border-radius: 8px; font-family: var(--font-body); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: none; text-decoration: none; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--orange); color: #fff; } .btn-primary:hover { background: var(--orange-dim); }
+    .btn-ghost { background: transparent; border: 1px solid var(--border-l); color: var(--text-dim); } .btn-ghost:hover { border-color: var(--orange); color: var(--text); }
+    .btn-danger { background: transparent; border: 1px solid var(--red); color: var(--red); } .btn-danger:hover { background: rgba(224,85,85,0.1); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-row { display: flex; gap: 10px; margin-top: 16px; }
+
+    .vehicle-list { display: flex; flex-direction: column; gap: 10px; }
+    .vehicle-card { display: flex; align-items: center; justify-content: space-between; background: var(--dark-4); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; transition: border-color 0.2s; }
+    .vehicle-card:hover { border-color: var(--border-l); }
+    .vehicle-info { }
+    .vehicle-name { font-family: var(--font-display); font-size: 16px; font-weight: 700; text-transform: uppercase; }
+    .vehicle-nick { font-size: 12px; color: var(--text-dim); }
+    .vehicle-actions { display: flex; gap: 6px; }
+
+    .msg { padding: 12px 14px; border-radius: 8px; font-size: 13px; line-height: 1.5; margin-bottom: 16px; display: none; }
+    .msg.error { background: rgba(224,85,85,0.12); border: 1px solid rgba(224,85,85,0.3); color: #f07070; }
+    .msg.success { background: rgba(92,107,58,0.2); border: 1px solid rgba(92,107,58,0.4); color: #a8c070; }
+    .msg.show { display: block; }
+
+    .empty-state { text-align: center; padding: 24px; color: var(--text-dim); font-size: 14px; }
+
+    .tier-badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .tier-free { background: rgba(255,255,255,0.06); color: var(--text-dim); }
+    .tier-mid { background: rgba(216,90,48,0.15); color: var(--orange); }
+    .tier-premium { background: rgba(29,158,117,0.15); color: var(--green); }
+
+    @media (max-width: 640px) {
+      .nav { padding: 0 16px; }
+      .row-2 { grid-template-columns: 1fr; }
+      .vehicle-card { flex-direction: column; align-items: flex-start; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="logo"><span class="b1">BUILD</span><span class="b2">BIO</span></a>
+  <div class="nav-r">
+    <a href="vehicle/new.html" class="nav-link">+ Add Vehicle</a>
+    <a class="nav-link" id="btn-logout">Sign Out</a>
+  </div>
+</nav>
+
+<div class="container">
+  <h1 class="page-title">Account Settings</h1>
+  <p class="page-sub">Manage your profile and vehicles.</p>
+
+  <div class="msg" id="msg"></div>
+
+  <!-- Vehicles -->
+  <div class="section">
+    <div class="section-title">My Vehicles</div>
+    <div class="vehicle-list" id="vehicle-list">
+      <div class="empty-state">Loading...</div>
+    </div>
+    <div class="btn-row">
+      <a href="vehicle/new.html" class="btn btn-primary">+ Add Vehicle</a>
+    </div>
+  </div>
+
+  <!-- Profile -->
+  <div class="section">
+    <div class="section-title">Profile</div>
+    <form id="form-profile">
+      <div class="field">
+        <label>Username</label>
+        <div class="field-static" id="display-username">-</div>
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <div class="field-static" id="display-email">-</div>
+      </div>
+      <div class="field">
+        <label>Membership</label>
+        <div class="field-static"><span class="tier-badge tier-free" id="display-tier">FREE</span></div>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label for="f-first">First Name</label>
+          <input type="text" id="f-first" placeholder="First name">
+        </div>
+        <div class="field">
+          <label for="f-last">Last Name</label>
+          <input type="text" id="f-last" placeholder="Last name">
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-bio">Bio</label>
+        <textarea id="f-bio" placeholder="Tell people about yourself and your builds"></textarea>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label for="f-city">City</label>
+          <input type="text" id="f-city" placeholder="Westlake Village">
+        </div>
+        <div class="field">
+          <label for="f-state">State</label>
+          <input type="text" id="f-state" placeholder="CA" maxlength="2">
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top:20px">Social Links</div>
+      <div class="field">
+        <label for="f-ig">Instagram</label>
+        <input type="text" id="f-ig" placeholder="@yourusername">
+      </div>
+      <div class="field">
+        <label for="f-yt">YouTube</label>
+        <input type="text" id="f-yt" placeholder="Channel URL or handle">
+      </div>
+      <div class="field">
+        <label for="f-tt">TikTok</label>
+        <input type="text" id="f-tt" placeholder="@yourusername">
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" class="btn btn-primary" id="btn-save">Save Changes</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Password -->
+  <div class="section">
+    <div class="section-title">Change Password</div>
+    <form id="form-pw">
+      <div class="field">
+        <label for="f-pw">New Password</label>
+        <input type="password" id="f-pw" placeholder="Min. 8 characters" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label for="f-pw2">Confirm Password</label>
+        <input type="password" id="f-pw2" placeholder="Re-enter password" autocomplete="new-password">
+      </div>
+      <div class="btn-row">
+        <button type="submit" class="btn btn-ghost" id="btn-pw">Update Password</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Notifications (placeholder) -->
+  <div class="section">
+    <div class="section-title">Notifications</div>
+    <p style="font-size:14px;color:var(--text-dim);">Notification preferences coming soon. You will be notified about scan milestones, new reviews, and recall alerts.</p>
+  </div>
+
+  <!-- Danger Zone -->
+  <div class="section" style="border-color:rgba(224,85,85,0.2);">
+    <div class="section-title" style="color:var(--red);">Danger Zone</div>
+    <p style="font-size:13px;color:var(--text-dim);margin-bottom:12px;">
+      Account deletion requires manual verification. Click below to send a deletion request to the BuildBio team.
+    </p>
+    <button class="btn btn-danger" id="btn-delete">Request Account Deletion</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL  = 'https://bicmwjtkncjkguumbidq.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpY213anRrbmNqa2d1dW1iaWRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMzY3MTYsImV4cCI6MjA5MjkxMjcxNn0.RdLFicGLAoddIfD5IDMNCQ1ocIyoSGEcL9Y9zOzjs_0';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let currentUser = null;
+let profile = null;
+
+function showMsg(text, type = 'error') {
+  const el = document.getElementById('msg');
+  el.textContent = text;
+  el.className = 'msg ' + type + ' show';
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+  currentUser = session.user;
+
+  document.getElementById('display-email').textContent = currentUser.email;
+
+  const { data: p } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+  if (p) {
+    profile = p;
+    document.getElementById('display-username').textContent = p.username || '-';
+    document.getElementById('f-first').value = p.first_name || '';
+    document.getElementById('f-last').value = p.last_name || '';
+    document.getElementById('f-bio').value = p.bio || '';
+    document.getElementById('f-city').value = p.location_city || '';
+    document.getElementById('f-state').value = p.location_state || '';
+    document.getElementById('f-ig').value = p.social_instagram || '';
+    document.getElementById('f-yt').value = p.social_youtube || '';
+    document.getElementById('f-tt').value = p.social_tiktok || '';
+
+    const tier = p.membership_tier || 'free';
+    const badge = document.getElementById('display-tier');
+    badge.textContent = tier.toUpperCase();
+    badge.className = 'tier-badge tier-' + tier;
+    if (p.founder_member) badge.textContent += ' (FOUNDER)';
+  }
+
+  const { data: vehicles } = await sb.from('vehicles').select('id, year, make, model, trim, nickname, slug').eq('owner_id', currentUser.id).order('created_at', { ascending: false });
+  const list = document.getElementById('vehicle-list');
+  if (!vehicles || vehicles.length === 0) {
+    list.innerHTML = '<div class="empty-state">No vehicles yet. Add your first vehicle to get started.</div>';
+  } else {
+    list.innerHTML = vehicles.map(v => `
+      <div class="vehicle-card">
+        <div class="vehicle-info">
+          <div class="vehicle-name">${v.year} ${v.make} ${v.model}${v.trim ? ' ' + v.trim : ''}</div>
+          ${v.nickname ? '<div class="vehicle-nick">' + v.nickname + '</div>' : ''}
+        </div>
+        <div class="vehicle-actions">
+          <a href="vehicle-profile.html?id=${v.id}" class="btn btn-ghost" style="font-size:12px;padding:6px 12px;">View</a>
+          <a href="vehicle/${v.id}/mod/new.html" class="btn btn-primary" style="font-size:12px;padding:6px 12px;">+ Add Mod</a>
+        </div>
+      </div>
+    `).join('');
+  }
+})();
+
+// Save profile
+document.getElementById('form-profile').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('btn-save');
+  btn.disabled = true; btn.textContent = 'Saving...';
+
+  const { error } = await sb.from('profiles').update({
+    first_name: document.getElementById('f-first').value.trim() || null,
+    last_name: document.getElementById('f-last').value.trim() || null,
+    bio: document.getElementById('f-bio').value.trim() || null,
+    location_city: document.getElementById('f-city').value.trim() || null,
+    location_state: document.getElementById('f-state').value.trim() || null,
+    social_instagram: document.getElementById('f-ig').value.trim() || null,
+    social_youtube: document.getElementById('f-yt').value.trim() || null,
+    social_tiktok: document.getElementById('f-tt').value.trim() || null,
+    updated_at: new Date().toISOString()
+  }).eq('id', currentUser.id);
+
+  btn.disabled = false; btn.textContent = 'Save Changes';
+  if (error) return showMsg(error.message);
+  showMsg('Profile updated.', 'success');
+});
+
+// Change password
+document.getElementById('form-pw').addEventListener('submit', async e => {
+  e.preventDefault();
+  const pw = document.getElementById('f-pw').value;
+  const pw2 = document.getElementById('f-pw2').value;
+  if (!pw || pw.length < 8) return showMsg('Password must be at least 8 characters.');
+  if (pw !== pw2) return showMsg('Passwords do not match.');
+
+  const btn = document.getElementById('btn-pw');
+  btn.disabled = true;
+  const { error } = await sb.auth.updateUser({ password: pw });
+  btn.disabled = false;
+  if (error) return showMsg(error.message);
+  showMsg('Password updated.', 'success');
+  document.getElementById('f-pw').value = '';
+  document.getElementById('f-pw2').value = '';
+});
+
+// Delete account
+document.getElementById('btn-delete').addEventListener('click', () => {
+  if (!confirm('Are you sure you want to request account deletion? This will be reviewed by the BuildBio team.')) return;
+  const email = currentUser.email;
+  const subject = encodeURIComponent('Account Deletion Request');
+  const body = encodeURIComponent('I would like to delete my BuildBio account.\n\nEmail: ' + email + '\nUser ID: ' + currentUser.id);
+  window.location.href = 'mailto:founder@buildbio.app?subject=' + subject + '&body=' + body;
+});
+
+// Logout
+document.getElementById('btn-logout').addEventListener('click', async () => {
+  await sb.auth.signOut();
+  window.location.href = 'index.html';
+});
+</script>
+</body>
+</html>

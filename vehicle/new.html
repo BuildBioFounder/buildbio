@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildBio — Add Vehicle</title>
+  <link rel="icon" type="image/png" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #D85A30; --orange-dim: #B84820; --olive: #5C6B3A; --olive-light: #7A8C50;
+      --dark: #0F0F0F; --dark-2: #161616; --dark-3: #1E1E1E; --dark-4: #2A2A2A;
+      --border: rgba(255,255,255,0.08); --border-l: #3A3A3A;
+      --text: #F0EDE8; --text-dim: #888; --green: #1D9E75;
+      --font-display: 'Barlow Condensed', sans-serif; --font-body: 'Barlow', sans-serif;
+    }
+    html { background: var(--dark); color: var(--text); font-family: var(--font-body); }
+    body { padding-bottom: 60px; }
+
+    .nav { position: sticky; top: 0; z-index: 100; background: rgba(15,15,15,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); height: 58px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; }
+    .logo { font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: 0.3px; text-decoration: none; }
+    .logo .b1 { color: var(--orange); } .logo .b2 { color: var(--olive-light); }
+    .nav-r { display: flex; gap: 14px; align-items: center; }
+    .nav-link { color: var(--text-dim); font-size: 13px; text-decoration: none; } .nav-link:hover { color: var(--text); }
+
+    .container { max-width: 640px; margin: 0 auto; padding: 32px 20px; }
+
+    .page-title { font-family: var(--font-display); font-size: 32px; font-weight: 800; margin-bottom: 6px; }
+    .page-sub { font-size: 14px; color: var(--text-dim); margin-bottom: 32px; }
+
+    .section-label { font-family: var(--font-display); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--olive-light); margin-bottom: 16px; margin-top: 32px; }
+    .section-label:first-of-type { margin-top: 0; }
+
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); margin-bottom: 6px; }
+    .field select, .field input, .field textarea {
+      width: 100%; padding: 12px 14px; background: var(--dark-3); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text); font-family: var(--font-body); font-size: 15px;
+      transition: all 0.2s; outline: none; -webkit-appearance: none; appearance: none;
+    }
+    .field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
+    .field select:disabled { opacity: 0.4; cursor: not-allowed; }
+    .field input::placeholder, .field textarea::placeholder { color: #555; }
+    .field select:focus, .field input:focus, .field textarea:focus { border-color: var(--orange); background: var(--dark-4); box-shadow: 0 0 0 3px rgba(216,90,48,0.1); }
+    .field textarea { resize: vertical; min-height: 80px; }
+
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    .photo-upload { border: 2px dashed var(--border-l); border-radius: 12px; padding: 32px; text-align: center; cursor: pointer; transition: all 0.2s; margin-bottom: 16px; }
+    .photo-upload:hover { border-color: var(--orange); background: rgba(216,90,48,0.04); }
+    .photo-upload-icon { font-size: 28px; color: var(--text-dim); margin-bottom: 8px; }
+    .photo-upload-text { font-size: 13px; color: var(--text-dim); }
+    .photo-upload-text span { color: var(--orange); }
+    .photo-preview { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .photo-thumb { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border-l); }
+    .photo-thumb-remove { position: relative; }
+    .photo-thumb-remove::after { content: 'x'; position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; background: var(--orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #fff; cursor: pointer; }
+
+    .discipline-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .discipline-chip { padding: 8px 16px; border: 1px solid var(--border-l); border-radius: 20px; background: var(--dark-3); color: var(--text-dim); font-size: 13px; cursor: pointer; transition: all 0.2s; }
+    .discipline-chip:hover { border-color: var(--orange); color: var(--text); }
+    .discipline-chip.selected { background: rgba(216,90,48,0.15); border-color: var(--orange); color: var(--orange); }
+
+    .submit-btn { width: 100%; padding: 16px; background: var(--orange); border: none; border-radius: 10px; color: #fff; font-family: var(--font-display); font-size: 18px; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; transition: all 0.2s; margin-top: 24px; position: relative; }
+    .submit-btn:hover:not(:disabled) { background: var(--orange-dim); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(216,90,48,0.3); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-spinner { display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); }
+    .submit-btn.loading .btn-spinner { display: block; }
+    @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+
+    .msg { padding: 12px 14px; border-radius: 8px; font-size: 13px; line-height: 1.5; margin-bottom: 16px; display: none; }
+    .msg.error { background: rgba(224,85,85,0.12); border: 1px solid rgba(224,85,85,0.3); color: #f07070; }
+    .msg.success { background: rgba(92,107,58,0.2); border: 1px solid rgba(92,107,58,0.4); color: #a8c070; }
+    .msg.show { display: block; }
+
+    @media (max-width: 640px) {
+      .nav { padding: 0 16px; }
+      .row-2, .row-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../index.html" class="logo"><span class="b1">BUILD</span><span class="b2">BIO</span></a>
+  <div class="nav-r">
+    <a href="../account.html" class="nav-link">Account</a>
+  </div>
+</nav>
+
+<div class="container">
+  <h1 class="page-title">Add your vehicle</h1>
+  <p class="page-sub">Tell us what you drive. You can always update this later.</p>
+
+  <div class="msg" id="msg"></div>
+
+  <form id="form-vehicle" novalidate>
+    <div class="section-label">Vehicle Info</div>
+
+    <div class="row-2">
+      <div class="field">
+        <label for="v-year">Year</label>
+        <select id="v-year"><option value="">Select year</option></select>
+      </div>
+      <div class="field">
+        <label for="v-make">Make</label>
+        <select id="v-make" disabled><option value="">Select make</option></select>
+      </div>
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label for="v-model">Model</label>
+        <select id="v-model" disabled><option value="">Select model</option></select>
+      </div>
+      <div class="field">
+        <label for="v-trim">Trim (optional)</label>
+        <input type="text" id="v-trim" placeholder="e.g. TRD Pro, GT, Limited">
+      </div>
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label for="v-color">Color</label>
+        <input type="text" id="v-color" placeholder="e.g. Cement Gray">
+      </div>
+      <div class="field">
+        <label for="v-nickname">Nickname (optional)</label>
+        <input type="text" id="v-nickname" placeholder="e.g. Desert Rat">
+      </div>
+    </div>
+
+    <div class="section-label">Build Discipline</div>
+    <p style="font-size:13px;color:var(--text-dim);margin-bottom:12px;">What type of build is this? Select one.</p>
+    <div class="discipline-chips" id="discipline-chips"></div>
+
+    <div class="section-label">Photos</div>
+    <div class="photo-upload" id="photo-drop">
+      <div class="photo-upload-icon">&#128247;</div>
+      <div class="photo-upload-text"><span>Click to upload</span> or drag photos here<br>JPG, PNG, WebP up to 5MB each</div>
+      <input type="file" id="photo-input" accept="image/*" multiple hidden>
+    </div>
+    <div class="photo-preview" id="photo-preview"></div>
+
+    <button type="submit" class="submit-btn" id="btn-submit">
+      Create Vehicle Profile
+      <span class="btn-spinner"></span>
+    </button>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL  = 'https://bicmwjtkncjkguumbidq.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpY213anRrbmNqa2d1dW1iaWRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMzY3MTYsImV4cCI6MjA5MjkxMjcxNn0.RdLFicGLAoddIfD5IDMNCQ1ocIyoSGEcL9Y9zOzjs_0';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let currentUser = null;
+let selectedDiscipline = null;
+let photoFiles = [];
+
+function showMsg(text, type = 'error') {
+  const el = document.getElementById('msg');
+  el.textContent = text;
+  el.className = 'msg ' + type + ' show';
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function setLoading(btn, loading) {
+  btn.disabled = loading;
+  loading ? btn.classList.add('loading') : btn.classList.remove('loading');
+}
+
+// Auth guard
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = '../login.html'; return; }
+  currentUser = session.user;
+  await loadYears();
+  await loadDisciplines();
+})();
+
+// Cascading dropdowns
+const yearEl = document.getElementById('v-year');
+const makeEl = document.getElementById('v-make');
+const modelEl = document.getElementById('v-model');
+
+async function loadYears() {
+  const { data } = await sb.from('vehicle_fitment').select('year').order('year', { ascending: false });
+  if (!data) return;
+  const years = [...new Set(data.map(r => r.year))];
+  years.forEach(y => {
+    const opt = document.createElement('option');
+    opt.value = y; opt.textContent = y;
+    yearEl.appendChild(opt);
+  });
+}
+
+yearEl.addEventListener('change', async () => {
+  makeEl.innerHTML = '<option value="">Select make</option>';
+  modelEl.innerHTML = '<option value="">Select model</option>';
+  makeEl.disabled = true;
+  modelEl.disabled = true;
+  if (!yearEl.value) return;
+
+  const { data } = await sb.from('vehicle_fitment').select('make').eq('year', parseInt(yearEl.value)).order('make');
+  if (!data) return;
+  const makes = [...new Set(data.map(r => r.make))];
+  makes.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m; opt.textContent = m;
+    makeEl.appendChild(opt);
+  });
+  makeEl.disabled = false;
+});
+
+makeEl.addEventListener('change', async () => {
+  modelEl.innerHTML = '<option value="">Select model</option>';
+  modelEl.disabled = true;
+  if (!makeEl.value) return;
+
+  const { data } = await sb.from('vehicle_fitment').select('model').eq('year', parseInt(yearEl.value)).eq('make', makeEl.value).order('model');
+  if (!data) return;
+  const models = [...new Set(data.map(r => r.model))];
+  models.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m; opt.textContent = m;
+    modelEl.appendChild(opt);
+  });
+  modelEl.disabled = false;
+});
+
+// Disciplines
+async function loadDisciplines() {
+  const { data } = await sb.from('disciplines').select('id, name, slug').order('sort_order');
+  if (!data) return;
+  const container = document.getElementById('discipline-chips');
+  data.forEach(d => {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'discipline-chip';
+    chip.textContent = d.name;
+    chip.dataset.id = d.id;
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.discipline-chip').forEach(c => c.classList.remove('selected'));
+      if (selectedDiscipline === d.id) {
+        selectedDiscipline = null;
+      } else {
+        chip.classList.add('selected');
+        selectedDiscipline = d.id;
+      }
+    });
+    container.appendChild(chip);
+  });
+}
+
+// Photo upload
+const photoDrop = document.getElementById('photo-drop');
+const photoInput = document.getElementById('photo-input');
+
+photoDrop.addEventListener('click', () => photoInput.click());
+photoDrop.addEventListener('dragover', e => { e.preventDefault(); photoDrop.style.borderColor = 'var(--orange)'; });
+photoDrop.addEventListener('dragleave', () => { photoDrop.style.borderColor = ''; });
+photoDrop.addEventListener('drop', e => {
+  e.preventDefault();
+  photoDrop.style.borderColor = '';
+  addFiles(e.dataTransfer.files);
+});
+photoInput.addEventListener('change', () => addFiles(photoInput.files));
+
+function addFiles(files) {
+  for (const f of files) {
+    if (f.size > 5 * 1024 * 1024) continue;
+    if (!f.type.startsWith('image/')) continue;
+    if (photoFiles.length >= 10) break;
+    photoFiles.push(f);
+  }
+  renderPreviews();
+}
+
+function renderPreviews() {
+  const container = document.getElementById('photo-preview');
+  container.innerHTML = '';
+  photoFiles.forEach((f, i) => {
+    const img = document.createElement('img');
+    img.className = 'photo-thumb';
+    img.src = URL.createObjectURL(f);
+    img.addEventListener('click', () => { photoFiles.splice(i, 1); renderPreviews(); });
+    img.title = 'Click to remove';
+    container.appendChild(img);
+  });
+}
+
+function slugify(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+// Submit
+document.getElementById('form-vehicle').addEventListener('submit', async e => {
+  e.preventDefault();
+  const year = yearEl.value;
+  const make = makeEl.value;
+  const model = modelEl.value;
+  const trim = document.getElementById('v-trim').value.trim();
+  const color = document.getElementById('v-color').value.trim();
+  const nickname = document.getElementById('v-nickname').value.trim();
+  const btn = document.getElementById('btn-submit');
+
+  if (!year || !make || !model) return showMsg('Please select year, make, and model.');
+
+  setLoading(btn, true);
+
+  const slug = slugify(`${year}-${make}-${model}${nickname ? '-' + nickname : ''}-${Date.now().toString(36)}`);
+
+  const { data: vehicle, error: vErr } = await sb.from('vehicles').insert({
+    owner_id: currentUser.id,
+    year: year,
+    make: make,
+    model: model,
+    trim: trim || null,
+    color: color || null,
+    nickname: nickname || null,
+    slug: slug
+  }).select().single();
+
+  if (vErr) { setLoading(btn, false); return showMsg(vErr.message); }
+
+  // Upload photos
+  let primaryPhoto = null;
+  for (let i = 0; i < photoFiles.length; i++) {
+    const file = photoFiles[i];
+    const ext = file.name.split('.').pop();
+    const path = `vehicles/${vehicle.id}/${i}.${ext}`;
+    const { error: upErr } = await sb.storage.from('images').upload(path, file, { contentType: file.type, upsert: true });
+    if (!upErr && i === 0) {
+      const { data: urlData } = sb.storage.from('images').getPublicUrl(path);
+      primaryPhoto = urlData.publicUrl;
+    }
+  }
+
+  if (primaryPhoto) {
+    await sb.from('vehicles').update({ primary_photo: primaryPhoto }).eq('id', vehicle.id);
+  }
+
+  // Link discipline
+  if (selectedDiscipline) {
+    await sb.from('vehicle_disciplines').insert({
+      vehicle_id: vehicle.id,
+      discipline_id: selectedDiscipline,
+      is_primary: true
+    });
+  }
+
+  showMsg('Vehicle created! Redirecting...', 'success');
+  setTimeout(() => { window.location.href = `../vehicle-profile.html?id=${vehicle.id}`; }, 1500);
+});
+</script>
+</body>
+</html>
