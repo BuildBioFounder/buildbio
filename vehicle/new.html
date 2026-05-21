@@ -221,20 +221,33 @@ yearEl.addEventListener('change', async () => {
   resetManualFields();
   if (!yearEl.value) return;
 
-  const { data } = await sb.from('vehicle_fitment').select('make').eq('year', parseInt(yearEl.value)).order('make').limit(10000);
-  const makes = data ? [...new Set(data.map(r => r.make))] : [];
-  if (makes.length === 0) {
+  const { data } = await sb.from('vehicle_fitment').select('make, make_tier').eq('year', parseInt(yearEl.value)).order('make').limit(10000);
+  const tierMap = new Map();
+  if (data) data.forEach(r => { if (!tierMap.has(r.make)) tierMap.set(r.make, r.make_tier); });
+  const mainstream = [...tierMap.entries()].filter(([,t]) => t === 'mainstream').map(([m]) => m).sort();
+  const oddball = [...tierMap.entries()].filter(([,t]) => t === 'oddball').map(([m]) => m).sort();
+  if (mainstream.length === 0 && oddball.length === 0) {
     makeEl.innerHTML = '<option value="">No makes found for this year</option>';
     showManualMake();
     modelEl.innerHTML = '<option value="">—</option>';
     showManualModel();
     return;
   }
-  makes.forEach(m => {
+  mainstream.forEach(m => {
     const opt = document.createElement('option');
     opt.value = m; opt.textContent = m;
     makeEl.appendChild(opt);
   });
+  if (oddball.length > 0) {
+    const sep = document.createElement('option');
+    sep.disabled = true; sep.textContent = '── Other Marques ──';
+    makeEl.appendChild(sep);
+    oddball.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m; opt.textContent = m;
+      makeEl.appendChild(opt);
+    });
+  }
   const notListed = document.createElement('option');
   notListed.value = '__manual__'; notListed.textContent = 'Not listed — type it in';
   makeEl.appendChild(notListed);
