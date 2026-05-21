@@ -186,14 +186,11 @@ const makeEl = document.getElementById('v-make');
 const modelEl = document.getElementById('v-model');
 
 async function loadYears() {
-  const { data } = await sb.from('vehicle_fitment').select('year').order('year', { ascending: false });
-  if (!data) return;
-  const years = [...new Set(data.map(r => r.year))];
-  years.forEach(y => {
+  for (let y = 2026; y >= 1976; y--) {
     const opt = document.createElement('option');
     opt.value = y; opt.textContent = y;
     yearEl.appendChild(opt);
-  });
+  }
 }
 
 yearEl.addEventListener('change', async () => {
@@ -203,7 +200,7 @@ yearEl.addEventListener('change', async () => {
   modelEl.disabled = true;
   if (!yearEl.value) return;
 
-  const { data } = await sb.from('vehicle_fitment').select('make').eq('year', parseInt(yearEl.value)).order('make');
+  const { data } = await sb.from('vehicle_fitment').select('make').eq('year', parseInt(yearEl.value)).order('make').limit(10000);
   if (!data) return;
   const makes = [...new Set(data.map(r => r.make))];
   makes.forEach(m => {
@@ -219,7 +216,7 @@ makeEl.addEventListener('change', async () => {
   modelEl.disabled = true;
   if (!makeEl.value) return;
 
-  const { data } = await sb.from('vehicle_fitment').select('model').eq('year', parseInt(yearEl.value)).eq('make', makeEl.value).order('model');
+  const { data } = await sb.from('vehicle_fitment').select('model').eq('year', parseInt(yearEl.value)).eq('make', makeEl.value).order('model').limit(5000);
   if (!data) return;
   const models = [...new Set(data.map(r => r.model))];
   models.forEach(m => {
