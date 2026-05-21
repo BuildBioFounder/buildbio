@@ -108,12 +108,14 @@
       <div class="field">
         <label for="v-make">Make</label>
         <select id="v-make" disabled><option value="">Select make</option></select>
+        <input type="text" id="v-make-manual" placeholder="e.g. Ford, Chevrolet" style="display:none;margin-top:6px">
       </div>
     </div>
     <div class="row-2">
       <div class="field">
         <label for="v-model">Model</label>
         <select id="v-model" disabled><option value="">Select model</option></select>
+        <input type="text" id="v-model-manual" placeholder="e.g. Model T, Camaro" style="display:none;margin-top:6px">
       </div>
       <div class="field">
         <label for="v-trim">Trim (optional)</label>
@@ -186,11 +188,29 @@ const makeEl = document.getElementById('v-make');
 const modelEl = document.getElementById('v-model');
 
 async function loadYears() {
-  for (let y = 2026; y >= 1976; y--) {
+  for (let y = new Date().getFullYear(); y >= 1908; y--) {
     const opt = document.createElement('option');
     opt.value = y; opt.textContent = y;
     yearEl.appendChild(opt);
   }
+}
+
+const makeManual = document.getElementById('v-make-manual');
+const modelManual = document.getElementById('v-model-manual');
+
+function showManualMake() {
+  makeEl.style.display = 'none';
+  makeManual.style.display = 'block';
+  makeManual.focus();
+}
+function showManualModel() {
+  modelEl.style.display = 'none';
+  modelManual.style.display = 'block';
+  modelManual.focus();
+}
+function resetManualFields() {
+  makeEl.style.display = ''; makeManual.style.display = 'none'; makeManual.value = '';
+  modelEl.style.display = ''; modelManual.style.display = 'none'; modelManual.value = '';
 }
 
 yearEl.addEventListener('change', async () => {
@@ -198,33 +218,60 @@ yearEl.addEventListener('change', async () => {
   modelEl.innerHTML = '<option value="">Select model</option>';
   makeEl.disabled = true;
   modelEl.disabled = true;
+  resetManualFields();
   if (!yearEl.value) return;
 
   const { data } = await sb.from('vehicle_fitment').select('make').eq('year', parseInt(yearEl.value)).order('make').limit(10000);
-  if (!data) return;
-  const makes = [...new Set(data.map(r => r.make))];
+  const makes = data ? [...new Set(data.map(r => r.make))] : [];
+  if (makes.length === 0) {
+    makeEl.innerHTML = '<option value="">No makes found for this year</option>';
+    showManualMake();
+    modelEl.innerHTML = '<option value="">—</option>';
+    showManualModel();
+    return;
+  }
   makes.forEach(m => {
     const opt = document.createElement('option');
     opt.value = m; opt.textContent = m;
     makeEl.appendChild(opt);
   });
+  const notListed = document.createElement('option');
+  notListed.value = '__manual__'; notListed.textContent = 'Not listed — type it in';
+  makeEl.appendChild(notListed);
   makeEl.disabled = false;
 });
 
 makeEl.addEventListener('change', async () => {
   modelEl.innerHTML = '<option value="">Select model</option>';
   modelEl.disabled = true;
+  modelEl.style.display = ''; modelManual.style.display = 'none'; modelManual.value = '';
   if (!makeEl.value) return;
+  if (makeEl.value === '__manual__') {
+    showManualMake();
+    showManualModel();
+    return;
+  }
 
   const { data } = await sb.from('vehicle_fitment').select('model').eq('year', parseInt(yearEl.value)).eq('make', makeEl.value).order('model').limit(5000);
-  if (!data) return;
-  const models = [...new Set(data.map(r => r.model))];
+  const models = data ? [...new Set(data.map(r => r.model))] : [];
+  if (models.length === 0) {
+    modelEl.innerHTML = '<option value="">No models found</option>';
+    showManualModel();
+    return;
+  }
   models.forEach(m => {
     const opt = document.createElement('option');
     opt.value = m; opt.textContent = m;
     modelEl.appendChild(opt);
   });
+  const notListed = document.createElement('option');
+  notListed.value = '__manual__'; notListed.textContent = 'Not listed — type it in';
+  modelEl.appendChild(notListed);
   modelEl.disabled = false;
+});
+
+modelEl.addEventListener('change', () => {
+  if (modelEl.value === '__manual__') showManualModel();
 });
 
 // Disciplines
@@ -296,8 +343,8 @@ function slugify(str) {
 document.getElementById('form-vehicle').addEventListener('submit', async e => {
   e.preventDefault();
   const year = yearEl.value;
-  const make = makeEl.value;
-  const model = modelEl.value;
+  const make = makeManual.style.display !== 'none' ? makeManual.value.trim() : makeEl.value;
+  const model = modelManual.style.display !== 'none' ? modelManual.value.trim() : modelEl.value;
   const trim = document.getElementById('v-trim').value.trim();
   const color = document.getElementById('v-color').value.trim();
   const nickname = document.getElementById('v-nickname').value.trim();
