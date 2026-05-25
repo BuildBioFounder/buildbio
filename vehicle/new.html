@@ -221,7 +221,7 @@ yearEl.addEventListener('change', async () => {
   resetManualFields();
   if (!yearEl.value) return;
 
-  const { data } = await sb.from('vehicle_fitment').select('make, make_tier').eq('year', parseInt(yearEl.value)).order('make').limit(10000);
+  const { data } = await sb.from('vehicle_catalog').select('make, make_tier').eq('year', parseInt(yearEl.value)).order('make').limit(10000);
   const tierMap = new Map();
   if (data) data.forEach(r => { if (!tierMap.has(r.make)) tierMap.set(r.make, r.make_tier); });
   const mainstream = [...tierMap.entries()].filter(([,t]) => t === 'mainstream').map(([m]) => m).sort();
@@ -265,7 +265,7 @@ makeEl.addEventListener('change', async () => {
     return;
   }
 
-  const { data } = await sb.from('vehicle_fitment').select('model').eq('year', parseInt(yearEl.value)).eq('make', makeEl.value).order('model').limit(5000);
+  const { data } = await sb.from('vehicle_catalog').select('model').eq('year', parseInt(yearEl.value)).eq('make', makeEl.value).order('model').limit(5000);
   const models = data ? [...new Set(data.map(r => r.model))] : [];
   if (models.length === 0) {
     modelEl.innerHTML = '<option value="">No models found</option>';
