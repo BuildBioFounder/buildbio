@@ -3,18 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="About BuildBio — The social platform for modified vehicles. Learn our story, mission, and what drives us.">
+  <meta name="description" content="About BuildBio — Built by a car guy who got tired of unanswered DMs. The platform for every modified vehicle.">
   <title>About — BuildBio</title>
   <link rel="icon" type="image/png" sizes="32x32" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-192.png">
   <link rel="apple-touch-icon" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-192.png">
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    :root{--orange:#D85A30;--olive:#5C6B3A;--olive-light:#7A8C50;--black:#000;--dark:#0D0D0D;--dark2:#111;--card:#1A1A1A;--border:#2E2E2E;--border-l:#3A3A3A;--text:#fff;--muted:#B4B2A9;--dim:#6B6B6B;--green:#1D9E75;--blue:#378ADD;--max:1160px}
+    :root{--orange:#E85D2C;--olive:#5C6B3A;--olive-light:#7A8C50;--black:#000;--dark:#0D0D0D;--dark2:#111;--card:#1A1A1A;--border:#2E2E2E;--border-l:#3A3A3A;--text:#fff;--muted:#B4B2A9;--dim:#6B6B6B;--green:#1D9E75;--blue:#378ADD;--max:1160px}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{font-family:'DM Sans',sans-serif;background:var(--black);color:var(--text);font-size:15px;line-height:1.6;overflow-x:hidden}
     .container{max-width:var(--max);margin:0 auto;padding:0 28px}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .fu{animation:fadeUp .7s ease both}
+    .d1{animation-delay:.1s}.d2{animation-delay:.22s}.d3{animation-delay:.36s}.d4{animation-delay:.5s}
 
     /* NAV */
     .nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
@@ -25,18 +29,23 @@
     .ncta{background:var(--orange);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;transition:opacity .15s,transform .1s;display:inline-flex;align-items:center}.ncta:hover{opacity:.88;transform:translateY(-1px)}
 
     /* HERO */
-    .page-hero{padding:140px 28px 80px;text-align:center;background:var(--dark);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
-    .page-hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:800px;height:400px;background:radial-gradient(ellipse at 50% 0%,rgba(216,90,48,.1) 0%,transparent 70%);pointer-events:none}
-    .page-hero-inner{position:relative;z-index:1;max-width:var(--max);margin:0 auto}
-    .page-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--olive-light);margin-bottom:14px}
-    .page-h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(40px,7vw,72px);font-weight:700;text-transform:uppercase;line-height:1;margin-bottom:18px}
-    .page-h1 em{font-style:normal;color:var(--orange)}
-    .page-sub{font-size:16px;color:var(--muted);max-width:560px;margin:0 auto;line-height:1.7}
+    .hero{position:relative;min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:120px 28px 80px}
+    .hero-img{position:absolute;inset:0;background-image:url('images/bg/turbo-blueprint.jpg');background-size:cover;background-position:center;background-repeat:no-repeat}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.78) 0%,rgba(0,0,0,.65) 40%,rgba(0,0,0,.88) 100%)}
+    .hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 100% 80% at 50% 50%,black 20%,transparent 80%)}
+    .hc{position:relative;z-index:2;max-width:840px}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(216,90,48,.12);border:1px solid rgba(216,90,48,.3);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:500;color:var(--orange);text-transform:uppercase;letter-spacing:.1em;margin-bottom:28px}
+    .edot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:pulse 2s ease-in-out infinite}
+    .h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(48px,8vw,88px);font-weight:700;text-transform:uppercase;line-height:.95;letter-spacing:-.5px;margin-bottom:28px}
+    .h1 .lo{color:var(--orange);display:block}.h1 .lw{color:var(--text);display:block}
+    .hsub{font-size:clamp(15px,2vw,18px);color:rgba(255,255,255,.8);max-width:560px;margin:0 auto 40px;line-height:1.65}
+    .hsub strong{color:var(--text);font-weight:500}
 
     /* SECTIONS */
     .sec{padding:80px 28px;max-width:var(--max);margin:0 auto}
     .sec-alt{background:var(--dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
     .sec-alt .sec{padding:80px 28px}
+    .sec-eye{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--olive-light);margin-bottom:14px}
     .sec-h2{font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:700;text-transform:uppercase;line-height:1.05;margin-bottom:20px}
     .sec-h2 em{font-style:normal;color:var(--orange)}
     .sec-body{color:var(--muted);font-size:15px;line-height:1.8;max-width:680px;margin-bottom:24px}
@@ -47,12 +56,40 @@
     .val-title{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;text-transform:uppercase;color:var(--text);letter-spacing:.2px;margin-bottom:8px}
     .val-body{font-size:13px;color:var(--muted);line-height:1.65}
 
+    /* IMAGE BAND */
+    .img-band{position:relative;height:420px;overflow:hidden}
+    .img-band-img{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;transition:transform 8s ease}
+    .img-band:hover .img-band-img{transform:scale(1.04)}
+    .img-band-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.55) 0%,rgba(0,0,0,.3) 50%,rgba(0,0,0,.7) 100%)}
+    .img-band-content{position:relative;z-index:2;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:28px}
+    .img-band-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--orange)}
+    .img-band-text{font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,4vw,48px);font-weight:700;text-transform:uppercase;color:#fff;text-align:center;line-height:1.05;text-shadow:0 2px 20px rgba(0,0,0,.6)}
+    .img-band-text em{font-style:normal;color:var(--orange)}
+
     /* FOUNDER */
-    .founder-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-top:40px}
-    .founder-photo{width:100%;aspect-ratio:1;background:var(--card);border:1px solid var(--border-l);border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:14px}
+    .founder-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:start;margin-top:40px}
+    .founder-photo{width:100%;aspect-ratio:3/4;background:var(--card);border:1px solid var(--border-l);border-radius:14px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+    .founder-photo-inner{width:100%;height:100%;background-image:url('images/bg/turbo-b-mark.jpg');background-size:cover;background-position:center;opacity:.6}
+    .founder-photo-label{position:absolute;bottom:20px;left:20px;right:20px;text-align:center}
     .founder-name{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;text-transform:uppercase;color:var(--text);margin-bottom:4px}
-    .founder-role{font-size:13px;color:var(--orange);font-weight:500;margin-bottom:16px}
-    .founder-bio{color:var(--muted);font-size:14px;line-height:1.8}
+    .founder-role{font-size:13px;color:var(--orange);font-weight:500;margin-bottom:20px}
+    .founder-bio{color:var(--muted);font-size:14px;line-height:1.85;margin-bottom:14px}
+    .founder-bio strong{color:var(--text);font-weight:500}
+
+    /* STATS */
+    .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:40px}
+    .stat-card{background:var(--card);border:1px solid var(--border-l);border-radius:14px;padding:28px 20px;text-align:center;transition:border-color .2s}
+    .stat-card:hover{border-color:rgba(216,90,48,.3)}
+    .stat-num{font-family:'Barlow Condensed',sans-serif;font-size:38px;font-weight:700;color:var(--orange);line-height:1;margin-bottom:6px}
+    .stat-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+
+    /* DIFF */
+    .diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
+    .diff-card{background:var(--card);border:1px solid var(--border-l);border-radius:14px;padding:28px 24px;transition:border-color .2s}
+    .diff-card:hover{border-color:rgba(216,90,48,.4)}
+    .diff-icon{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:700;color:rgba(216,90,48,.2);line-height:1;margin-bottom:10px}
+    .diff-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;color:var(--text);letter-spacing:.2px;margin-bottom:8px}
+    .diff-body{font-size:13px;color:var(--muted);line-height:1.65}
 
     /* CTA */
     .cta-sec{padding:100px 28px;text-align:center;position:relative;overflow:hidden}
@@ -74,13 +111,16 @@
 
     /* RESPONSIVE */
     @media(max-width:900px){
-      .sec-grid{grid-template-columns:1fr}
+      .sec-grid,.diff-grid{grid-template-columns:1fr}
       .founder-grid{grid-template-columns:1fr}
+      .stat-grid{grid-template-columns:repeat(2,1fr)}
     }
     @media(max-width:640px){
       .nav{padding:0 16px}.nav-r .nl{display:none}
-      .page-hero,.sec,.sec-alt .sec,.cta-sec{padding-left:16px;padding-right:16px}
-      .page-hero{padding-top:110px;padding-bottom:60px}
+      .hero,.sec,.sec-alt .sec,.cta-sec{padding-left:16px;padding-right:16px}
+      .hero{padding-top:100px;padding-bottom:60px;min-height:60vh}
+      .img-band{height:280px}
+      .stat-grid{grid-template-columns:1fr 1fr}
       .footer-in{flex-direction:column;align-items:flex-start}
     }
   </style>
@@ -100,63 +140,143 @@
 </nav>
 
 <!-- HERO -->
-<section class="page-hero">
-  <div class="page-hero-inner">
-    <div class="page-eyebrow">About BuildBio</div>
-    <h1 class="page-h1">Built by <em>car people</em><br>for car people</h1>
-    <!-- COPY PENDING FROM 1.2 — hero subtitle -->
-    <p class="page-sub">Every modified vehicle has a story. BuildBio gives it a permanent home.</p>
+<section class="hero">
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hgrid"></div>
+  <div class="hc">
+    <div class="eyebrow fu"><div class="edot"></div>About BuildBio</div>
+    <h1 class="h1 fu d1"><span class="lo">Built by car people.</span><span class="lw">For car people.</span></h1>
+    <p class="hsub fu d2">BuildBio started with a simple frustration: you see an incredible build and there's no easy way to know what's on it. We fixed that.</p>
   </div>
 </section>
 
 <!-- MISSION -->
 <div class="sec">
-  <h2 class="sec-h2">The <em>mission</em></h2>
-  <!-- COPY PENDING FROM 1.2 — mission statement body copy (2-3 paragraphs) -->
-  <p class="sec-body">BuildBio exists to give every modified vehicle its own digital identity. One QR code, one profile page, every mod documented and discoverable. No more forum digs. No more comment-section hunting. Scan it and know.</p>
-  <p class="sec-body">We are building the definitive platform for the aftermarket vehicle community -- a place where owners document their builds, viewers discover parts they want, and the entire ecosystem grows together.</p>
+  <div class="sec-eye">The mission</div>
+  <h2 class="sec-h2">Give every build <em>a permanent home</em></h2>
+  <p class="sec-body">BuildBio exists to give every modified vehicle its own digital identity. One QR code, one profile page, every mod documented and discoverable. No more forum digs. No more comment-section hunting. No more unanswered DMs. Scan it and know.</p>
+  <p class="sec-body">The aftermarket vehicle community generates billions in parts sales every year, but the builds themselves — the actual documentation of what people install, how it performs, and why they chose it — lives scattered across Instagram captions, forum threads, and group chats that disappear. BuildBio makes that information permanent, searchable, and useful.</p>
+</div>
+
+<!-- IMAGE BAND -->
+<div class="img-band">
+  <div class="img-band-img" style="background-image:url('images/bg/jeep-pnw-forest.png');background-position:center 40%"></div>
+  <div class="img-band-overlay"></div>
+  <div class="img-band-content">
+    <div class="img-band-label">Every mod. Every build.</div>
+    <div class="img-band-text">The trail doesn't ask <em>what you paid.</em><br>Neither do we.</div>
+  </div>
 </div>
 
 <!-- VALUES -->
 <div class="sec-alt">
   <div class="sec">
-    <h2 class="sec-h2">What <em>drives</em> us</h2>
-    <!-- COPY PENDING FROM 1.2 — values section intro paragraph -->
-    <p class="sec-body">Three principles guide every product decision at BuildBio.</p>
+    <div class="sec-eye">What drives us</div>
+    <h2 class="sec-h2">Three principles. <em>Zero exceptions.</em></h2>
+    <p class="sec-body">Every feature, every design decision, and every line of code at BuildBio filters through these.</p>
     <div class="sec-grid">
       <div class="val-card">
         <div class="val-num">01</div>
         <div class="val-title">Owner-first</div>
-        <!-- COPY PENDING FROM 1.2 — value 1 body copy -->
-        <div class="val-body">Every feature starts with one question: does this make life better for the person who built the vehicle? If yes, ship it. If not, cut it.</div>
+        <div class="val-body">Every feature starts with one question: does this make life better for the person who built the vehicle? If yes, ship it. If not, cut it. The owner is the customer, the content creator, and the reason this platform exists.</div>
       </div>
       <div class="val-card">
         <div class="val-num">02</div>
         <div class="val-title">Accuracy matters</div>
-        <!-- COPY PENDING FROM 1.2 — value 2 body copy -->
-        <div class="val-body">Verified builds, 90-day accuracy confirmations, real part numbers. The car community deserves data it can trust.</div>
+        <div class="val-body">Verified builds, 90-day accuracy confirmations, real part numbers. The car community has been burned by bad data for too long — forum posts from 2014, dead links, wrong fitment. BuildBio data is current or it gets flagged.</div>
       </div>
       <div class="val-card">
         <div class="val-num">03</div>
         <div class="val-title">Builders get paid</div>
-        <!-- COPY PENDING FROM 1.2 — value 3 body copy -->
-        <div class="val-body">Your build generates affiliate interest every time someone scans it. Premium members earn revenue share on every sale. Your build pays you back.</div>
+        <div class="val-body">Your build generates affiliate interest every time someone scans it. Premium members earn revenue share on every sale their profile drives. Your build isn't just documented — it pays you back.</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- FOUNDER -->
+<!-- WHAT MAKES US DIFFERENT -->
 <div class="sec">
-  <h2 class="sec-h2">Meet the <em>founder</em></h2>
-  <div class="founder-grid">
-    <div class="founder-photo"><!-- COPY PENDING FROM 1.2 — founder headshot image -->[Photo placeholder]</div>
-    <div>
-      <div class="founder-name">Blakeley King</div>
-      <div class="founder-role">Founder</div>
-      <!-- COPY PENDING FROM 1.2 — founder bio (3-4 paragraphs) -->
-      <p class="founder-bio">BuildBio was born from a simple frustration: you see an incredible build at Cars & Coffee, but there is no easy way to know what is on it. No spec sheet. No parts list. Just guesswork and unanswered DMs.</p>
-      <p class="founder-bio" style="margin-top:12px">Blakeley built BuildBio to solve that problem permanently -- one QR code that tells the whole story.</p>
+  <div class="sec-eye">Why BuildBio</div>
+  <h2 class="sec-h2">Not another <em>car app</em></h2>
+  <p class="sec-body">BuildBio isn't a social media platform. It's a permanent record with a revenue engine attached.</p>
+  <div class="diff-grid">
+    <div class="diff-card">
+      <div class="diff-icon">//</div>
+      <div class="diff-title">Permanent, not ephemeral</div>
+      <div class="diff-body">Instagram stories disappear. Forum posts get buried. BuildBio profiles are permanent, SEO-indexed, and always accessible via QR code. Your build documentation outlives every platform trend.</div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">//</div>
+      <div class="diff-title">Data you can trust</div>
+      <div class="diff-body">Verified part numbers. Accuracy confirmations. NHTSA recall alerts. This isn't guesswork — it's the spec sheet for your vehicle, maintained by the person who built it.</div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">//</div>
+      <div class="diff-title">Revenue, not just likes</div>
+      <div class="diff-body">Every scan of your QR code is a potential affiliate sale. Premium members earn real money when someone buys a part they documented. Engagement converts to income.</div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">//</div>
+      <div class="diff-title">Every build welcome</div>
+      <div class="diff-body">Budget daily. Dream build. Rust bucket project car. Overlander. Street car. Classic muscle. If you turned a wrench on it, it belongs here. No gatekeeping. No minimum spend.</div>
+    </div>
+  </div>
+</div>
+
+<!-- IMAGE BAND 2 -->
+<div class="img-band">
+  <div class="img-band-img" style="background-image:url('images/bg/cruiser-desert-sunset.png');background-position:center 50%"></div>
+  <div class="img-band-overlay"></div>
+  <div class="img-band-content">
+    <div class="img-band-label">Built different</div>
+    <div class="img-band-text">Different builds. Same purpose.<br><em>Not me. We.</em></div>
+  </div>
+</div>
+
+<!-- FOUNDER -->
+<div class="sec-alt">
+  <div class="sec">
+    <div class="sec-eye">The founder</div>
+    <h2 class="sec-h2">Meet <em>Blakeley</em></h2>
+    <div class="founder-grid">
+      <div class="founder-photo">
+        <div class="founder-photo-inner"></div>
+        <div class="founder-photo-label">
+          <div class="founder-name">Blakeley King</div>
+          <div class="founder-role">Founder</div>
+        </div>
+      </div>
+      <div>
+        <p class="founder-bio"><strong>BuildBio was born at a Cars and Coffee.</strong> Blakeley saw a 4Runner with a setup he'd never seen before — clean lift, perfect wheel fitment, light bar he couldn't identify. The owner wasn't around. He DM'd them on Instagram. No response. He dug through forums. Dead ends. Three hours later, still no straight answer.</p>
+        <p class="founder-bio">That's the moment BuildBio clicked. Every modified vehicle should have its own page — scannable, permanent, and complete. One QR code that tells the whole story.</p>
+        <p class="founder-bio">Blakeley's background isn't Silicon Valley. <strong>Six years in automotive sales</strong> — he knows how people talk about cars, what matters at the point of sale, and what information actually closes the gap between curiosity and purchase. Before that, fine dining and sales. The thread through all of it: understanding what people want before they can articulate it.</p>
+        <p class="founder-bio">BuildBio is bootstrapped, solo-founded, and built in Westlake Village, California. No venture capital. No board of directors. Just a founder who got tired of unanswered DMs and decided to build the fix himself.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BY THE NUMBERS -->
+<div class="sec">
+  <div class="sec-eye">By the numbers</div>
+  <h2 class="sec-h2">Where we <em>stand</em></h2>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-num">2026</div>
+      <div class="stat-label">Founded</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">30+</div>
+      <div class="stat-label">Features planned</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">$0</div>
+      <div class="stat-label">To get started</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">1</div>
+      <div class="stat-label">Founder. No committee.</div>
     </div>
   </div>
 </div>
@@ -164,7 +284,7 @@
 <!-- CTA -->
 <section class="cta-sec">
   <div class="cta-inner">
-    <h2 class="cta-h2">Ready to <em>document</em><br>your build?</h2>
+    <h2 class="cta-h2">Your build <em>deserves</em><br>a page.</h2>
     <p class="cta-sub">Create your free BuildBio profile in under 2 minutes. No credit card required.</p>
     <a href="/signup.html" class="btnl bpl" style="font-size:16px;padding:16px 40px">Create Your Free Profile Now!</a>
   </div>
@@ -179,8 +299,8 @@
       <a href="/#features" class="flink">Features</a>
       <a href="/pricing.html" class="flink">Pricing</a>
       <a href="/vehicle-profile.html" class="flink">Sample profile</a>
-      <a href="/privacy" class="flink">Privacy</a>
-      <a href="/terms" class="flink">Terms</a>
+      <a href="/privacy.html" class="flink">Privacy</a>
+      <a href="/terms.html" class="flink">Terms</a>
     </div>
     <div class="fcp">&copy; 2026 BuildBio. All rights reserved.</div>
   </div>
