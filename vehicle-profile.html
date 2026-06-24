@@ -76,6 +76,8 @@
     .mod-actions { display: flex; gap: 6px; }
     .mod-btn { font-size: 12px; padding: 5px 12px; border-radius: 6px; border: 1px solid var(--olive); color: var(--olive-light); background: transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.15s, color 0.15s; }
     .mod-btn:hover { background: rgba(92,107,58,0.15); color: #fff; }
+    .buy-now-btn { font-size: 12px; padding: 5px 14px; border-radius: 6px; border: none; background: var(--orange); color: #fff; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 500; transition: opacity 0.15s; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+    .buy-now-btn:hover { opacity: 0.88; }
 
     .social-section { max-width: var(--max-width); margin: 28px auto 0; padding: 20px 28px; border-top: 1px solid var(--border); }
     .social-label { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
@@ -131,6 +133,32 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 const params = new URLSearchParams(window.location.search);
 const vehicleId = params.get('id');
+
+const TIER1_BRANDS = ['summit racing','baja designs','amp research','rough country','readylift','bilstein','k&n filters','k&n','mishimoto','perrin performance','perrin'];
+const TIER2_BRANDS = ['rally armor','c4 fabrication','arb','warn industries','warn','rigid industries','rigid'];
+
+function getAffiliateInfo(brandName) {
+  if (!brandName) return null;
+  const lower = brandName.toLowerCase();
+  const search = encodeURIComponent(brandName + ' ' + '');
+  if (TIER1_BRANDS.includes(lower)) return { tier: 1, program: 'avantlink' };
+  if (TIER2_BRANDS.includes(lower)) return { tier: 2, program: 'impact' };
+  return { tier: 3, program: 'amazon' };
+}
+
+function makeAffiliateUrl(brandName, productName) {
+  if (!brandName) return null;
+  const search = encodeURIComponent(brandName + ' ' + productName);
+  return 'https://www.amazon.com/s?k=' + search + '&tag=ASSOCIATE_TAG_PLACEHOLDER';
+}
+
+function trackClick(partBrand, partName, vehicleId, tier, program) {
+  fetch(SUPABASE_URL + '/rest/v1/affiliate_clicks', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON, 'Prefer': 'return=minimal' },
+    body: JSON.stringify({ vehicle_profile_id: vehicleId, affiliate_program: program, affiliate_tier: tier, user_agent: navigator.userAgent })
+  }).catch(() => {});
+}
 
 function stars(rating, count) {
   const full = Math.round(rating || 0);
@@ -219,6 +247,9 @@ function initials(first, last, username) {
       for (const m of catMods) {
         const r = reviewMap[m.id] || [];
         const avg = r.length > 0 ? r.reduce((a, b) => a + b, 0) / r.length : 0;
+        const affUrl = makeAffiliateUrl(m.brand, m.product_name);
+        const affInfo = getAffiliateInfo(m.brand);
+        const buyBtn = affUrl && affInfo ? `<a href="${affUrl}" target="_blank" rel="noopener" class="buy-now-btn" onclick="trackClick('${(m.brand||'').replace(/'/g,"\\'")}','${(m.product_name||'').replace(/'/g,"\\'")}','${v.id}',${affInfo.tier},'${affInfo.program}')">Buy Now</a>` : '';
         modsHtml += `
           <div class="mod-card">
             <div class="mod-name">${m.product_name}</div>
@@ -227,6 +258,7 @@ function initials(first, last, username) {
             <div class="mod-bottom">
               ${r.length > 0 ? stars(avg, r.length) : '<span style="font-size:11px;color:var(--text-muted)">No reviews yet</span>'}
               <div class="mod-actions">
+                ${buyBtn}
                 <button class="mod-btn">Leave a review</button>
               </div>
             </div>
