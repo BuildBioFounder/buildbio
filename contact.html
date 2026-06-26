@@ -197,6 +197,12 @@
 function handleSubmit(e) {
   e.preventDefault();
   var form = document.getElementById('contactForm');
+  var name = form.querySelector('[name="name"]')?.value || '';
+  var email = form.querySelector('[name="email"]')?.value || '';
+  var message = form.querySelector('[name="message"]')?.value || '';
+  var subject = encodeURIComponent('BuildBio Contact: ' + name);
+  var body = encodeURIComponent('From: ' + name + '\nEmail: ' + email + '\n\n' + message);
+  window.location.href = 'mailto:founder@buildbio.app?subject=' + subject + '&body=' + body;
   var success = document.getElementById('formSuccess');
   form.style.display = 'none';
   success.classList.add('show');

@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="See every modification on this vehicle — BuildBio">
+  <meta property="og:title" content="Vehicle Profile — BuildBio">
+  <meta property="og:description" content="Your Aftermarket Blueprint. See every mod, scan the QR, buy the parts.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/og-default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vehicle Profile — BuildBio">
+  <meta name="twitter:description" content="Your Aftermarket Blueprint. See every mod, scan the QR, buy the parts.">
   <title id="page-title">Vehicle Profile — BuildBio</title>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-32.png">
@@ -259,7 +266,7 @@ function initials(first, last, username) {
               ${r.length > 0 ? stars(avg, r.length) : '<span style="font-size:11px;color:var(--text-muted)">No reviews yet</span>'}
               <div class="mod-actions">
                 ${buyBtn}
-                <button class="mod-btn">Leave a review</button>
+                <button class="mod-btn" onclick="alert('Reviews launching soon. First-Hand Only reviews require part ownership.')">Leave a review</button>
               </div>
             </div>
           </div>`;
@@ -318,8 +325,10 @@ function initials(first, last, username) {
     ${socialHtml}
   `;
 
-  // Record scan (only for non-owners)
-  if (!isOwner) {
+  // Record scan (only for QR scans, not direct nav/search clicks)
+  const referer = document.referrer || '';
+  const isQrScan = params.has('qr') || (!referer.includes(window.location.hostname) && !referer);
+  if (!isOwner && isQrScan) {
     await sb.from('qr_scans').insert({ vehicle_id: v.id });
   }
 })();

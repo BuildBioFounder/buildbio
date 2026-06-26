@@ -328,7 +328,8 @@ document.getElementById('btn-submit').addEventListener('click', async () => {
     part_number: document.getElementById('part-number').value.trim() || null,
     date_installed: document.getElementById('install-date').value || null,
     installer_name: document.getElementById('installer-name').value.trim() || null,
-    installer_location: document.getElementById('installer-loc').value.trim() || null
+    installer_location: document.getElementById('installer-loc').value.trim() || null,
+    notes: document.getElementById('mod-notes').value.trim() || null
   });
 
   btn.disabled = false; btn.classList.remove('loading');

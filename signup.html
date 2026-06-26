@@ -711,7 +711,7 @@ document.getElementById('form-login').addEventListener('submit', async e => {
   setLoading(btn, false);
 
   if (error) return showMsg(error.message);
-  window.location.href = 'dashboard.html';
+  window.location.href = 'account.html';
 });
 
 // ── Forgot Password ──
@@ -720,7 +720,7 @@ document.getElementById('forgot-pw').addEventListener('click', async e => {
   const email = document.getElementById('login-email').value.trim();
   if (!email) return showMsg('Enter your email address above first.');
   const { error } = await sb.auth.resetPasswordForEmail(email, {
-    redirectTo: window.location.origin + '/reset-password.html'
+    redirectTo: window.location.origin + '/password-reset-confirm.html'
   });
   if (error) return showMsg(error.message);
   showMsg('Password reset link sent — check your email.', 'success');
@@ -729,7 +729,7 @@ document.getElementById('forgot-pw').addEventListener('click', async e => {
 // ── Redirect if already signed in ──
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
-  if (session) window.location.href = 'dashboard.html';
+  if (session) window.location.href = 'account.html';
 })();
 </script>
 

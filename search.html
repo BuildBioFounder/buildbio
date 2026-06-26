@@ -393,7 +393,7 @@
       results.vehicles.forEach(v => {
         const name = [v.year, v.make, v.model].filter(Boolean).join(' ');
         const nick = v.nickname ? v.nickname : '';
-        const profileUrl = v.slug ? '/vehicle-profile.html?slug=' + encodeURIComponent(v.slug) : '#';
+        const profileUrl = v.id ? '/vehicle-profile.html?id=' + encodeURIComponent(v.id) : '#';
         html += '<div class="vehicle-card">'
           + '<div class="vehicle-icon">&#128663;</div>'
           + '<div class="vehicle-info">'
