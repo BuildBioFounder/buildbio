@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Start building your vehicle profile on BuildBio. Upload photos, list your mods, and share your build with the world.">
+  <title>Start Your Build — BuildBio</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-192.png">
+  <link rel="apple-touch-icon" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-192.png">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--orange:#E85D2C;--olive:#5C6B3A;--olive-light:#7A8C50;--black:#000;--dark:#0D0D0D;--dark2:#111;--card:#1A1A1A;--border:#2E2E2E;--border-l:#3A3A3A;--text:#fff;--muted:#B4B2A9;--dim:#6B6B6B;--green:#1D9E75;--blue:#378ADD;--max:720px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--black);color:var(--text);font-size:15px;line-height:1.6;overflow-x:hidden}
+
+    /* NAV */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .logo{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;letter-spacing:.3px;line-height:1;text-decoration:none;display:flex;align-items:baseline}
+    .logo .BL{font-size:28px;color:var(--orange)}.logo .rb{color:var(--orange)}.logo .BL2{font-size:28px;color:var(--olive-light)}.logo .rb2{color:var(--olive-light)}
+    .nav-r{display:flex;align-items:center;gap:24px}
+    .nl{color:var(--muted);font-size:13px;text-decoration:none;transition:color .15s}.nl:hover{color:var(--text)}
+    .ncta{background:var(--orange);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;transition:opacity .15s,transform .1s;display:inline-flex;align-items:center}.ncta:hover{opacity:.88;transform:translateY(-1px)}
+
+    /* ANIMATIONS */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    .fu{animation:fadeUp .7s ease both}
+    .d1{animation-delay:.1s}.d2{animation-delay:.22s}.d3{animation-delay:.36s}
+
+    /* HERO */
+    .start-hero{padding:140px 28px 80px;text-align:center;position:relative;overflow:hidden}
+    .start-hero-bg{position:absolute;inset:0}
+    .start-hero-slide{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity 1.5s ease}
+    .start-hero-slide.active{opacity:1}
+    .start-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.62) 0%,rgba(0,0,0,.45) 40%,rgba(0,0,0,.82) 100%)}
+    .start-hero-inner{position:relative;z-index:1;max-width:var(--max);margin:0 auto}
+    .start-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--olive-light);margin-bottom:14px}
+    .start-h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,7vw,56px);font-weight:700;text-transform:uppercase;line-height:1;margin-bottom:16px}
+    .start-h1 em{font-style:normal;color:var(--orange)}
+    .start-sub{font-size:15px;color:var(--muted);max-width:480px;margin:0 auto;line-height:1.7}
+
+    /* STEPPER */
+    .stepper{max-width:var(--max);margin:0 auto;padding:0 28px}
+    .step-bar{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:48px;position:relative}
+    .step-dot{width:36px;height:36px;border-radius:50%;background:var(--card);border:2px solid var(--border-l);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--dim);transition:all .3s;position:relative;z-index:2;flex-shrink:0}
+    .step-dot.active{background:var(--orange);border-color:var(--orange);color:#fff}
+    .step-dot.done{background:var(--olive-light);border-color:var(--olive-light);color:#fff}
+    .step-line{height:2px;width:60px;background:var(--border-l);transition:background .3s;flex-shrink:0}
+    .step-line.done{background:var(--olive-light)}
+    .step-labels{display:flex;justify-content:space-between;margin-top:-8px;margin-bottom:40px;padding:0 6px}
+    .step-label{font-size:11px;color:var(--dim);text-align:center;width:80px;transition:color .3s}
+    .step-label.active{color:var(--orange)}
+    .step-label.done{color:var(--olive-light)}
+
+    /* PANELS */
+    .panel{display:none;animation:fadeUp .5s ease both}
+    .panel.active{display:block}
+
+    /* FORM ELEMENTS */
+    .field{margin-bottom:20px}
+    .field-label{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;display:block}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .field input,.field select,.field textarea{width:100%;padding:12px 16px;background:var(--card);border:1px solid var(--border-l);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--orange)}
+    .field input::placeholder,.field textarea::placeholder{color:var(--dim)}
+    .field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6B6B' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px;cursor:pointer}
+    .field select option{background:var(--card);color:var(--text)}
+    .field textarea{resize:vertical;min-height:80px}
+    .field-hint{font-size:12px;color:var(--dim);margin-top:6px}
+
+    /* PHOTO UPLOAD */
+    .drop-zone{border:2px dashed var(--border-l);border-radius:14px;padding:48px 28px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative}
+    .drop-zone:hover,.drop-zone.dragover{border-color:var(--orange);background:rgba(232,93,44,.04)}
+    .drop-icon{font-size:32px;margin-bottom:12px;color:var(--dim);line-height:1}
+    .drop-text{font-size:14px;color:var(--muted);margin-bottom:4px}
+    .drop-hint{font-size:12px;color:var(--dim)}
+    .drop-zone input{position:absolute;inset:0;opacity:0;cursor:pointer}
+    .photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+    .photo-thumb{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;border:1px solid var(--border-l);background:var(--card)}
+    .photo-thumb img{width:100%;height:100%;object-fit:cover}
+    .photo-remove{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.7);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:background .15s}
+    .photo-remove:hover{background:var(--orange)}
+    .photo-count{font-size:12px;color:var(--dim);margin-top:10px;text-align:center}
+
+    /* MOD LIST */
+    .mod-entry{background:var(--card);border:1px solid var(--border-l);border-radius:12px;padding:18px 20px;margin-bottom:12px;position:relative;transition:border-color .2s}
+    .mod-entry:hover{border-color:rgba(232,93,44,.25)}
+    .mod-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .mod-row-3{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;margin-top:10px;align-items:end}
+    .mod-entry input,.mod-entry select{width:100%;padding:10px 14px;background:var(--dark);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+    .mod-entry input:focus,.mod-entry select:focus{border-color:var(--orange)}
+    .mod-entry input::placeholder{color:var(--dim)}
+    .mod-entry select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6B6B' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px;cursor:pointer;background-color:var(--dark)}
+    .mod-remove{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--dim);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+    .mod-remove:hover{background:rgba(232,93,44,.15);border-color:var(--orange);color:var(--orange)}
+    .mod-mini-label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;font-weight:500}
+    .add-mod{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid var(--border-l);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;margin-top:8px}
+    .add-mod:hover{background:rgba(255,255,255,.1);color:var(--text);border-color:rgba(255,255,255,.2)}
+    .mod-count{font-size:12px;color:var(--dim);margin-top:12px}
+    .mod-stars{display:flex;align-items:center;gap:4px;margin-top:10px}
+    .mod-stars-label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;font-weight:500;margin-right:8px}
+    .mod-star{width:28px;height:28px;cursor:pointer;transition:transform .12s;display:flex;align-items:center;justify-content:center}
+    .mod-star:hover{transform:scale(1.15)}
+    .mod-star svg{width:22px;height:22px;fill:var(--border-l);transition:fill .15s}
+    .mod-star.hovered svg,.mod-star.active svg{fill:var(--orange)}
+    .mod-photo-row{margin-top:10px;display:flex;align-items:center;gap:12px}
+    .mod-photo-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;background:rgba(255,255,255,.04);border:1px dashed var(--border-l);color:var(--dim);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+    .mod-photo-btn:hover{border-color:var(--orange);color:var(--muted);background:rgba(232,93,44,.04)}
+    .mod-photo-btn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+    .mod-photo-preview{width:48px;height:48px;border-radius:6px;overflow:hidden;border:1px solid var(--border-l);flex-shrink:0;position:relative}
+    .mod-photo-preview img{width:100%;height:100%;object-fit:cover}
+    .mod-photo-x{position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:rgba(0,0,0,.75);border:none;color:#fff;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+
+    /* PREVIEW */
+    .preview-card{background:var(--card);border:1px solid var(--border-l);border-radius:16px;overflow:hidden;max-width:480px;margin:0 auto}
+    .preview-hero{width:100%;height:200px;background:var(--dark2);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+    .preview-hero img{width:100%;height:100%;object-fit:cover}
+    .preview-hero-empty{font-size:13px;color:var(--dim)}
+    .preview-body{padding:24px}
+    .preview-vehicle{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;text-transform:uppercase;line-height:1.1;margin-bottom:4px}
+    .preview-vehicle em{font-style:normal;color:var(--orange)}
+    .preview-trim{font-size:13px;color:var(--dim);margin-bottom:20px}
+    .preview-section-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--olive-light);margin-bottom:10px}
+    .preview-photos{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:24px}
+    .preview-photos img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;border:1px solid var(--border)}
+    .preview-mod-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+    .preview-mod-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 14px;background:var(--dark);border-radius:8px;border:1px solid var(--border)}
+    .preview-mod-name{font-size:13px;font-weight:500;color:var(--text)}
+    .preview-mod-brand{font-size:12px;color:var(--dim)}
+    .preview-mod-cat{font-size:10px;color:var(--olive-light);font-family:'Barlow Condensed',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+    .preview-empty{font-size:13px;color:var(--dim);text-align:center;padding:20px 0}
+
+    /* SAVE PROMPT */
+    .save-prompt{background:var(--card);border:1px solid var(--border-l);border-radius:16px;padding:36px 32px;margin-top:32px;text-align:center;max-width:480px;margin-left:auto;margin-right:auto}
+    .save-prompt h3{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;text-transform:uppercase;margin-bottom:8px}
+    .save-prompt h3 em{font-style:normal;color:var(--orange)}
+    .save-prompt p{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6}
+    .save-fields{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;text-align:left}
+    .save-fields input{width:100%;padding:12px 16px;background:var(--dark);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+    .save-fields input:focus{border-color:var(--orange)}
+    .save-fields input::placeholder{color:var(--dim)}
+    .save-terms{font-size:11px;color:var(--dim);line-height:1.5;margin-top:4px}
+    .save-terms a{color:var(--orange);text-decoration:none}
+    .save-skip{font-size:13px;color:var(--dim);margin-top:16px;cursor:pointer;transition:color .15s;background:none;border:none;font-family:'DM Sans',sans-serif}
+    .save-skip:hover{color:var(--muted)}
+
+    /* BUTTONS */
+    .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;text-decoration:none;cursor:pointer;border:none;background:var(--orange);color:#fff;transition:opacity .15s,transform .12s;width:100%}
+    .btn-primary:hover{opacity:.88;transform:translateY(-2px)}
+    .btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;text-decoration:none;cursor:pointer;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);transition:all .15s}
+    .btn-secondary:hover{background:rgba(255,255,255,.12);color:#fff;transform:translateY(-1px)}
+    .btn-row{display:flex;gap:12px;margin-top:32px}
+    .btn-row .btn-secondary{flex:0 0 auto;width:auto;padding:14px 24px}
+    .btn-row .btn-primary{flex:1}
+
+    /* FOOTER */
+    .footer{background:var(--dark);border-top:1px solid var(--border);padding:38px 28px;margin-top:80px}
+    .footer-in{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+    .fl2{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;text-decoration:none}.fl2 .f1{color:var(--orange)}.fl2 .f2{color:var(--olive-light)}
+    .flinks{display:flex;gap:22px;flex-wrap:wrap}
+    .flink{font-size:13px;color:var(--dim);text-decoration:none;transition:color .15s}.flink:hover{color:var(--muted)}
+    .fcp{font-size:12px;color:var(--dim)}
+
+    /* HAMBURGER MENU */
+    .ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:10px;margin-right:-10px;z-index:301}
+    .ham span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:transform .3s,opacity .3s}
+    .ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0}
+    .ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    .mob-menu{position:fixed;inset:0;z-index:300;background:linear-gradient(to bottom,var(--orange),var(--olive));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;opacity:0;pointer-events:none;transition:opacity .3s}
+    .mob-menu.open{opacity:1;pointer-events:auto}
+    .mob-menu a{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;text-transform:uppercase;color:#fff;text-decoration:none;padding:16px 0;letter-spacing:.04em;transition:opacity .15s}
+    .mob-menu a:hover{opacity:.8}
+    .mob-menu .mob-cta{margin-top:20px;background:rgba(0,0,0,.25);padding:16px 40px;border-radius:12px;font-size:22px}
+    .mob-menu .mob-close{position:absolute;top:16px;right:20px;font-size:32px;color:#fff;background:none;border:none;cursor:pointer;padding:10px;line-height:1}
+
+    /* RESPONSIVE */
+    @media(max-width:640px){
+      .nav{padding:0 16px}.nav-r .nl{display:none}.nav-r .ncta{display:none}
+      .ham{display:flex}
+      .ncta{padding:12px 20px;font-size:14px;min-height:44px}
+      .start-hero{padding:90px 16px 36px}
+      .stepper{padding:0 16px}
+      .field-row{grid-template-columns:1fr}
+      .mod-row{grid-template-columns:1fr}
+      .mod-row-3{grid-template-columns:1fr 1fr;gap:10px}
+      .mod-row-3 .mod-remove{justify-self:end}
+      .mod-remove{width:44px;height:44px;font-size:18px}
+      .mod-star{width:44px;height:44px}.mod-star svg{width:26px;height:26px}
+      .mod-photo-x{width:32px;height:32px;font-size:14px;top:2px;right:2px}
+      .add-mod{padding:14px 22px;font-size:14px;width:100%;justify-content:center}
+      .photo-remove{width:36px;height:36px;font-size:16px}
+      .photo-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+      .preview-photos{grid-template-columns:repeat(3,1fr)}
+      .drop-zone{padding:32px 16px}
+      .btn-row{flex-direction:column-reverse}.btn-row .btn-secondary{width:100%}
+      .btn-primary,.btn-secondary{min-height:48px;font-size:16px}
+      .save-prompt{padding:28px 20px}
+      .save-skip{padding:14px 16px;min-height:44px;width:100%}
+      .save-fields input{padding:14px 16px;font-size:16px}
+      .step-dot{width:42px;height:42px;font-size:15px}
+      .step-line{width:36px}
+      .step-labels{padding:0}
+      .step-label{width:60px;font-size:10px}
+      .field input,.field select{padding:14px 16px;font-size:16px;min-height:48px}
+      .mod-entry input,.mod-entry select{padding:12px 14px;font-size:14px;min-height:44px}
+      .footer-in{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="logo"><span class="BL">B</span><span class="rb">UILD</span><span class="BL2">B</span><span class="rb2">IO</span></a>
+  <div class="nav-r">
+    <a href="/how-it-works.html" class="nl">How it works</a>
+    <a href="/#features" class="nl">Features</a>
+    <a href="/pricing.html" class="nl">Pricing</a>
+    <a href="/login.html" class="nl">Log in</a>
+    <a href="/signup.html" class="ncta">Sign Up Direct</a>
+    <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="/how-it-works.html">How It Works</a>
+  <a href="/#features">Features</a>
+  <a href="/pricing.html">Pricing</a>
+  <a href="/login.html">Log In</a>
+  <a href="/start.html" class="mob-cta">Start Your Build</a>
+</div>
+
+<!-- HERO -->
+<section class="start-hero">
+  <div class="start-hero-bg">
+    <div class="start-hero-slide active" style="background-image:url('images/bg/tacoma-desert.png')"></div>
+    <div class="start-hero-slide" style="background-image:url('images/bg/street-scene.png')"></div>
+    <div class="start-hero-slide" style="background-image:url('images/bg/bronco-mud-trail.png')"></div>
+    <div class="start-hero-slide" style="background-image:url('images/bg/cars-coffee-sunset.png')"></div>
+  </div>
+  <div class="start-hero-overlay"></div>
+  <div class="start-hero-inner">
+    <img src="images/bg/bb-logo.png" alt="BuildBio" style="width:192px;height:auto;margin-bottom:20px" class="fu">
+    <div class="start-eyebrow fu d1">NO ACCOUNT REQUIRED</div>
+    <h1 class="start-h1 fu d2">START YOUR <em>BUILD.</em></h1>
+    <p class="start-sub fu d3">Add your vehicle, upload your photos, list your mods.<br>Save it when you're ready.</p>
+  </div>
+</section>
+
+<!-- STEPPER -->
+<div class="stepper">
+
+  <!-- STEP INDICATORS -->
+  <div class="step-bar">
+    <div class="step-dot active" data-step="1">1</div>
+    <div class="step-line" data-line="1"></div>
+    <div class="step-dot" data-step="2">2</div>
+    <div class="step-line" data-line="2"></div>
+    <div class="step-dot" data-step="3">3</div>
+    <div class="step-line" data-line="3"></div>
+    <div class="step-dot" data-step="4">4</div>
+  </div>
+
+  <!-- STEP 1: VEHICLE -->
+  <div class="panel active" id="step1">
+    <div style="margin-bottom:32px;padding:28px;background:var(--card);border:1px solid var(--border-l);border-radius:14px;border-left:3px solid var(--orange)">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;color:var(--text);margin-bottom:14px">Why BuildBio?</div>
+      <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:14px">Tired of texting or DM'ing your mod list to strangers just so they can find out what's on your build -- and giving out your personal info in the process?</p>
+      <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:14px">We've all been there. Hunting through comment sections, sliding into DMs, scrolling five platforms deep trying to find one part name -- only to hit a dead end.</p>
+      <p style="font-size:14px;color:var(--text);line-height:1.8;margin-bottom:14px"><strong>BuildBio was built by an enthusiast, for enthusiasts.</strong></p>
+      <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:14px">List every mod on your vehicle in one clean, scannable profile. Share it at Cars and Coffee, car meets, trail runs, or anywhere online with a unique QR code.</p>
+      <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:0">One snap of the camera and anyone has instant access to your full build -- every part, every brand, easy to read, easy to research, easy to buy. <span style="color:var(--orange)">No more dead ends. No more DMs.</span> Just your build, documented.</p>
+    </div>
+    <div class="field">
+      <label class="field-label">Year</label>
+      <select id="v-year">
+        <option value="">Select year</option>
+      </select>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label">Make</label>
+        <select id="v-make" onchange="filterModels()">
+          <option value="">Select make</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field-label">Model</label>
+        <select id="v-model" disabled>
+          <option value="">Select make first</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label class="field-label">Trim <span style="color:var(--dim);font-weight:400;text-transform:none;letter-spacing:0;font-family:'DM Sans',sans-serif">(optional)</span></label>
+        <input type="text" id="v-trim" placeholder="TRD Pro, Raptor, Type R...">
+      </div>
+      <div class="field">
+        <label class="field-label">Color</label>
+        <input type="text" id="v-color" placeholder="Cement Gray, Cavalry Blue...">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="goStep(2)">Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: PHOTOS -->
+  <div class="panel" id="step2">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;margin-bottom:8px">Profile Photo</div>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:8px;line-height:1.6">This is the <strong style="color:var(--text)">first thing people see</strong> when they find your build.</p>
+      <p style="font-size:13px;color:var(--dim);margin-bottom:24px;line-height:1.6">Pick your best angle -- the shot you'd post on Instagram. Clean, well-lit, shows the whole vehicle.</p>
+    </div>
+    <div class="drop-zone" id="dropZone">
+      <div id="dropContent">
+        <div class="drop-icon">+</div>
+        <div class="drop-text">Drop your photo here or tap to browse</div>
+        <div class="drop-hint">JPG, PNG, or HEIC. One photo.</div>
+      </div>
+      <div id="thumbPreview" style="display:none">
+        <img id="thumbImg" style="max-width:100%;max-height:320px;border-radius:10px;display:block;margin:0 auto" alt="Profile photo">
+        <button id="thumbRemove" onclick="removePhoto()" style="margin-top:14px;padding:8px 20px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid var(--border-l);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer">Change Photo</button>
+      </div>
+      <input type="file" id="photoInput" accept="image/*">
+    </div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goStep(1)">Back</button>
+      <button class="btn-primary" onclick="goStep(3)">Next</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: MODS -->
+  <div class="panel" id="step3">
+    <div id="modList">
+      <div class="mod-entry">
+        <div class="mod-row">
+          <div>
+            <div class="mod-mini-label">Category</div>
+            <select class="mod-cat" onchange="filterParts(this)">
+              <option value="">Select</option>
+              <option>Armor / Protection</option>
+              <option>Audio / Electronics</option>
+              <option>Bed / Cargo</option>
+              <option>Brakes</option>
+              <option>Drivetrain</option>
+              <option>Engine</option>
+              <option>Exhaust</option>
+              <option>Exterior</option>
+              <option>Interior</option>
+              <option>Lighting</option>
+              <option>Overland / Camp</option>
+              <option>Recovery</option>
+              <option>Roof / Rack</option>
+              <option>Suspension</option>
+              <option>Wheels / Tires</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div>
+            <div class="mod-mini-label">Part</div>
+            <select class="mod-part" onchange="handlePartSelect(this)" disabled>
+              <option value="">Select category first</option>
+            </select>
+            <input type="text" class="mod-part-other" placeholder="Describe your part..." style="display:none;margin-top:8px">
+          </div>
+        </div>
+        <div class="mod-row-3">
+          <div>
+            <div class="mod-mini-label">Brand</div>
+            <input type="text" class="mod-brand" placeholder="Optional">
+          </div>
+          <div>
+            <div class="mod-mini-label">Notes</div>
+            <input type="text" class="mod-notes" placeholder="Optional">
+          </div>
+          <button class="mod-remove" onclick="removeMod(this)" title="Remove">&times;</button>
+        </div>
+        <div class="mod-stars">
+          <span class="mod-stars-label">Part Rating</span>
+          <span class="mod-star" data-val="1" onmouseenter="hoverStars(this,1)" onmouseleave="unhoverStars(this)" onclick="setStars(this,1)"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg></span>
+          <span class="mod-star" data-val="2" onmouseenter="hoverStars(this,2)" onmouseleave="unhoverStars(this)" onclick="setStars(this,2)"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg></span>
+          <span class="mod-star" data-val="3" onmouseenter="hoverStars(this,3)" onmouseleave="unhoverStars(this)" onclick="setStars(this,3)"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg></span>
+        </div>
+        <div class="mod-photo-row">
+          <label class="mod-photo-btn">Add Photo of Mod<input type="file" accept="image/*" onchange="handleModPhoto(this)"></label>
+          <div class="mod-photo-preview" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+    <button class="add-mod" onclick="addMod()">+ Add Another Mod</button>
+    <div class="mod-count" id="modCount">1 mod listed</div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goStep(2)">Back</button>
+      <button class="btn-primary" onclick="goStep(4)">Preview Your Build</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: PREVIEW + SAVE -->
+  <div class="panel" id="step4">
+    <div class="preview-card">
+      <div class="preview-hero" id="previewHero">
+        <span class="preview-hero-empty">No cover photo</span>
+      </div>
+      <div class="preview-body">
+        <div class="preview-vehicle" id="previewVehicle"><em>YOUR</em> BUILD</div>
+        <div class="preview-trim" id="previewTrim"></div>
+        <div id="previewModsWrap" style="display:none">
+          <div class="preview-section-label">Modifications</div>
+          <ul class="preview-mod-list" id="previewMods"></ul>
+        </div>
+        <div class="preview-empty" id="previewEmpty" style="display:none">Add vehicle info, photos, and mods to see your build here.</div>
+      </div>
+    </div>
+
+    <div class="save-prompt">
+      <h3>SAVE <em>YOUR BUILD.</em></h3>
+      <p>Create a free account to save your profile, get your QR code, and share your build with the world.</p>
+      <p style="font-size:13px;color:var(--orange);margin-bottom:24px;line-height:1.6;margin-top:-12px">Shout out your socials on your profile -- link your Instagram, YouTube, TikTok, and more so people who scan your build can follow you everywhere.</p>
+      <div class="save-fields">
+        <input type="email" placeholder="Email address" id="save-email">
+        <input type="text" placeholder="Username" id="save-user">
+        <input type="password" placeholder="Password" id="save-pass">
+      </div>
+      <button class="btn-primary" onclick="handleSave()">Save My Build</button>
+      <div class="save-terms">By signing up you agree to the <a href="/terms.html">Terms of Service</a> and <a href="/privacy.html">Privacy Policy</a>.</div>
+      <button class="save-skip">Continue without saving</button>
+    </div>
+
+    <div class="btn-row" style="justify-content:center">
+      <button class="btn-secondary" onclick="goStep(3)">Back to Editing</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-in">
+    <a href="/" class="fl2"><span class="f1">BUILD</span><span class="f2">BIO</span></a>
+    <div class="flinks">
+      <a href="/how-it-works.html" class="flink">How it works</a>
+      <a href="/#features" class="flink">Features</a>
+      <a href="/pricing.html" class="flink">Pricing</a>
+      <a href="/privacy.html" class="flink">Privacy</a>
+      <a href="/terms.html" class="flink">Terms</a>
+    </div>
+    <div class="fcp">&copy; 2026 BuildBio. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Vehicle data
+  var vehicles={
+    'Acura':['CL','ILX','Integra','Legend','MDX','NSX','RDX','RL','RLX','RSX','SLX','TL','TLX','TSX','Vigor','ZDX'],
+    'Alfa Romeo':['164','4C','Giulia','GTV-6','Milano','Spider','Stelvio','Tonale'],
+    'Aston Martin':['DB11','DB12','DB7','DB9','DBS','DBX','Rapide','Vanquish','Vantage','Virage'],
+    'Audi':['A3','A4','A5','A6','A7','A8','Allroad','Q3','Q4 e-tron','Q5','Q7','Q8','R8','RS3','RS4','RS5','RS6','RS7','RS Q8','S3','S4','S5','S6','S7','S8','SQ5','SQ7','SQ8','TT','TT RS','TTS','e-tron','e-tron GT'],
+    'BMW':['1 Series','2 Series','3 Series','4 Series','5 Series','6 Series','7 Series','8 Series','M2','M3','M4','M5','M6','M8','X1','X2','X3','X3 M','X4','X4 M','X5','X5 M','X6','X6 M','X7','XM','Z3','Z4','Z8','i4','i5','i7','i8','iX'],
+    'Buick':['Century','Enclave','Encore','Encore GX','Envision','Grand National','LaCrosse','LeSabre','Lucerne','Park Avenue','Regal','Rendezvous','Riviera','Roadmaster','Skylark','Verano'],
+    'Cadillac':['ATS','CT4','CT5','CT6','CTS','CTS-V','DeVille','DTS','Eldorado','Escalade','Fleetwood','Lyriq','Seville','SRX','STS','XLR','XT4','XT5','XT6'],
+    'Chevrolet':['Avalanche','Blazer','Bolt EV','C/K','C10','Camaro','Caprice','Cavalier','Chevelle','Cobalt','Colorado','Corvette','Cruze','El Camino','Equinox','HHR','Impala','Lumina','Malibu','Monte Carlo','Nova','S-10','SS','SSR','Silverado','Sonic','Spark','Suburban','Tahoe','TrailBlazer','Traverse','Trax','Volt'],
+    'Chrysler':['200','300','300M','Crossfire','LeBaron','New Yorker','Pacifica','PT Cruiser','Sebring','Town & Country','Voyager'],
+    'Dodge':['Avenger','Caliber','Challenger','Charger','Dakota','Dart','Daytona','Durango','Grand Caravan','Hornet','Intrepid','Journey','Magnum','Neon','Nitro','Shadow','Stealth','Stratus','Viper'],
+    'Ferrari':['296 GTB','308','328','348','360','456','458','488','512','550','575M','599','812','California','F12','F355','F40','F430','F50','F8','FF','GTC4Lusso','LaFerrari','Portofino','Purosangue','Roma','SF90','Testarossa'],
+    'Fiat':['124 Spider','500','500L','500X'],
+    'Ford':['Bronco','Bronco II','Bronco Sport','C-Max','Contour','Crown Victoria','EcoSport','Edge','Escape','Escort','Excursion','Expedition','Explorer','Explorer Sport Trac','F-150','F-150 Lightning','F-250','F-350','Festiva','Fiesta','Five Hundred','Flex','Focus','Fusion','GT','Maverick','Mustang','Mustang Mach-E','Probe','Ranger','Taurus','Thunderbird','Transit','Windstar'],
+    'Genesis':['G70','G80','G90','GV60','GV70','GV80'],
+    'GMC':['Acadia','Canyon','Envoy','Hummer EV','Jimmy','Safari','Sierra','Sonoma','Syclone','Terrain','Typhoon','Yukon'],
+    'Honda':['Accord','CR-V','CR-Z','CRX','Civic','Crosstour','Del Sol','Element','Fit','HR-V','Insight','Odyssey','Passport','Pilot','Prelude','Prologue','Ridgeline','S2000'],
+    'Hyundai':['Accent','Azera','Elantra','Equus','Genesis Coupe','Ioniq 5','Ioniq 6','Kona','Palisade','Santa Cruz','Santa Fe','Sonata','Tiburon','Tucson','Veloster','Venue','Veracruz'],
+    'Infiniti':['EX35','FX35','FX45','FX50','G20','G35','G37','I30','I35','J30','M35','M37','M45','M56','Q45','Q50','Q60','Q70','QX4','QX30','QX50','QX55','QX56','QX60','QX70','QX80'],
+    'Jaguar':['E-Pace','F-Pace','F-Type','I-Pace','S-Type','X-Type','XE','XF','XJ','XJR','XJS','XK','XKR'],
+    'Jeep':['CJ','Cherokee','Comanche','Commander','Compass','Gladiator','Grand Cherokee','Grand Wagoneer','Liberty','Patriot','Renegade','Wagoneer','Wrangler'],
+    'Kia':['Carnival','EV6','EV9','Forte','K5','K900','Niro','Optima','Rio','Sedona','Seltos','Sorento','Soul','Sportage','Stinger','Telluride'],
+    'Lamborghini':['Aventador','Countach','Diablo','Gallardo','Huracan','Murcielago','Revuelto','Urus'],
+    'Land Rover':['Defender','Discovery','Discovery Sport','Freelander','LR2','LR3','LR4','Range Rover','Range Rover Evoque','Range Rover Sport','Range Rover Velar'],
+    'Lexus':['CT','ES','GS','GX','IS','LC','LFA','LS','LX','NX','RC','RC F','RX','RZ','SC','TX','UX'],
+    'Lincoln':['Aviator','Continental','Corsair','LS','MKC','MKS','MKT','MKX','MKZ','Mark LT','Mark VIII','Nautilus','Navigator','Town Car','Zephyr'],
+    'Mazda':['B-Series','CX-3','CX-30','CX-5','CX-50','CX-7','CX-9','CX-70','CX-90','MX-5 Miata','MX-6','MX-30','Mazda2','Mazda3','Mazda5','Mazda6','Mazdaspeed3','Mazdaspeed6','Millenia','Protege','RX-7','RX-8','Tribute'],
+    'McLaren':['540C','570GT','570S','600LT','650S','675LT','720S','750S','765LT','Artura','GT','MP4-12C','P1','Senna'],
+    'Mercedes-Benz':['190E','A-Class','AMG GT','B-Class','C-Class','CL-Class','CLA','CLK','CLS','E-Class','EQB','EQE','EQS','G-Class','GL-Class','GLA','GLB','GLC','GLE','GLK','GLS','ML-Class','R-Class','S-Class','SL-Class','SLC','SLK','SLS AMG','Sprinter'],
+    'Mini':['Clubman','Convertible','Cooper','Countryman','Coupe','Paceman','Roadster'],
+    'Mitsubishi':['3000GT','Eclipse','Eclipse Cross','Endeavor','Evolution','Galant','Lancer','Mirage','Montero','Montero Sport','Outlander','Outlander Sport','Raider'],
+    'Nissan':['200SX','240SX','280ZX','300ZX','350Z','370Z','Altima','Armada','Ariya','Cube','Frontier','GT-R','Hardbody','Juke','Kicks','Leaf','Maxima','Murano','Pathfinder','Quest','Rogue','Rogue Sport','Sentra','Titan','Versa','Xterra','Z'],
+    'Oldsmobile':['Achieva','Alero','Aurora','Bravada','Cutlass','Cutlass Supreme','Delta 88','Intrigue','Ninety-Eight','Silhouette','Toronado'],
+    'Pontiac':['Aztek','Bonneville','Fiero','Firebird','G6','G8','Grand Am','Grand Prix','GTO','Solstice','Sunfire','Trans Am','Vibe'],
+    'Porsche':['718 Boxster','718 Cayman','911','914','924','928','944','968','Boxster','Cayenne','Cayman','Macan','Panamera','Taycan'],
+    'Ram':['1500','1500 TRX','2500','3500','Dakota','ProMaster'],
+    'Rivian':['R1S','R1T','R2','R3'],
+    'Saab':['9-2X','9-3','9-5','9-7X','900','9000'],
+    'Saturn':['Astra','Aura','Ion','L-Series','Outlook','S-Series','Sky','Vue'],
+    'Scion':['FR-S','iA','iM','iQ','tC','xA','xB','xD'],
+    'Subaru':['Ascent','Baja','Brat','BRZ','Crosstrek','Forester','Impreza','Legacy','Outback','Solterra','SVX','Tribeca','WRX','WRX STI'],
+    'Suzuki':['Aerio','Equator','Grand Vitara','Kizashi','Samurai','Sidekick','Swift','SX4','Vitara','XL-7'],
+    'Tesla':['Cybertruck','Model 3','Model S','Model X','Model Y','Roadster','Semi'],
+    'Toyota':['4Runner','86','Avalon','bZ4X','C-HR','Camry','Celica','Corolla','Corolla Cross','Crown','Echo','FJ Cruiser','GR Corolla','GR Supra','GR86','Highlander','Land Cruiser','Matrix','MR2','Paseo','Prius','RAV4','Sequoia','Sienna','Solara','Supra','Tacoma','Tercel','Tundra','Venza','Yaris'],
+    'Volkswagen':['Arteon','Atlas','Atlas Cross Sport','Beetle','CC','Corrado','Eos','Golf','Golf R','GTI','ID.4','ID.Buzz','Jetta','New Beetle','Passat','Phaeton','R32','Rabbit','Scirocco','Taos','Tiguan','Touareg'],
+    'Volvo':['240','740','850','940','960','C30','C40','C70','EX30','EX90','S40','S60','S70','S80','S90','V50','V60','V70','V90','XC40','XC60','XC70','XC90']
+  };
+
+  // Year dropdown
+  var ys=document.getElementById('v-year');
+  for(var y=2026;y>=1940;y--){var o=document.createElement('option');o.value=y;o.textContent=y;ys.appendChild(o)}
+
+  // Make dropdown
+  var ms=document.getElementById('v-make');
+  Object.keys(vehicles).forEach(function(make){
+    var o=document.createElement('option');o.value=make;o.textContent=make;ms.appendChild(o);
+  });
+
+  // Model filtering
+  window.filterModels=function(){
+    var make=document.getElementById('v-make').value;
+    var ml=document.getElementById('v-model');
+    ml.innerHTML='';
+    if(!make){
+      ml.innerHTML='<option value="">Select make first</option>';
+      ml.disabled=true;
+      return;
+    }
+    ml.disabled=false;
+    ml.innerHTML='<option value="">Select model</option>';
+    var models=vehicles[make]||[];
+    models.forEach(function(m){
+      var o=document.createElement('option');o.value=m;o.textContent=m;ml.appendChild(o);
+    });
+    var other=document.createElement('option');other.value='Other';other.textContent='Other';ml.appendChild(other);
+  };
+
+  // Photo handling (single profile photo)
+  var profilePhoto=null;
+  var dz=document.getElementById('dropZone');
+  var pi=document.getElementById('photoInput');
+
+  dz.addEventListener('dragover',function(e){e.preventDefault();dz.classList.add('dragover')});
+  dz.addEventListener('dragleave',function(){dz.classList.remove('dragover')});
+  dz.addEventListener('drop',function(e){e.preventDefault();dz.classList.remove('dragover');handleFile(e.dataTransfer.files)});
+  pi.addEventListener('change',function(){handleFile(pi.files);pi.value=''});
+
+  function handleFile(files){
+    if(!files.length)return;
+    var f=files[0];
+    if(!f.type.startsWith('image/'))return;
+    var reader=new FileReader();
+    reader.onload=function(e){
+      profilePhoto=e.target.result;
+      showThumb();
+    };
+    reader.readAsDataURL(f);
+  }
+
+  function showThumb(){
+    document.getElementById('dropContent').style.display='none';
+    var tp=document.getElementById('thumbPreview');
+    tp.style.display='block';
+    document.getElementById('thumbImg').src=profilePhoto;
+  }
+
+  window.removePhoto=function(){
+    profilePhoto=null;
+    document.getElementById('dropContent').style.display='';
+    document.getElementById('thumbPreview').style.display='none';
+    document.getElementById('thumbImg').src='';
+  };
+
+  // Category placeholder icons (SVG data URIs)
+  function ci(inner){
+    return 'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" rx="6" fill="#111"/><g stroke="#555" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+inner+'</g></svg>');
+  }
+  var catIcons={
+    'Audio / Electronics':ci('<rect x="11" y="16" width="5" height="8" rx="1" fill="#555"/><path d="M16 16 L24 11 L24 29 L16 24 Z" fill="#555"/><path d="M27 15 Q30 20 27 25"/><path d="M29 12 Q34 20 29 28"/>'),
+    'Bed / Cargo':ci('<rect x="8" y="18" width="24" height="10" rx="2"/><line x1="8" y1="22" x2="32" y2="22"/><rect x="11" y="12" width="18" height="6" rx="1" fill="#555"/><line x1="20" y1="12" x2="20" y2="18"/>'),
+    'Brakes':ci('<circle cx="20" cy="20" r="9"/><circle cx="20" cy="20" r="4"/><circle cx="20" cy="20" r="1.5" fill="#555"/><path d="M12 14 L16 18" stroke-width="3"/>'),
+    'Drivetrain':ci('<circle cx="16" cy="16" r="6"/><circle cx="16" cy="16" r="2.5"/><circle cx="26" cy="26" r="5"/><circle cx="26" cy="26" r="2"/><line x1="21" y1="20" x2="22" y2="22"/>'),
+    'Engine':ci('<circle cx="20" cy="17" r="5"/><rect x="18" y="22" width="4" height="6" rx="1" fill="#555"/><line x1="15" y1="12" x2="13" y2="10"/><line x1="25" y1="12" x2="27" y2="10"/><line x1="15" y1="22" x2="13" y2="24"/><line x1="25" y1="22" x2="27" y2="24"/>'),
+    'Exhaust':ci('<path d="M10 24 L18 24 Q22 24 24 20 L28 14"/><circle cx="28" cy="12" r="3"/><path d="M30 10 Q34 8 32 12"/><path d="M28 9 Q32 6 30 10"/>'),
+    'Suspension':ci('<line x1="20" y1="8" x2="20" y2="11"/><path d="M16 11 L24 14 L16 17 L24 20 L16 23 L24 26"/><line x1="20" y1="26" x2="20" y2="32"/><circle cx="20" cy="32" r="1.5" fill="#555"/>'),
+    'Wheels / Tires':ci('<circle cx="20" cy="20" r="10"/><circle cx="20" cy="20" r="5"/><circle cx="20" cy="20" r="1.5" fill="#555"/><line x1="20" y1="10" x2="20" y2="15"/><line x1="20" y1="25" x2="20" y2="30"/><line x1="10" y1="20" x2="15" y2="20"/><line x1="25" y1="20" x2="30" y2="20"/>'),
+    'Exterior':ci('<path d="M8 25 L10 19 L15 15 L25 15 L30 19 L32 25"/><line x1="8" y1="25" x2="32" y2="25"/><circle cx="14" cy="25" r="2.5" fill="#111"/><circle cx="26" cy="25" r="2.5" fill="#111"/>'),
+    'Interior':ci('<circle cx="20" cy="20" r="9"/><circle cx="20" cy="20" r="3.5"/><line x1="20" y1="11" x2="20" y2="16.5"/><line x1="11.5" y1="24" x2="16.8" y2="21.5"/><line x1="28.5" y1="24" x2="23.2" y2="21.5"/>'),
+    'Lighting':ci('<circle cx="20" cy="20" r="4" fill="#555"/><line x1="20" y1="10" x2="20" y2="14"/><line x1="20" y1="26" x2="20" y2="30"/><line x1="10" y1="20" x2="14" y2="20"/><line x1="26" y1="20" x2="30" y2="20"/><line x1="13" y1="13" x2="15.8" y2="15.8"/><line x1="24.2" y1="24.2" x2="27" y2="27"/><line x1="27" y1="13" x2="24.2" y2="15.8"/><line x1="15.8" y1="24.2" x2="13" y2="27"/>'),
+    'Overland / Camp':ci('<path d="M10 28 L20 14 L30 28 Z"/><line x1="20" y1="14" x2="20" y2="10"/><circle cx="20" cy="9" r="1.5" fill="#555"/><line x1="14" y1="28" x2="26" y2="28" stroke-width="2.5"/>'),
+    'Armor / Protection':ci('<path d="M20 8 L29 12 L29 21 Q29 29 20 33 Q11 29 11 21 L11 12 Z"/><path d="M20 14 L20 24" stroke-width="2"/><path d="M16 19 L24 19" stroke-width="2"/>'),
+    'Roof / Rack':ci('<rect x="10" y="15" width="20" height="2.5" rx="1" fill="#555"/><rect x="10" y="21" width="20" height="2.5" rx="1" fill="#555"/><rect x="13" y="23.5" width="2" height="5" rx=".5" fill="#555"/><rect x="25" y="23.5" width="2" height="5" rx=".5" fill="#555"/>'),
+    'Recovery':ci('<path d="M20 9 L20 20 Q20 27 14 27 Q9 27 9 22"/><circle cx="20" cy="9" r="3"/><line x1="28" y1="14" x2="28" y2="28"/><line x1="24" y1="28" x2="32" y2="28"/>'),
+    'Other':ci('<circle cx="15" cy="12" r="4"/><line x1="18" y1="15" x2="28" y2="25"/><circle cx="28" cy="28" r="4" stroke-dasharray="2 2"/><line x1="15" y1="16" x2="15" y2="22"/>')
+  };
+
+  function getCatIcon(cat){return catIcons[cat]||catIcons['Other'];}
+
+  // Parts per category
+  var catParts={
+    'Armor / Protection':['A-Pillar Guards','Body Armor','Brush Guard','Bull Bar','Corner Guards','Differential Guard','Fender Liners','Rock Sliders','Rocker Guards','Skid Plates','Transfer Case Guard'],
+    'Audio / Electronics':['Amplifier','Backup Camera','CB Radio','Dash Cam','Equalizer','GPS / Navigation','HAM Radio','Head Unit','Sound Deadening','Speakers','Subwoofer','Tweeters'],
+    'Bed / Cargo':['Bed Extender','Bed Liner','Bed Mat','Bed Rack','Bed Slide','Cargo Net','Drawer System','Tailgate Lock','Tie-Downs','Tonneau Cover','Toolbox','Truck Shell / Canopy','Utility Rails'],
+    'Brakes':['Big Brake Kit','Brake Calipers','Brake Lines','Brake Master Cylinder','Brake Pads','Brake Rotors','E-Brake Cables','Parking Brake Shoes'],
+    'Drivetrain':['Axle Shafts','Clutch','Differential','Differential Cover','Driveshaft','Gears','Limited Slip Differential','Locker','Short Throw Shifter','Transfer Case','U-Joints'],
+    'Engine':['Blow-Off Valve','Camshaft','Cold Air Intake','ECU Tune','Engine Mounts','Fuel Injectors','Fuel Pump','Intake Manifold','Intercooler','Oil Catch Can','Pulleys','Short Ram Intake','Spark Plugs','Supercharger','Throttle Body','Turbo Kit','Wastegate'],
+    'Exhaust':['Axle-Back Exhaust','Cat-Back Exhaust','Downpipe','Exhaust Header','Exhaust Tips','Long Tube Headers','Mid-Pipe','Muffler','Muffler Delete','Resonator','Resonator Delete','Test Pipe','X-Pipe'],
+    'Exterior':['Antenna','Badges / Emblems','Diffuser','Door Handle Covers','Fender Flares','Front Bumper','Grille','Hood','Mirror Caps','Mud Flaps','Paint Protection Film','Rear Bumper','Running Boards','Side Steps','Spoiler','Tow Hooks','Vinyl Wrap','Window Tint','Wing'],
+    'Interior':['Center Console Organizer','Floor Mats','Gauge Pod','Grab Handles','Harness','Harness Bar','MOLLE Panels','Pedal Covers','Roll Cage','Seat Covers','Seats','Shift Knob','Steering Wheel','Trim Kit'],
+    'Lighting':['Aux Lights','Ditch Lights','DRL','Fog Lights','Headlights','Interior LED Kit','LED Bulbs','Light Bar','Pod Lights','Raptor Lights','Rock Lights','Tail Lights','Third Brake Light','Turn Signals','Underglow'],
+    'Overland / Camp':['Awning','Camp Kitchen','Fire Extinguisher','Fridge / Freezer','Jerry Cans','Portable Shower','Rooftop Tent','Shovel','Sleeping Platform','Solar Panel','Water Filtration','Water Tank'],
+    'Recovery':['Air Compressor','D-Ring Shackles','Fairlead','Hi-Lift Jack','Kinetic Rope','Recovery Boards','Snatch Block','Synthetic Rope','Tire Repair Kit','Tow Strap','Tree Saver','Winch','Winch Line'],
+    'Roof / Rack':['Cargo Box','Crossbars','Hi-Lift Mount','Jerry Can Mount','Ladder','Light Bar Mount','Roof Basket','Roof Rack','Shovel Mount'],
+    'Suspension':['Air Suspension','Bump Stops','Bushings','Coilovers','Control Arms','Leaf Springs','Leveling Kit','Lift Kit','Shock Absorbers','Spacer Lift','Springs','Strut Tower Brace','Struts','Sway Bars','Track Bar','Trailing Arms'],
+    'Wheels / Tires':['Beadlock Wheels','Center Caps','Lug Nuts','Spare Tire Mount','Tires','TPMS Sensors','Wheel Locks','Wheel Spacers','Wheels'],
+    'Other':[]
+  };
+
+  window.filterParts=function(catSelect){
+    var entry=catSelect.closest('.mod-entry');
+    var partSelect=entry.querySelector('.mod-part');
+    var partOther=entry.querySelector('.mod-part-other');
+    var cat=catSelect.value;
+    partOther.style.display='none';
+    partOther.value='';
+    partSelect.innerHTML='';
+    if(!cat){
+      partSelect.innerHTML='<option value="">Select category first</option>';
+      partSelect.disabled=true;
+      return;
+    }
+    partSelect.disabled=false;
+    partSelect.innerHTML='<option value="">Select part</option>';
+    var parts=catParts[cat]||[];
+    parts.forEach(function(p){
+      var o=document.createElement('option');o.value=p;o.textContent=p;partSelect.appendChild(o);
+    });
+    var other=document.createElement('option');other.value='__other__';other.textContent='Other';partSelect.appendChild(other);
+  };
+
+  window.handlePartSelect=function(sel){
+    var entry=sel.closest('.mod-entry');
+    var partOther=entry.querySelector('.mod-part-other');
+    if(sel.value==='__other__'){
+      partOther.style.display='block';
+      partOther.focus();
+    }else{
+      partOther.style.display='none';
+      partOther.value='';
+    }
+  };
+
+  // Star rating
+  window.hoverStars=function(el,val){
+    var stars=el.closest('.mod-stars').querySelectorAll('.mod-star');
+    stars.forEach(function(s){s.classList.toggle('hovered',parseInt(s.dataset.val)<=val)});
+  };
+  window.unhoverStars=function(el){
+    var stars=el.closest('.mod-stars').querySelectorAll('.mod-star');
+    stars.forEach(function(s){s.classList.remove('hovered')});
+  };
+  window.setStars=function(el,val){
+    var stars=el.closest('.mod-stars').querySelectorAll('.mod-star');
+    var current=el.closest('.mod-stars').dataset.rating;
+    if(parseInt(current)===val){
+      stars.forEach(function(s){s.classList.remove('active')});
+      el.closest('.mod-stars').dataset.rating='0';
+    }else{
+      stars.forEach(function(s){s.classList.toggle('active',parseInt(s.dataset.val)<=val)});
+      el.closest('.mod-stars').dataset.rating=val;
+    }
+  };
+
+  // Mod photo handling
+  window.handleModPhoto=function(input){
+    var entry=input.closest('.mod-entry');
+    var preview=entry.querySelector('.mod-photo-preview');
+    var btnLabel=entry.querySelector('.mod-photo-btn');
+    if(!input.files.length)return;
+    var f=input.files[0];
+    if(!f.type.startsWith('image/'))return;
+    var reader=new FileReader();
+    reader.onload=function(e){
+      preview.innerHTML='<img src="'+e.target.result+'" alt="Mod photo"><button class="mod-photo-x" onclick="removeModPhoto(this)">&times;</button>';
+      preview.style.display='block';
+      btnLabel.style.display='none';
+    };
+    reader.readAsDataURL(f);
+    input.value='';
+  };
+
+  window.removeModPhoto=function(btn){
+    var entry=btn.closest('.mod-entry');
+    var preview=entry.querySelector('.mod-photo-preview');
+    var btnLabel=entry.querySelector('.mod-photo-btn');
+    preview.innerHTML='';
+    preview.style.display='none';
+    btnLabel.style.display='inline-flex';
+  };
+
+  // Mod list
+  window.addMod=function(){
+    var list=document.getElementById('modList');
+    var entry=list.querySelector('.mod-entry').cloneNode(true);
+    entry.querySelectorAll('input[type="text"]').forEach(function(inp){inp.value=''});
+    entry.querySelector('.mod-cat').selectedIndex=0;
+    var partSel=entry.querySelector('.mod-part');
+    partSel.innerHTML='<option value="">Select category first</option>';
+    partSel.disabled=true;
+    var partOther=entry.querySelector('.mod-part-other');
+    partOther.style.display='none';partOther.value='';
+    var preview=entry.querySelector('.mod-photo-preview');
+    preview.innerHTML='';preview.style.display='none';
+    var btnLabel=entry.querySelector('.mod-photo-btn');
+    btnLabel.style.display='inline-flex';
+    var fileInput=entry.querySelector('.mod-photo-btn input');
+    fileInput.value='';
+    var starsWrap=entry.querySelector('.mod-stars');
+    starsWrap.dataset.rating='0';
+    starsWrap.querySelectorAll('.mod-star').forEach(function(s){s.classList.remove('active','hovered')});
+    list.appendChild(entry);
+    updateModCount();
+  };
+
+  window.removeMod=function(btn){
+    var list=document.getElementById('modList');
+    if(list.children.length<=1)return;
+    btn.closest('.mod-entry').remove();
+    updateModCount();
+  };
+
+  function updateModCount(){
+    var n=document.getElementById('modList').children.length;
+    document.getElementById('modCount').textContent=n+' mod'+(n===1?'':'s')+' listed';
+  }
+
+  // Stepper
+  var current=1;
+  window.goStep=function(n){
+    current=n;
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+    document.getElementById('step'+n).classList.add('active');
+
+    document.querySelectorAll('.step-dot').forEach(function(d){
+      var s=parseInt(d.dataset.step);
+      d.classList.remove('active','done');
+      if(s===n)d.classList.add('active');
+      else if(s<n)d.classList.add('done');
+    });
+    document.querySelectorAll('.step-line').forEach(function(l){
+      var s=parseInt(l.dataset.line);
+      l.classList.toggle('done',s<n);
+    });
+
+    if(n===4)buildPreview();
+    window.scrollTo({top:280,behavior:'smooth'});
+  };
+
+  function buildPreview(){
+    var year=document.getElementById('v-year').value;
+    var make=document.getElementById('v-make').value.trim();
+    var model=document.getElementById('v-model').value.trim();
+    var trim=document.getElementById('v-trim').value.trim();
+
+    var color=document.getElementById('v-color').value.trim();
+
+    var veh=document.getElementById('previewVehicle');
+    if(year&&make&&model){
+      veh.innerHTML='<em>'+year+'</em> '+make.toUpperCase()+' '+model.toUpperCase();
+    }else{
+      veh.innerHTML='<em>YOUR</em> BUILD';
+    }
+    var trimLine=trim;
+    if(color)trimLine=color+(trim?' / '+trim:'');
+    else trimLine=trim;
+    document.getElementById('previewTrim').textContent=trimLine;
+
+    // Profile photo
+    var hero=document.getElementById('previewHero');
+    if(profilePhoto){
+      hero.innerHTML='<img src="'+profilePhoto+'" alt="Profile photo">';
+    }else{
+      hero.innerHTML='<span class="preview-hero-empty">No profile photo</span>';
+    }
+
+    // Mods
+    var mw=document.getElementById('previewModsWrap');
+    var ml=document.getElementById('previewMods');
+    ml.innerHTML='';
+    var entries=document.querySelectorAll('.mod-entry');
+    var modCount=0;
+    entries.forEach(function(e){
+      var partVal=e.querySelector('.mod-part').value;
+      var part=partVal==='__other__'?e.querySelector('.mod-part-other').value.trim():partVal.trim();
+      if(!part)return;
+      modCount++;
+      var cat=e.querySelector('.mod-cat').value||'Mod';
+      var brand=e.querySelector('.mod-brand').value.trim();
+      var modImg=e.querySelector('.mod-photo-preview img');
+      var modSrc=modImg?modImg.src:null;
+      var thumbSrc=modSrc||getCatIcon(cat);
+      var rating=parseInt(e.querySelector('.mod-stars').dataset.rating)||0;
+      var starsHtml='';
+      if(rating>0){for(var s=0;s<3;s++){starsHtml+='<svg width="14" height="14" viewBox="0 0 24 24" style="fill:'+(s<rating?'var(--orange)':'var(--border-l)')+'"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>';}}
+      var li=document.createElement('li');li.className='preview-mod-item';
+      var imgHtml='<img src="'+thumbSrc+'" alt="" style="width:40px;height:40px;border-radius:4px;object-fit:cover;border:1px solid var(--border);flex-shrink:0">';
+      li.innerHTML=imgHtml+'<div style="flex:1;min-width:0"><div class="preview-mod-name">'+part+(brand?' <span class="preview-mod-brand">'+brand+'</span>':'')+'</div>'+(starsHtml?'<div style="display:flex;gap:2px;margin-top:3px">'+starsHtml+'</div>':'')+'</div><div class="preview-mod-cat">'+cat+'</div>';
+      ml.appendChild(li);
+    });
+    mw.style.display=modCount?'block':'none';
+
+    var empty=document.getElementById('previewEmpty');
+    empty.style.display=(!year&&!make&&!profilePhoto&&!modCount)?'block':'none';
+  }
+
+  // Hamburger menu
+  window.toggleMenu=function(){
+    var ham=document.querySelector('.ham');
+    var menu=document.getElementById('mobMenu');
+    ham.classList.toggle('open');
+    menu.classList.toggle('open');
+    document.body.style.overflow=menu.classList.contains('open')?'hidden':'';
+  };
+  document.querySelectorAll('#mobMenu a').forEach(function(a){
+    a.addEventListener('click',function(){
+      document.querySelector('.ham').classList.remove('open');
+      document.getElementById('mobMenu').classList.remove('open');
+      document.body.style.overflow='';
+    });
+  });
+
+  // Hero carousel
+  var slides=document.querySelectorAll('.start-hero-slide');
+  var currentSlide=0;
+  setInterval(function(){
+    slides[currentSlide].classList.remove('active');
+    currentSlide=(currentSlide+1)%slides.length;
+    slides[currentSlide].classList.add('active');
+  },5000);
+
+  window.handleSave=function(){
+    var email=document.getElementById('save-email').value.trim();
+    var user=document.getElementById('save-user').value.trim();
+    var pass=document.getElementById('save-pass').value;
+    if(!email||!user||!pass){
+      alert('Please fill in all fields to save your build.');
+      return;
+    }
+    alert('Account creation will be connected to Supabase. For now, this is a preview of the save flow.');
+  };
+
+})();
+</script>
+
+</body>
+</html>

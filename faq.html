@@ -42,7 +42,7 @@
     .faq-icon{width:28px;height:28px;border-radius:50%;background:rgba(216,90,48,.1);border:1px solid rgba(216,90,48,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .3s,background .2s;color:var(--orange);font-size:16px;font-weight:700;line-height:1}
     .faq-item.open .faq-icon{transform:rotate(45deg);background:rgba(216,90,48,.2)}
     .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease}
-    .faq-item.open .faq-a{max-height:400px}
+    .faq-item.open .faq-a{max-height:800px}
     .faq-a-inner{padding:0 24px 20px;color:var(--muted);font-size:14px;line-height:1.8}
 
     /* CTA */
@@ -63,14 +63,29 @@
     .flink{font-size:13px;color:var(--dim);text-decoration:none;transition:color .15s}.flink:hover{color:var(--muted)}
     .fcp{font-size:12px;color:var(--dim)}
 
+    /* HAMBURGER MENU */
+    .ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:10px;margin-right:-10px;z-index:301}
+    .ham span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:transform .3s,opacity .3s}
+    .ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0}
+    .ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    .mob-menu{position:fixed;inset:0;z-index:300;background:linear-gradient(to bottom,#E85D2C,#5C6B3A);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;opacity:0;pointer-events:none;transition:opacity .3s}
+    .mob-menu.open{opacity:1;pointer-events:auto}
+    .mob-menu a{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;text-transform:uppercase;color:#fff;text-decoration:none;padding:16px 0;letter-spacing:.04em;transition:opacity .15s}
+    .mob-menu a:hover{opacity:.8}
+    .mob-menu .mob-cta{margin-top:20px;background:rgba(0,0,0,.25);padding:16px 40px;border-radius:12px;font-size:22px}
+
     /* RESPONSIVE */
     @media(max-width:640px){
       .nav{padding:0 16px}.nav-r .nl{display:none}
+      .nav-r .ncta{display:none}
+      .ham{display:flex}
       .page-hero,.faq-sec,.cta-sec{padding-left:16px;padding-right:16px}
       .page-hero{padding-top:110px;padding-bottom:60px}
       .faq-q{padding:16px 18px}
       .faq-a-inner{padding:0 18px 16px}
       .footer-in{flex-direction:column;align-items:flex-start}
+      .ncta{padding:12px 16px;font-size:13px;min-height:44px}
     }
   </style>
 </head>
@@ -84,9 +99,17 @@
     <a href="/#features" class="nl">Features</a>
     <a href="/pricing.html" class="nl">Pricing</a>
     <a href="/login.html" class="nl">Log in</a>
-    <a href="/signup.html" class="ncta">Create Your Free Profile Now!</a>
+    <a href="/start.html" class="ncta">Start Your Build</a>
+    <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
   </div>
 </nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="/how-it-works.html">How It Works</a>
+  <a href="/#features">Features</a>
+  <a href="/pricing.html">Pricing</a>
+  <a href="/login.html">Log In</a>
+  <a href="/start.html" class="mob-cta">Start Your Build</a>
+</div>
 
 <!-- HERO -->
 <section class="page-hero">
@@ -195,7 +218,7 @@
     <p class="cta-sub">Reach out anytime. Or just create your free profile and see for yourself.</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
       <a href="/contact.html" class="btnl" style="background:rgba(255,255,255,.1);backdrop-filter:blur(8px);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);font-size:15px">Contact us</a>
-      <a href="/signup.html" class="btnl bpl" style="font-size:15px">Create Your Free Profile Now!</a>
+      <a href="/start.html" class="btnl bpl" style="font-size:15px">Start Your Build</a>
     </div>
   </div>
 </section>
@@ -216,5 +239,9 @@
   </div>
 </footer>
 
+<script>
+function toggleMenu(){var h=document.querySelector('.ham'),m=document.getElementById('mobMenu');h.classList.toggle('open');m.classList.toggle('open');document.body.style.overflow=m.classList.contains('open')?'hidden':''}
+document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('click',function(){document.querySelector('.ham').classList.remove('open');document.getElementById('mobMenu').classList.remove('open');document.body.style.overflow=''})})
+</script>
 </body>
 </html>

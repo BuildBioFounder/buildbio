@@ -86,7 +86,7 @@
     .terms-note{font-size:11px;color:var(--dim);text-align:center;margin-top:32px;letter-spacing:.02em}
 
     /* TIER TABLE */
-    .tier-table-wrap{max-width:720px;margin:0 auto;background:var(--card);border:1px solid var(--border-l);border-radius:16px;overflow:hidden}
+    .tier-table-wrap{max-width:720px;margin:0 auto;background:var(--card);border:1px solid var(--border-l);border-radius:16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
     .tier-table{width:100%;border-collapse:collapse}
     .tier-table thead th{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);padding:18px 24px;text-align:left;border-bottom:1px solid var(--border)}
     .tier-table thead th:last-child{text-align:right}
@@ -166,6 +166,18 @@
     .flink{font-size:13px;color:var(--dim);text-decoration:none;transition:color .15s}.flink:hover{color:var(--muted)}
     .fcp{font-size:12px;color:var(--dim)}
 
+    /* HAMBURGER MENU */
+    .ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:10px;margin-right:-10px;z-index:301}
+    .ham span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:transform .3s,opacity .3s}
+    .ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0}
+    .ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    .mob-menu{position:fixed;inset:0;z-index:300;background:linear-gradient(to bottom,#E85D2C,#5C6B3A);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;opacity:0;pointer-events:none;transition:opacity .3s}
+    .mob-menu.open{opacity:1;pointer-events:auto}
+    .mob-menu a{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;text-transform:uppercase;color:#fff;text-decoration:none;padding:16px 0;letter-spacing:.04em;transition:opacity .15s}
+    .mob-menu a:hover{opacity:.8}
+    .mob-menu .mob-cta{margin-top:20px;background:rgba(0,0,0,.25);padding:16px 40px;border-radius:12px;font-size:22px}
+
     /* RESPONSIVE */
     @media(max-width:900px){
       .ben-g{grid-template-columns:1fr}
@@ -174,6 +186,8 @@
     }
     @media(max-width:640px){
       .nav{padding:0 16px}.nav-r .nl{display:none}
+      .nav-r .ncta{display:none}
+      .ham{display:flex}
       .hero{padding:100px 16px 64px}
       .sec{padding:64px 16px}
       .fine{padding:48px 16px}
@@ -183,6 +197,9 @@
       .img-band{height:200px}
       .tier-table td{padding:12px 16px}
       .tier-table td:last-child{font-size:18px}
+      .ncta{padding:12px 16px;font-size:13px;min-height:44px}
+      .tier-table thead th{font-size:10px;padding:12px 8px;letter-spacing:.06em}
+      .tier-table td{padding:10px 8px;font-size:13px}
     }
   </style>
 </head>
@@ -196,9 +213,17 @@
     <a href="/#features" class="nl">Features</a>
     <a href="/pricing.html" class="nl">Pricing</a>
     <a href="/login.html" class="nl">Log in</a>
-    <a href="/signup.html" class="ncta">Create Your Free Profile Now!</a>
+    <a href="/start.html" class="ncta">Start Your Build</a>
+    <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
   </div>
 </nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="/how-it-works.html">How It Works</a>
+  <a href="/#features">Features</a>
+  <a href="/pricing.html">Pricing</a>
+  <a href="/login.html">Log In</a>
+  <a href="/start.html" class="mob-cta">Start Your Build</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -484,5 +509,9 @@
   </div>
 </footer>
 
+<script>
+function toggleMenu(){var h=document.querySelector('.ham'),m=document.getElementById('mobMenu');h.classList.toggle('open');m.classList.toggle('open');document.body.style.overflow=m.classList.contains('open')?'hidden':''}
+document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('click',function(){document.querySelector('.ham').classList.remove('open');document.getElementById('mobMenu').classList.remove('open');document.body.style.overflow=''})})
+</script>
 </body>
 </html>

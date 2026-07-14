@@ -102,8 +102,22 @@
 
     .loading-state { text-align: center; padding: 80px 20px; color: var(--text-muted); font-size: 15px; }
 
+    /* HAMBURGER MENU */
+    .ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:10px;margin-right:-10px;z-index:301}
+    .ham span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:transform .3s,opacity .3s}
+    .ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0}
+    .ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    .mob-menu{position:fixed;inset:0;z-index:300;background:linear-gradient(to bottom,#E85D2C,#5C6B3A);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;opacity:0;pointer-events:none;transition:opacity .3s}
+    .mob-menu.open{opacity:1;pointer-events:auto}
+    .mob-menu a{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;text-transform:uppercase;color:#fff;text-decoration:none;padding:16px 0;letter-spacing:.04em;transition:opacity .15s}
+    .mob-menu a:hover{opacity:.8}
+    .mob-menu .mob-cta{margin-top:20px;background:rgba(0,0,0,.25);padding:16px 40px;border-radius:12px;font-size:22px}
+
     @media (max-width: 768px) {
       .nav { padding: 0 16px; } .nav-link { display: none; }
+      .nav-right .btn-primary{display:none}
+      .ham{display:flex}
       .hero { grid-template-columns: 1fr; padding: 20px 16px; gap: 20px; }
       .vehicle-name { font-size: 24px; } .stats-row { gap: 16px; }
       .mods-section { padding: 20px 16px 0; } .social-section { padding: 16px; }
@@ -119,9 +133,17 @@
   <a href="/" class="logo"><span class="b-build">BUILD</span><span class="b-bio">BIO</span></a>
   <div class="nav-right">
     <a href="/login.html" class="nav-link" id="nav-login">Log in</a>
-    <a href="/signup.html" class="btn btn-primary" id="nav-cta">Create free profile</a>
+    <a href="/start.html" class="btn btn-primary" id="nav-cta">Start Your Build</a>
+    <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
   </div>
 </nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="/how-it-works.html">How It Works</a>
+  <a href="/#features">Features</a>
+  <a href="/pricing.html">Pricing</a>
+  <a href="/login.html">Log In</a>
+  <a href="/start.html" class="mob-cta">Start Your Build</a>
+</div>
 
 <div id="content">
   <div class="loading-state">Loading vehicle profile...</div>
@@ -129,7 +151,7 @@
 
 <div class="sticky-bar" id="sticky-bar">
   <span class="sticky-text">Create your own BuildBio profile — it's free</span>
-  <a href="/signup.html" class="sticky-btn">Create free profile</a>
+  <a href="/start.html" class="sticky-btn">Start Your Build</a>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -332,6 +354,10 @@ function initials(first, last, username) {
     await sb.from('qr_scans').insert({ vehicle_id: v.id });
   }
 })();
+</script>
+<script>
+function toggleMenu(){var h=document.querySelector('.ham'),m=document.getElementById('mobMenu');h.classList.toggle('open');m.classList.toggle('open');document.body.style.overflow=m.classList.contains('open')?'hidden':''}
+document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('click',function(){document.querySelector('.ham').classList.remove('open');document.getElementById('mobMenu').classList.remove('open');document.body.style.overflow=''})})
 </script>
 </body>
 </html>
