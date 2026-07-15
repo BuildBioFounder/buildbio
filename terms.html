@@ -19,13 +19,13 @@
     :root { --orange:#E85D2C;--olive-light:#7A8C50;--dark:#0D0D0D;--card:#1A1A1A;--border:#3A3A3A;--text:#fff;--muted:#B4B2A9;--dim:#6B6B6B;--max:860px; }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'DM Sans',sans-serif;background:#000;color:var(--text);font-size:15px;line-height:1.7}
-    .nav{position:sticky;top:0;z-index:200;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
     .logo{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;text-decoration:none}.logo .b1{color:var(--orange)}.logo .b2{color:var(--olive-light)}
     .nav-r{display:flex;gap:14px;align-items:center}
     .nl{color:var(--muted);font-size:13px;text-decoration:none}.nl:hover{color:var(--text)}
     .ncta{background:var(--orange);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;text-decoration:none}
 
-    .hero{padding:80px 28px 40px;text-align:center;border-bottom:1px solid var(--border)}
+    .hero{padding:120px 28px 40px;text-align:center;border-bottom:1px solid var(--border)}
     .hero h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,5vw,52px);font-weight:700;text-transform:uppercase;margin-bottom:8px}
     .hero h1 em{font-style:normal;color:var(--orange)}
     .hero p{color:var(--muted);font-size:14px}
@@ -75,14 +75,13 @@
 
   <h2>4. Membership Tiers and Pricing</h2>
   <p>4.1 <strong>Free Tier.</strong> Free accounts include one vehicle profile, community browsing, banner ad-supported experience, and access to a locked earnings dashboard displaying potential revenue the member would earn under a paid tier.</p>
-  <p>4.2 <strong>Mid Tier.</strong> Mid tier memberships are available at the standard monthly or annual rate. Mid tier members receive ad-free browsing, private messaging, Stolen Vehicle Alert, and For Sale listing access. Mid tier members do not participate in the revenue share program.</p>
-  <p>4.3 <strong>Premium Tier.</strong> Premium tier memberships are available at the standard monthly or annual rate. Premium members receive all Mid tier benefits plus two vehicle profiles, My Garage customization, priority For Sale placement, analytics dashboard access, annual sticker benefit, complimentary BuildBio event entry, Verified Build Badge eligibility, specialty insurance program access, and eligibility for the revenue share program subject to Section 8.</p>
+  <p>4.2 <strong>Mid Tier.</strong> Mid tier memberships are available at the standard monthly rate. Mid tier members receive ad-free browsing, private messaging, Stolen Vehicle Alert, and For Sale listing access. Mid tier members do not participate in the revenue share program.</p>
+  <p>4.3 <strong>Premium Tier.</strong> Premium tier memberships are available at the standard monthly rate. Premium members receive all Mid tier benefits plus two vehicle profiles, My Garage customization, priority For Sale placement, analytics dashboard access, sticker benefit, complimentary BuildBio event entry, Verified Build Badge eligibility, specialty insurance program access, and eligibility for the revenue share program subject to Section 8.</p>
   <p>4.4 <strong>Limited Founder Membership.</strong> During the Limited Founder Membership period, discounted pricing is available to qualifying early members at rates and price lock durations as specified on the Pricing page at the time of purchase. Founder pricing is non-transferable. Price locks expire as specified at purchase, after which accounts automatically convert to then-current standard pricing.</p>
   <p>4.5 <strong>Tier Availability at Launch.</strong> At the time of initial Platform launch, only the Free tier is available. Mid and Premium tiers will be made available at a date to be announced by BuildBio, no earlier than six months after initial Platform launch. Users who register during the Free-only period will be notified of Mid and Premium tier availability and Founder Pricing windows by email.</p>
-  <p>4.6 <strong>Annual Plans.</strong> Annual subscriptions are billed as a single non-refundable one-time payment. Annual subscribers receive 1.5 months of service at no additional charge versus equivalent monthly billing. Annual payments are non-refundable except as required by applicable law.</p>
-  <p>4.7 <strong>Automatic Renewal.</strong> Monthly subscriptions automatically renew each month. Annual subscriptions automatically renew each year at the then-current annual rate unless cancelled prior to the renewal date.</p>
-  <p>4.8 <strong>Price Changes.</strong> BuildBio reserves the right to modify pricing with 30 days advance notice to affected members. Members with locked Founder Pricing are exempt from price changes during their lock period.</p>
-  <p>4.9 <strong>Minimum Commitment and Billing Cycle.</strong> All paid subscriptions bill on the first (1st) of each calendar month. Members who subscribe after the 1st are charged a prorated fee for the remainder of the current month plus their first full calendar month at sign-up. Mid and Premium subscriptions carry a minimum commitment of the prorated initial period plus one (1) full billing cycle. Cancellations take effect at the end of the paid period. No refunds are issued for the minimum commitment period except as required by law.</p>
+  <p>4.6 <strong>Automatic Renewal.</strong> Monthly subscriptions automatically renew each month unless cancelled prior to the renewal date.</p>
+  <p>4.7 <strong>Price Changes.</strong> BuildBio reserves the right to modify pricing with 30 days advance notice to affected members. Members with locked Founder Pricing are exempt from price changes during their lock period.</p>
+  <p>4.8 <strong>Minimum Commitment and Billing Cycle.</strong> All paid subscriptions bill on the first (1st) of each calendar month. Members who subscribe after the 1st are charged a prorated fee for the remainder of the current month plus their first full calendar month at sign-up. Mid and Premium subscriptions carry a minimum commitment of the prorated initial period plus one (1) full billing cycle. Cancellations take effect at the end of the paid period. No refunds are issued for the minimum commitment period except as required by law.</p>
 
   <h2>5. Vehicle Profiles and User Content</h2>
   <p>5.1 You retain ownership of all content you submit to the Platform, including vehicle information, modification details, and photographs ("User Content").</p>
@@ -174,7 +173,18 @@
 <footer class="footer">
   <div class="footer-in">
     <a href="index.html" class="fl2"><span class="f1">BUILD</span><span class="f2">BIO</span></a>
-    <div class="flinks"><a href="about.html" class="flink">About</a><a href="how-it-works.html" class="flink">How it works</a><a href="pricing.html" class="flink">Pricing</a><a href="privacy.html" class="flink">Privacy</a><a href="terms.html" class="flink">Terms</a></div>
+    <div class="flinks">
+      <a href="/how-it-works.html" class="flink">How it works</a>
+      <a href="/#features" class="flink">Features</a>
+      <a href="/pricing.html" class="flink">Pricing</a>
+      <a href="/shop.html" class="flink">Shop</a>
+      <a href="/community.html" class="flink">Community</a>
+      <a href="/mission.html" class="flink">Mission</a>
+      <a href="/vehicle-profile.html" class="flink">Sample profile</a>
+      <a href="/privacy.html" class="flink">Privacy</a>
+      <a href="/terms.html" class="flink">Terms</a>
+      <a href="/affiliate-disclosure.html" class="flink">Affiliate Disclosure</a>
+    </div>
     <div class="fcp">© 2026 BuildBio. All rights reserved.</div>
   </div>
 </footer>

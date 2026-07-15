@@ -19,12 +19,12 @@
     :root { --orange:#E85D2C;--olive-light:#7A8C50;--dark:#0D0D0D;--border:#3A3A3A;--text:#fff;--muted:#B4B2A9;--dim:#6B6B6B;--max:860px; }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'DM Sans',sans-serif;background:#000;color:var(--text);font-size:15px;line-height:1.7}
-    .nav{position:sticky;top:0;z-index:200;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
     .logo{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;text-decoration:none}.logo .b1{color:var(--orange)}.logo .b2{color:var(--olive-light)}
     .nav-r{display:flex;gap:14px;align-items:center}
     .nl{color:var(--muted);font-size:13px;text-decoration:none}.nl:hover{color:var(--text)}
     .ncta{background:var(--orange);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;text-decoration:none}
-    .hero{padding:80px 28px 40px;text-align:center;border-bottom:1px solid var(--border)}
+    .hero{padding:120px 28px 40px;text-align:center;border-bottom:1px solid var(--border)}
     .hero h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,5vw,52px);font-weight:700;text-transform:uppercase;margin-bottom:8px}
     .hero h1 em{font-style:normal;color:var(--orange)}
     .hero p{color:var(--muted);font-size:14px}
@@ -148,7 +148,18 @@
 <footer class="footer">
   <div class="footer-in">
     <a href="index.html" class="fl2"><span class="f1">BUILD</span><span class="f2">BIO</span></a>
-    <div class="flinks"><a href="about.html" class="flink">About</a><a href="how-it-works.html" class="flink">How it works</a><a href="pricing.html" class="flink">Pricing</a><a href="privacy.html" class="flink">Privacy</a><a href="terms.html" class="flink">Terms</a></div>
+    <div class="flinks">
+      <a href="/how-it-works.html" class="flink">How it works</a>
+      <a href="/#features" class="flink">Features</a>
+      <a href="/pricing.html" class="flink">Pricing</a>
+      <a href="/shop.html" class="flink">Shop</a>
+      <a href="/community.html" class="flink">Community</a>
+      <a href="/mission.html" class="flink">Mission</a>
+      <a href="/vehicle-profile.html" class="flink">Sample profile</a>
+      <a href="/privacy.html" class="flink">Privacy</a>
+      <a href="/terms.html" class="flink">Terms</a>
+      <a href="/affiliate-disclosure.html" class="flink">Affiliate Disclosure</a>
+    </div>
     <div class="fcp">© 2026 BuildBio. All rights reserved.</div>
   </div>
 </footer>

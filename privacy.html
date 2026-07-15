@@ -19,13 +19,13 @@
     :root { --orange:#E85D2C;--olive-light:#7A8C50;--dark:#0D0D0D;--card:#1A1A1A;--border:#3A3A3A;--text:#fff;--muted:#B4B2A9;--dim:#6B6B6B;--max:860px; }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'DM Sans',sans-serif;background:#000;color:var(--text);font-size:15px;line-height:1.7}
-    .nav{position:sticky;top:0;z-index:200;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
     .logo{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;text-decoration:none}.logo .b1{color:var(--orange)}.logo .b2{color:var(--olive-light)}
     .nav-r{display:flex;gap:14px;align-items:center}
     .nl{color:var(--muted);font-size:13px;text-decoration:none}.nl:hover{color:var(--text)}
     .ncta{background:var(--orange);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;text-decoration:none}
 
-    .hero{padding:80px 28px 40px;text-align:center;border-bottom:1px solid var(--border)}
+    .hero{padding:120px 28px 40px;text-align:center;border-bottom:1px solid var(--border)}
     .hero h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(36px,5vw,52px);font-weight:700;text-transform:uppercase;margin-bottom:8px}
     .hero h1 em{font-style:normal;color:var(--orange)}
     .hero p{color:var(--muted);font-size:14px}
@@ -114,7 +114,7 @@
 
   <h2>4. How We Share Your Information</h2>
   <p>4.1 <strong>Public Information.</strong> Your vehicle profile, modification list, photographs, and Verified Build Badge status are public by default and accessible to any internet user. Your personal contact information is never publicly displayed.</p>
-  <p>4.2 <strong>Service Providers.</strong> We share information with vendors who help us operate the Platform, including Vercel (website hosting), GitHub (version control), Supabase (database, authentication, and file storage), Stripe (payments and payouts), MailerSend (email delivery), Printful (merchandise fulfillment), and Zapier (automation). These vendors are contractually obligated to use your information only to provide services to us.</p>
+  <p>4.2 <strong>Service Providers.</strong> We share information with vendors who help us operate the Platform, including Vercel (website hosting), GitHub (version control), Supabase (database, authentication, and file storage), Stripe (payments and payouts), MailerSend (email delivery), Printful (merchandise fulfillment), Zapier (automation), and Google Analytics (Google LLC -- anonymous site usage and traffic analytics). These vendors are contractually obligated to use your information only to provide services to us.</p>
   <p>4.3 <strong>Affiliate Partners.</strong> When you click a Buy Now affiliate link, we share necessary transaction attribution data with our affiliate partners to track and process commissions.</p>
   <p>4.4 <strong>Carfax.</strong> When a buyer clicks a Carfax report button on a For Sale listing, the buyer is redirected to Carfax's platform. BuildBio does not share your personal information with Carfax.</p>
   <p>4.5 <strong>B2B Data Sales.</strong> BuildBio sells aggregated, anonymized data derived from platform activity to aftermarket manufacturers and marketing companies. This data is used for industry research, targeted marketing campaigns, and business intelligence. The following data fields are eligible for sale in aggregated, anonymized form:</p>
@@ -145,7 +145,7 @@
   <p>5.4 You may also manage all email preferences directly in your account settings under Notification Preferences.</p>
 
   <h2>6. Cookies and Tracking Technologies</h2>
-  <p>BuildBio uses cookies and similar tracking technologies to operate the Platform, maintain your session, and analyze usage patterns. You may control cookie preferences through your browser settings. Disabling cookies may affect Platform functionality.</p>
+  <p>BuildBio uses cookies and similar tracking technologies to operate the Platform, maintain your session, and analyze usage patterns. BuildBio also uses Google Analytics cookies to collect anonymous traffic and usage data; this data is processed by Google in accordance with its privacy policy. You may control cookie preferences through your browser settings. Disabling cookies may affect Platform functionality.</p>
 
   <h2>7. Data Security</h2>
   <p>BuildBio implements industry-standard security measures including Vercel-managed infrastructure with DDoS mitigation, HTTPS/TLS encrypted transmission, Supabase Auth with MFA support, Google reCAPTCHA v3 bot prevention, and regular security audits. No data transmission over the internet is 100% secure. We cannot guarantee absolute security but are committed to protecting your information using reasonable technical and organizational measures.</p>
@@ -183,7 +183,18 @@
 <footer class="footer">
   <div class="footer-in">
     <a href="index.html" class="fl2"><span class="f1">BUILD</span><span class="f2">BIO</span></a>
-    <div class="flinks"><a href="about.html" class="flink">About</a><a href="how-it-works.html" class="flink">How it works</a><a href="pricing.html" class="flink">Pricing</a><a href="privacy.html" class="flink">Privacy</a><a href="terms.html" class="flink">Terms</a></div>
+    <div class="flinks">
+      <a href="/how-it-works.html" class="flink">How it works</a>
+      <a href="/#features" class="flink">Features</a>
+      <a href="/pricing.html" class="flink">Pricing</a>
+      <a href="/shop.html" class="flink">Shop</a>
+      <a href="/community.html" class="flink">Community</a>
+      <a href="/mission.html" class="flink">Mission</a>
+      <a href="/vehicle-profile.html" class="flink">Sample profile</a>
+      <a href="/privacy.html" class="flink">Privacy</a>
+      <a href="/terms.html" class="flink">Terms</a>
+      <a href="/affiliate-disclosure.html" class="flink">Affiliate Disclosure</a>
+    </div>
     <div class="fcp">© 2026 BuildBio. All rights reserved.</div>
   </div>
 </footer>
