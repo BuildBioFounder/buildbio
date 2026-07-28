@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="Cache-Control" content="no-store">
+  <title>BuildBio - Stolen Vehicle Alert</title>
+  <link rel="icon" type="image/png" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-32.png">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #E85D2C; --olive-light: #7A8C50;
+      --dark: #0F0F0F; --dark-2: #161616; --card: #1A1A1A;
+      --border: #2E2E2E; --border-l: #3A3A3A;
+      --text: #fff; --muted: #B4B2A9; --dim: #6B6B6B;
+      --green: #1D9E75; --red: #E24B4A; --blue: #378ADD;
+      --alert-red: #C0392B; --alert-orange: #D35400; --alert-amber: #B8860B; --alert-gray: #555;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.6;
+      padding-bottom: 40px;
+    }
+
+    /* NAV */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15,15,15,0.95); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      height: 58px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px;
+    }
+    .logo {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 22px; letter-spacing: .3px; text-decoration: none;
+    }
+    .logo .b1 { color: var(--orange); }
+    .logo .b2 { color: var(--olive-light); }
+    .nav-r { display: flex; gap: 14px; align-items: center; }
+    .nav-link { color: var(--muted); font-size: 13px; text-decoration: none; }
+    .nav-link:hover { color: var(--text); }
+
+    /* LAYOUT */
+    .container { max-width: 640px; margin: 0 auto; padding: 0 20px; }
+
+    /* ALERT BANNER */
+    .alert-banner {
+      padding: 18px 20px; text-align: center;
+      font-family: 'Barlow Condensed', sans-serif;
+    }
+    .alert-banner-title {
+      font-size: 28px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: #fff; margin-bottom: 4px;
+    }
+    .alert-banner-age {
+      font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.85);
+      font-family: 'DM Sans', sans-serif;
+    }
+    .alert-banner.age-red { background: var(--alert-red); }
+    .alert-banner.age-orange { background: var(--alert-orange); }
+    .alert-banner.age-amber { background: var(--alert-amber); }
+    .alert-banner.age-gray { background: var(--alert-gray); }
+
+    /* VEHICLE PHOTO */
+    .vehicle-photo {
+      width: 100%; aspect-ratio: 16/10; background: var(--card);
+      border: 1px solid var(--border-l); border-radius: 12px;
+      overflow: hidden; margin: 20px 0; display: flex;
+      align-items: center; justify-content: center;
+    }
+    .vehicle-photo img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .vehicle-photo-placeholder {
+      color: var(--dim); font-size: 14px; text-align: center; padding: 20px;
+    }
+
+    /* VEHICLE INFO */
+    .info-section {
+      background: var(--card); border: 1px solid var(--border-l);
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+    }
+    .info-section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--olive-light); margin-bottom: 12px;
+    }
+    .vehicle-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 26px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.3px; line-height: 1.1; margin-bottom: 12px;
+    }
+    .info-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 8px 0; border-bottom: 1px solid var(--border);
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label {
+      font-size: 13px; color: var(--dim); text-transform: uppercase;
+      letter-spacing: 0.05em; font-weight: 500;
+    }
+    .info-value { font-size: 14px; color: var(--text); font-weight: 500; text-align: right; }
+
+    /* STATUS BADGE */
+    .status-badge {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      padding: 3px 10px; border-radius: 12px; text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .status-owner-reported {
+      background: rgba(232,93,44,0.15); color: var(--orange);
+    }
+    .status-verified {
+      background: rgba(29,158,117,0.15); color: var(--green);
+    }
+
+    /* 911 CTA */
+    .cta-section {
+      background: var(--card); border: 1px solid var(--border-l);
+      border-radius: 12px; padding: 28px 20px; margin-bottom: 16px;
+      text-align: center;
+    }
+    .cta-911 {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 10px; width: 100%; max-width: 360px;
+      background: var(--alert-red); color: #fff; border: none;
+      padding: 18px 32px; border-radius: 10px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 24px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; text-decoration: none;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .cta-911:hover { opacity: 0.9; transform: translateY(-1px); }
+    .cta-text {
+      font-size: 15px; color: var(--muted); margin-top: 14px;
+      line-height: 1.6;
+    }
+    .safety-warning {
+      font-size: 13px; font-weight: 700; color: var(--alert-red);
+      margin-top: 16px; padding: 14px; line-height: 1.5;
+      background: rgba(192,57,43,0.08);
+      border: 1px solid rgba(192,57,43,0.25);
+      border-radius: 8px; text-transform: uppercase;
+    }
+
+    /* SIGHTING FORM */
+    .sighting-section {
+      background: var(--card); border: 1px solid var(--border-l);
+      border-radius: 12px; padding: 24px 20px; margin-bottom: 16px;
+    }
+    .sighting-login-prompt {
+      text-align: center; padding: 12px 0;
+    }
+    .sighting-login-prompt p {
+      font-size: 14px; color: var(--muted); margin-bottom: 12px;
+    }
+    .sighting-login-prompt a {
+      color: var(--orange); text-decoration: none; font-weight: 500;
+    }
+    .sighting-login-prompt a:hover { text-decoration: underline; }
+    .field { margin-bottom: 16px; }
+    .field:last-child { margin-bottom: 0; }
+    .field label {
+      display: block; font-size: 12px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--muted); margin-bottom: 6px;
+    }
+    .field input[type="text"], .field textarea, .field select {
+      width: 100%; padding: 12px 14px;
+      background: var(--dark-2); border: 1px solid var(--border-l);
+      border-radius: 10px; color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 14px;
+      transition: border-color 0.2s; outline: none;
+    }
+    .field input[type="text"]::placeholder,
+    .field textarea::placeholder { color: #555; }
+    .field input[type="text"]:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(232,93,44,0.1);
+    }
+    .field textarea { resize: vertical; min-height: 80px; }
+    .field select { cursor: pointer; }
+    .field select option { background: var(--dark-2); color: var(--text); }
+    .checkbox-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0; cursor: pointer;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 18px; height: 18px; accent-color: var(--orange);
+      cursor: pointer; flex-shrink: 0;
+    }
+    .checkbox-row span { font-size: 14px; color: var(--muted); }
+    .char-count {
+      font-size: 11px; color: var(--dim); text-align: right; margin-top: 4px;
+    }
+    .btn-submit {
+      display: block; width: 100%; text-align: center;
+      padding: 14px; border-radius: 8px;
+      background: var(--orange); color: #fff; border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 500;
+      cursor: pointer; transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn-submit:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* MESSAGES */
+    .msg {
+      padding: 12px 14px; border-radius: 8px; font-size: 13px;
+      line-height: 1.5; margin-bottom: 16px; display: none;
+    }
+    .msg.error {
+      background: rgba(224,85,85,0.12); border: 1px solid rgba(224,85,85,0.3);
+      color: #f07070;
+    }
+    .msg.success {
+      background: rgba(92,107,58,0.2); border: 1px solid rgba(92,107,58,0.4);
+      color: #a8c070;
+    }
+    .msg.show { display: block; }
+
+    /* STATES */
+    .loading-state {
+      text-align: center; padding: 80px 20px;
+      color: var(--muted); font-size: 15px;
+    }
+    .inactive-state {
+      text-align: center; padding: 80px 20px;
+    }
+    .inactive-state p {
+      color: var(--muted); font-size: 15px; margin-bottom: 20px;
+    }
+    .inactive-state a {
+      display: inline-flex; align-items: center;
+      background: var(--orange); color: #fff; border: none;
+      padding: 12px 28px; border-radius: 8px;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+      text-decoration: none; transition: opacity 0.15s;
+    }
+    .inactive-state a:hover { opacity: 0.88; }
+
+    /* FOOTER */
+    .footer {
+      background: #0D0D0D; border-top: 1px solid var(--border);
+      padding: 24px 28px; text-align: center; margin-top: 24px;
+    }
+    .fcp { font-size: 12px; color: var(--dim); }
+
+    @media (max-width: 640px) {
+      .nav { padding: 0 16px; }
+      .container { padding: 0 16px; }
+      .alert-banner-title { font-size: 22px; }
+      .vehicle-title { font-size: 22px; }
+      .cta-911 { font-size: 20px; padding: 16px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="logo"><span class="b1">BUILD</span><span class="b2">BIO</span></a>
+  <div class="nav-r">
+    <a href="/login.html" class="nav-link" id="nav-login">Log in</a>
+  </div>
+</nav>
+
+<div id="content">
+  <div class="loading-state">Loading alert...</div>
+</div>
+
+<footer class="footer">
+  <div class="fcp">&copy; 2026 BuildBio. All rights reserved.</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL  = 'https://bicmwjtkncjkguumbidq.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpY213anRrbmNqa2d1dW1iaWRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMzY3MTYsImV4cCI6MjA5MjkxMjcxNn0.RdLFicGLAoddIfD5IDMNCQ1ocIyoSGEcL9Y9zOzjs_0';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+const params = new URLSearchParams(window.location.search);
+const vehicleId = params.get('vid');
+
+function getAlertAge(reportedAt) {
+  const now = new Date();
+  const reported = new Date(reportedAt);
+  const diffMs = now - reported;
+  const diffHours = diffMs / (1000 * 60 * 60);
+  const diffDays = diffMs / (1000 * 60 * 60 * 24);
+
+  let ageClass, ageText;
+
+  if (diffHours < 1) {
+    ageClass = 'age-red';
+    const mins = Math.max(1, Math.floor(diffMs / (1000 * 60)));
+    ageText = 'Reported ' + mins + ' minute' + (mins !== 1 ? 's' : '') + ' ago';
+  } else if (diffHours < 24) {
+    ageClass = 'age-red';
+    const hrs = Math.floor(diffHours);
+    ageText = 'Reported ' + hrs + ' hour' + (hrs !== 1 ? 's' : '') + ' ago';
+  } else if (diffDays < 3) {
+    ageClass = 'age-orange';
+    const days = Math.floor(diffDays);
+    ageText = 'Reported ' + days + ' day' + (days !== 1 ? 's' : '') + ' ago';
+  } else if (diffDays < 7) {
+    ageClass = 'age-amber';
+    const days = Math.floor(diffDays);
+    ageText = 'Reported ' + days + ' days ago';
+  } else {
+    ageClass = 'age-gray';
+    const days = Math.floor(diffDays);
+    ageText = 'Reported ' + days + ' days ago (still missing)';
+  }
+
+  return { ageClass, ageText };
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+(async () => {
+  if (!vehicleId) {
+    document.getElementById('content').innerHTML =
+      '<div class="inactive-state"><p>No vehicle specified.</p><a href="/">Return Home</a></div>';
+    return;
+  }
+
+  // Check session for nav state
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    document.getElementById('nav-login').textContent = 'Account';
+    document.getElementById('nav-login').href = '/account.html';
+  }
+
+  // Fetch alert data
+  const { data: alert, error } = await sb.rpc('get_active_bolo_alert_public', { p_vehicle_id: vehicleId });
+
+  if (error || !alert || (Array.isArray(alert) && alert.length === 0)) {
+    document.getElementById('content').innerHTML =
+      '<div class="inactive-state"><p>This alert is no longer active or does not exist.</p><a href="/">Return Home</a></div>';
+    return;
+  }
+
+  // RPC may return an array or single object
+  const a = Array.isArray(alert) ? alert[0] : alert;
+  if (!a) {
+    document.getElementById('content').innerHTML =
+      '<div class="inactive-state"><p>This alert is no longer active or does not exist.</p><a href="/">Return Home</a></div>';
+    return;
+  }
+
+  const { ageClass, ageText } = getAlertAge(a.reported_at);
+  const vehicleName = [a.year, a.make, a.model].filter(Boolean).join(' ');
+  const statusLabel = a.report_status === 'verified' ? 'Verified' : 'Owner-Reported';
+  const statusClass = a.report_status === 'verified' ? 'status-verified' : 'status-owner-reported';
+
+  let photoHtml = '';
+  if (a.primary_photo_url) {
+    photoHtml = '<div class="vehicle-photo"><img src="' + escapeHtml(a.primary_photo_url) + '" alt="Vehicle photo"></div>';
+  } else {
+    photoHtml = '<div class="vehicle-photo"><div class="vehicle-photo-placeholder">No photo available</div></div>';
+  }
+
+  // Vehicle info section
+  let infoRows = '';
+  if (a.color) {
+    infoRows += '<div class="info-row"><span class="info-label">Color</span><span class="info-value">' + escapeHtml(a.color) + '</span></div>';
+  }
+  if (a.plate_number) {
+    infoRows += '<div class="info-row"><span class="info-label">Plate</span><span class="info-value">' + escapeHtml(a.plate_number) + (a.plate_state ? ' (' + escapeHtml(a.plate_state) + ')' : '') + '</span></div>';
+  }
+
+  // Visible modifications
+  let modsHtml = '';
+  if (a.visible_modifications_description) {
+    modsHtml = '<div class="info-section"><div class="info-section-title">Visible Modifications</div><p style="font-size:14px;color:var(--muted);line-height:1.7">' + escapeHtml(a.visible_modifications_description) + '</p></div>';
+  }
+
+  // Last seen
+  let lastSeenHtml = '';
+  if (a.last_seen_location) {
+    lastSeenHtml = '<div class="info-section"><div class="info-section-title">Last Seen Near</div><p style="font-size:14px;color:var(--text);font-weight:500">' + escapeHtml(a.last_seen_location) + '</p></div>';
+  }
+
+  // Law enforcement
+  let lawHtml = '';
+  const lawRows = [];
+  if (a.agency) lawRows.push('<div class="info-row"><span class="info-label">Agency</span><span class="info-value">' + escapeHtml(a.agency) + '</span></div>');
+  if (a.jurisdiction) lawRows.push('<div class="info-row"><span class="info-label">Jurisdiction</span><span class="info-value">' + escapeHtml(a.jurisdiction) + '</span></div>');
+  if (a.report_number) lawRows.push('<div class="info-row"><span class="info-label">Report #</span><span class="info-value">' + escapeHtml(a.report_number) + '</span></div>');
+  if (lawRows.length > 0) {
+    lawHtml = '<div class="info-section"><div class="info-section-title">Law Enforcement</div>' + lawRows.join('') + '</div>';
+  }
+
+  // Report status section
+  let statusHtml = '<div class="info-section"><div class="info-section-title">Report Status</div>';
+  statusHtml += '<div class="info-row"><span class="info-label">Status</span><span class="info-value"><span class="status-badge ' + statusClass + '">' + statusLabel + '</span></span></div>';
+  statusHtml += '<div class="info-row"><span class="info-label">Report Age</span><span class="info-value">' + escapeHtml(ageText.replace('Reported ', '')) + '</span></div>';
+  statusHtml += '</div>';
+
+  // Sighting section
+  let sightingHtml = '';
+  if (session) {
+    sightingHtml = `
+      <div class="sighting-section">
+        <div class="info-section-title">Submit a Sighting Report</div>
+        <div class="msg" id="sighting-msg"></div>
+        <form id="sighting-form">
+          <div class="field">
+            <label for="sight-location">Where did you see this vehicle?</label>
+            <input type="text" id="sight-location" placeholder="Cross streets, parking lot, city area..." required>
+          </div>
+          <label class="checkbox-row">
+            <input type="checkbox" id="sight-visible">
+            <span>The vehicle is currently visible at this location</span>
+          </label>
+          <div class="field" style="margin-top:12px">
+            <label for="sight-confidence">Confidence Level</label>
+            <select id="sight-confidence">
+              <option value="low">Low - Might be the vehicle</option>
+              <option value="medium" selected>Medium - Fairly confident</option>
+              <option value="high">High - Very confident it is the vehicle</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sight-notes">Additional Notes</label>
+            <textarea id="sight-notes" placeholder="Any details that might help (direction of travel, occupants, condition...)" maxlength="500"></textarea>
+            <div class="char-count"><span id="sight-notes-count">0</span>/500</div>
+          </div>
+          <button type="submit" class="btn-submit" id="sight-submit">Submit Sighting Report</button>
+        </form>
+      </div>`;
+  } else {
+    sightingHtml = `
+      <div class="sighting-section">
+        <div class="info-section-title">Submit a Sighting Report</div>
+        <div class="sighting-login-prompt">
+          <p>Have you seen this vehicle? Log in to submit a sighting report.</p>
+          <a href="/login.html?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}">Log in to report a sighting</a>
+        </div>
+      </div>`;
+  }
+
+  document.getElementById('content').innerHTML = `
+    <div class="alert-banner ${ageClass}">
+      <div class="alert-banner-title">Stolen Vehicle Alert</div>
+      <div class="alert-banner-age">${escapeHtml(ageText)}</div>
+    </div>
+    <div class="container">
+      ${photoHtml}
+      <div class="info-section">
+        <div class="info-section-title">Vehicle Information</div>
+        <div class="vehicle-title">${escapeHtml(vehicleName)}</div>
+        ${infoRows}
+      </div>
+      ${modsHtml}
+      ${lastSeenHtml}
+      ${lawHtml}
+      ${statusHtml}
+      <div class="cta-section">
+        <a href="tel:911" class="cta-911">Call 911</a>
+        <p class="cta-text">If you see this vehicle, call 911 immediately.</p>
+        <div class="safety-warning">Do not follow, block, approach or confront the vehicle or its occupants.</div>
+      </div>
+      ${sightingHtml}
+    </div>`;
+
+  // Sighting form handlers (only if logged in)
+  if (session) {
+    const notesField = document.getElementById('sight-notes');
+    const notesCount = document.getElementById('sight-notes-count');
+    if (notesField && notesCount) {
+      notesField.addEventListener('input', function() {
+        notesCount.textContent = this.value.length;
+      });
+    }
+
+    const sightingForm = document.getElementById('sighting-form');
+    if (sightingForm) {
+      sightingForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const submitBtn = document.getElementById('sight-submit');
+        const msgEl = document.getElementById('sighting-msg');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+
+        const location = document.getElementById('sight-location').value.trim();
+        if (!location) {
+          msgEl.textContent = 'Please enter a location.';
+          msgEl.className = 'msg error show';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit Sighting Report';
+          return;
+        }
+
+        const { error: insertErr } = await sb.from('bolo_sightings').insert({
+          bolo_report_id: a.id,
+          reporter_user_id: session.user.id,
+          location_description: location,
+          vehicle_currently_visible: document.getElementById('sight-visible').checked,
+          confidence_level: document.getElementById('sight-confidence').value,
+          notes: document.getElementById('sight-notes').value.trim() || null
+        });
+
+        if (insertErr) {
+          msgEl.textContent = 'Error submitting report: ' + insertErr.message;
+          msgEl.className = 'msg error show';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Submit Sighting Report';
+          return;
+        }
+
+        msgEl.textContent = 'Sighting report submitted. Thank you for helping.';
+        msgEl.className = 'msg success show';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Report Submitted';
+        sightingForm.querySelectorAll('input, textarea, select').forEach(el => el.disabled = true);
+      });
+    }
+  }
+})();
+</script>
+</body>
+</html>

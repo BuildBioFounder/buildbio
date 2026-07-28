@@ -224,6 +224,11 @@ function initials(first, last, username) {
     return;
   }
 
+  if (v.vehicle_status === 'stolen') {
+    window.location.href = '/alert.html?vid=' + v.id;
+    return;
+  }
+
   const { data: owner } = await sb.from('profiles').select('*').eq('id', v.owner_id).single();
   const { data: mods } = await sb.from('modifications').select('*').eq('vehicle_id', v.id).order('category').order('created_at');
   const { data: scans } = await sb.from('qr_scans').select('id').eq('vehicle_id', v.id);
@@ -253,7 +258,7 @@ function initials(first, last, username) {
   const location = [owner?.location_city, owner?.location_state].filter(Boolean).join(', ');
   const ini = owner ? initials(owner.first_name, owner.last_name, owner.username) : 'BB';
 
-  const qrUrl = `${SUPABASE_URL}/functions/v1/generate-qr?url=${encodeURIComponent(window.location.href)}&size=200`;
+  const qrUrl = `${SUPABASE_URL}/functions/v1/generate-qr?url=${encodeURIComponent('https://buildbio.app/v/' + v.vehicle_public_id)}&size=200`;
 
   // Check if current user is owner
   const { data: { session } } = await sb.auth.getSession();

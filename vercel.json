@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/v/:pid", "destination": "/api/v/:pid" }
+  ]
+}

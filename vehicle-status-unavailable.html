@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="Cache-Control" content="no-store">
+  <title>BuildBio - Vehicle Status Unavailable</title>
+  <link rel="icon" type="image/png" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-32.png">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #E85D2C; --olive-light: #7A8C50;
+      --dark: #0F0F0F; --card: #1A1A1A; --border: #2E2E2E;
+      --text: #fff; --muted: #B4B2A9; --dim: #6B6B6B;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 58px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px; background: rgba(0,0,0,.88); backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .logo {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 22px; letter-spacing: .3px; text-decoration: none;
+    }
+    .logo .b1 { color: var(--orange); }
+    .logo .b2 { color: var(--olive-light); }
+
+    .main {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      padding: 88px 28px 40px; text-align: center;
+    }
+    .msg-box {
+      max-width: 480px; width: 100%;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 48px 32px;
+    }
+    .msg-icon {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: rgba(232,93,44,0.1); border: 1px solid rgba(232,93,44,0.25);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px; font-size: 24px; color: var(--orange);
+    }
+    .msg-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 24px; font-weight: 700; text-transform: uppercase;
+      margin-bottom: 12px; letter-spacing: 0.3px;
+    }
+    .msg-body {
+      font-size: 15px; color: var(--muted); line-height: 1.7;
+      margin-bottom: 28px;
+    }
+    .home-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--orange); color: #fff; border: none;
+      padding: 12px 28px; border-radius: 8px;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+      text-decoration: none; transition: opacity 0.15s, transform 0.1s;
+    }
+    .home-link:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .footer {
+      background: #0D0D0D; border-top: 1px solid var(--border);
+      padding: 24px 28px; text-align: center;
+    }
+    .fcp { font-size: 12px; color: var(--dim); }
+
+    @media (max-width: 640px) {
+      .nav { padding: 0 16px; }
+      .main { padding: 88px 16px 40px; }
+      .msg-box { padding: 36px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="logo"><span class="b1">BUILD</span><span class="b2">BIO</span></a>
+</nav>
+
+<div class="main">
+  <div class="msg-box">
+    <div class="msg-icon">!</div>
+    <div class="msg-title">Vehicle Status Unavailable</div>
+    <p class="msg-body">This vehicle's status is temporarily unavailable. Please check back shortly.</p>
+    <a href="/" class="home-link">Return Home</a>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="fcp">&copy; 2026 BuildBio. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
