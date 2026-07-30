@@ -1,0 +1,5 @@
+.vercel
+.env*
+
+# Non-production reference snapshots (underscore prefix). Never deployed, never linked.
+_reference-landing.html
