@@ -329,7 +329,7 @@ function initials(first, last, username) {
         <div class="badge-row">
           ${v.verified_build_badge ? '<span class="badge badge-verified">Verified Build</span>' : ''}
           ${owner?.founder_member ? '<span class="badge badge-founder">Founder</span>' : ''}
-          ${owner?.membership_tier === 'premium' ? '<span class="badge badge-founder">APEX</span>' : ''}
+          ${owner?.membership_tier === 'apex' ? '<span class="badge badge-founder">APEX</span>' : ''}
         </div>
         <div class="vehicle-name">${title}</div>
         ${v.nickname ? '<div class="vehicle-nick">' + v.nickname + '</div>' : ''}
