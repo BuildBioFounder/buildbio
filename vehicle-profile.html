@@ -258,7 +258,7 @@ function initials(first, last, username) {
   const location = [owner?.location_city, owner?.location_state].filter(Boolean).join(', ');
   const ini = owner ? initials(owner.first_name, owner.last_name, owner.username) : 'BB';
 
-  const qrUrl = `${SUPABASE_URL}/functions/v1/generate-qr?url=${encodeURIComponent('https://buildbio.app/v/' + v.vehicle_public_id)}&size=200`;
+  const qrUrl = `${SUPABASE_URL}/functions/v1/generate-qr?url=${encodeURIComponent('buildbio.app/v/' + v.vehicle_public_id)}&size=200`;
 
   // Check if current user is owner
   const { data: { session } } = await sb.auth.getSession();
@@ -329,7 +329,7 @@ function initials(first, last, username) {
         <div class="badge-row">
           ${v.verified_build_badge ? '<span class="badge badge-verified">Verified Build</span>' : ''}
           ${owner?.founder_member ? '<span class="badge badge-founder">Founder</span>' : ''}
-          ${owner?.membership_tier === 'premium' ? '<span class="badge badge-founder">Premium</span>' : ''}
+          ${owner?.membership_tier === 'apex' ? '<span class="badge badge-founder">APEX</span>' : ''}
         </div>
         <div class="vehicle-name">${title}</div>
         ${v.nickname ? '<div class="vehicle-nick">' + v.nickname + '</div>' : ''}
