@@ -33,10 +33,28 @@ built*; Notion is truth for *what was decided and why*.
 - **Brand colors:** BB Orange `#E85D2C` (action/CTAs/leads), Olive Green `#5C6B3A` (identity).
   `#D85A30` is RETIRED — do not use. Orange always leads action; never equal weight with olive
   in the same moment.
-- **Rev-share tiers (authoritative — from 9.4b legal doc):** Starter $0–499=5%, Builder
-  $500–1,499=10%, Enthusiast $1,500–3,999=15%, Pro $4,000–7,999=20%, Elite $8,000–14,999=25%,
-  Legend $15,000+=30% (of BuildBio's earned commission, not sale price). Rev-share does NOT
-  activate until 6 months post-launch — no page may promise day-one earnings.
+- **Rev-share ladder (authoritative — APEX spec v1-rev.d, FOUNDER-APPROVED 2026-08-04, at
+  `My Drive/BuildBio/03_Product/BB_product_apex-rev-share-spec_v1_20260730.md`):**
+  Starter $0–249.99=5%, Builder $250–749.99=10%, Enthusiast $750–1,999.99=15%,
+  Pro $2,000–3,999.99=20%, Elite $4,000–7,499.99=25%, Legend $7,500+=30%.
+  Bands are half-open — lower bound inclusive, upper exclusive.
+  **This SUPERSEDES the old 9.4b ladder ($0–499 … $15,000+). Do not reintroduce those bands.**
+- **Payout basis:** a % of **BuildBio's earned commission**, never the sale price. At the top
+  rung that is roughly 2.4–3.6% of sale. Any page stating a rate must say this plainly.
+- **Rate algorithm:** set on the 1st from the **best 2 of the last 3 Qualifying Months**,
+  averaged. Forward-only — never restated. Sale-date governs which month's rate applies.
+  Intro 10% through month 3 (once per lifetime); permanent 5% floor.
+- **Two-lane split (founder-locked 2026-07-30):** **self-purchases NEVER earn rev-share and
+  NEVER count toward MRS, on any network.** They route to APEX Member Pricing instead —
+  brand-funded codes first, else 50%-of-commission BB Points-back. Points are merch-only.
+  **Amazon-routed purchases get NO member benefit** (Participation Requirements cl. 14/29),
+  labeled honestly in UI. Never write copy or code treating a self-purchase as fraud or as
+  rev-share-eligible.
+- **Pause:** 2×/calendar year, whole months, max 3 consecutive, never past Dec 31, auto-resume
+  Jan 1. Scheduler-enforced — there is no penalty state. Sales during a pause earn nothing;
+  pre-pause earnings still pay.
+- Rev-share does NOT activate until 6 months post-launch — **no page may promise day-one
+  earnings**, or any earnings at all.
 
 ---
 
@@ -51,7 +69,8 @@ access from terminal).
 
 **Step 1.5 — Reconcile canonical BODY prose (NOT just the log).** Updating the log captures
 *what happened*; it does NOT fix stale *claims* in page bodies. Before closing, verify the prose
-of canonical docs still matches reality: tier thresholds (match 9.4b), tool/agent statuses,
+of canonical docs still matches reality: tier thresholds (match the APEX spec v1-rev.d, NOT
+the retired 9.4b bands), tool/agent statuses,
 build approach, currency model, anything locked this session. Past drift came from "log what
 happened" outrunning "rewrite what is now true." Fix the encyclopedia, not just the diary.
 
