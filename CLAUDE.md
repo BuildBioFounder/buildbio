@@ -43,7 +43,12 @@ built*; Notion is truth for *what was decided and why*.
   rung that is roughly 2.4–3.6% of sale. Any page stating a rate must say this plainly.
 - **Rate algorithm:** set on the 1st from the **best 2 of the last 3 Qualifying Months**,
   averaged. Forward-only — never restated. Sale-date governs which month's rate applies.
-  Intro 10% through month 3 (once per lifetime); permanent 5% floor.
+  Intro 10% through month 3 (once per lifetime); 5% floor while enrolled and in good standing.
+- **NOTHING IS PERMANENT (founder ruling 2026-08-08).** No status, rate floor or designation is
+  permanent or irrevocable. Ambassador / Trusted Influencer floors run in **6-month renewable
+  terms**, requalified on conversions, verified reach and a conduct veto; losing one drops the
+  member to their earned rung, never out of the Program. **Never write "permanent," "forever"
+  or "irrevocable" against a status in member-facing copy** — use "held while your status is active."
 - **Two-lane split (founder-locked 2026-07-30):** **self-purchases NEVER earn rev-share and
   NEVER count toward MRS, on any network.** They route to APEX Member Pricing instead —
   brand-funded codes first, else 50%-of-commission BB Points-back. Points are merch-only.
