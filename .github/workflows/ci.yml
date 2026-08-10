@@ -1,0 +1,46 @@
+name: CI
+
+# Lightweight release gate for the BuildBio frontend (addresses audit R-10).
+# Runs on every push to main and on every pull request. Two checks, both
+# dependency-free and fast:
+#   1. secret-scan  — no leaked keys may ship to the browser
+#   2. js-syntax    — every .js file must parse
+# Note: scans are scoped to code extensions, so this workflow file (.yml) is
+# never scanned against its own grep patterns.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Forbid leaked keys in frontend source
+        run: |
+          echo "Scanning .html/.js for secrets that must never ship to the browser..."
+          if grep -rIn --include='*.html' --include='*.js' \
+               -e 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' \
+               -e 'sb_secret_' \
+               -e 'BEGIN .*PRIVATE KEY' .; then
+            echo "::error::Forbidden secret in frontend source — legacy Supabase JWT, secret key, or private key. Browser code must use the sb_publishable_ key only."
+            exit 1
+          fi
+          echo "Clean: no forbidden secrets found."
+
+  js-syntax:
+    name: JS syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: node --check every JS file
+        run: |
+          echo "Parsing all .js files (find -exec fails the job on any syntax error)..."
+          find . -name '*.js' -not -path './node_modules/*' -print -exec node --check {} \;
+          echo "All JS files parsed OK."
