@@ -1,5 +1,5 @@
 const SUPABASE_URL = 'https://bicmwjtkncjkguumbidq.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJpY213anRrbmNqa2d1dW1iaWRxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU4ODIwMTEsImV4cCI6MjA2MTQ1ODAxMX0.TLWK_HzfdO9PgMYMpKxxymuOMRNvS4x_Will1h-tJkY';
+const SUPABASE_ANON_KEY = 'sb_publishable_vt_RE80rfii-6Pb6wtPLhA_t_hyYiTE';
 
 const NO_CACHE = {
   'Cache-Control': 'no-store, no-cache, must-revalidate',
