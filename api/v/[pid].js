@@ -6,6 +6,11 @@ const NO_CACHE = {
   'Pragma': 'no-cache',
 };
 
+// Public IDs are generated as substr(replace(gen_random_uuid()::text,'-',''),1,8):
+// exactly 8 lowercase hex chars. Validate against that exact shape so malformed
+// or oversized input is rejected before it ever reaches the database.
+const PUBLIC_ID_RE = /^[0-9a-f]{8}$/i;
+
 module.exports = async (req, res) => {
   const { pid } = req.query;
 
@@ -14,7 +19,7 @@ module.exports = async (req, res) => {
     return res.end();
   }
 
-  if (!pid || pid.length < 8) {
+  if (!pid || !PUBLIC_ID_RE.test(pid)) {
     res.writeHead(302, { Location: '/' });
     return res.end();
   }
@@ -31,6 +36,9 @@ module.exports = async (req, res) => {
     });
 
     if (!rpcRes.ok) {
+      // Surface the failure in the Vercel function logs instead of silently
+      // bouncing home — a clean dashboard must not hide a broken resolver.
+      console.error(`resolve_vehicle_qr failed: HTTP ${rpcRes.status} for pid=${pid}`);
       res.writeHead(302, { Location: '/' });
       return res.end();
     }
@@ -44,16 +52,34 @@ module.exports = async (req, res) => {
 
     const v = rows[0];
 
-    fetch(`${SUPABASE_URL}/rest/v1/qr_scans`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-        'Prefer': 'return=minimal',
-      },
-      body: JSON.stringify({ vehicle_id: v.vehicle_id }),
-    }).catch(() => {});
+    // Record the scan. AWAIT it (bounded) so the serverless invocation cannot
+    // freeze or return before the write lands — qr_scans is the data moat and a
+    // dropped scan is unrecoverable. There is no package.json in this repo, so
+    // Vercel's waitUntil (@vercel/functions) is unavailable without adding a
+    // build step; a timeout-bounded await is the reliable alternative. A slow or
+    // failing insert can delay the redirect by at most the timeout, never hang
+    // it, and never throws.
+    try {
+      const scanController = new AbortController();
+      const scanTimeout = setTimeout(() => scanController.abort(), 2500);
+      try {
+        await fetch(`${SUPABASE_URL}/rest/v1/qr_scans`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Prefer': 'return=minimal',
+          },
+          body: JSON.stringify({ vehicle_id: v.vehicle_id }),
+          signal: scanController.signal,
+        });
+      } finally {
+        clearTimeout(scanTimeout);
+      }
+    } catch (scanErr) {
+      console.error(`qr_scans insert failed for vehicle_id=${v.vehicle_id}: ${scanErr}`);
+    }
 
     const isStolen = v.vehicle_status === 'stolen' && v.active_report_id;
     const isTotalLoss = v.vehicle_status === 'total_loss';
@@ -71,6 +97,7 @@ module.exports = async (req, res) => {
     res.writeHead(307, { ...NO_CACHE, Location: `/vehicle-profile.html?id=${v.vehicle_id}&qr=1` });
     return res.end();
   } catch (err) {
+    console.error(`QR resolver error for pid=${pid}: ${err}`);
     res.writeHead(302, { Location: '/' });
     return res.end();
   }
