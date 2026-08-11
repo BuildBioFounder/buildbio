@@ -378,16 +378,19 @@ document.getElementById('form-vehicle').addEventListener('submit', async e => {
 
   const slug = slugify(`${year}-${make}-${model}${nickname ? '-' + nickname : ''}-${Date.now().toString(36)}`);
 
-  const { data: vehicle, error: vErr } = await sb.from('vehicles').insert({
-    owner_id: currentUser.id,
-    year: year,
-    make: make,
-    model: model,
-    trim: trim || null,
-    color: color || null,
-    nickname: nickname || null,
-    slug: slug
-  }).select().single();
+  // Concurrency-safe creation via RPC: the server generates vehicle_public_id
+  // inside a retry loop that catches only the public-id unique violation, so
+  // simultaneous inserts cannot fail on a collision (create_vehicle). owner_id is
+  // set from auth.uid() server-side (the client cannot spoof it).
+  const { data: vehicle, error: vErr } = await sb.rpc('create_vehicle', {
+    p_year: year,
+    p_make: make,
+    p_model: model,
+    p_trim: trim || null,
+    p_color: color || null,
+    p_nickname: nickname || null,
+    p_slug: slug
+  });
 
   if (vErr) { setLoading(btn, false); return showMsg(vErr.message); }
 
