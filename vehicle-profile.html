@@ -252,7 +252,9 @@ function initials(first, last, username) {
   const location = [owner?.location_city, owner?.location_state].filter(Boolean).join(', ');
   const ini = owner ? initials(owner.first_name, owner.last_name, owner.username) : 'BB';
 
-  const qrUrl = `${SUPABASE_URL}/functions/v1/generate-qr?url=${encodeURIComponent('buildbio.app/v/' + v.vehicle_public_id)}&size=200`;
+  // generate-qr constructs the profile URL server-side from the vehicle id (the
+  // endpoint no longer accepts an arbitrary target). Pass the public id explicitly.
+  const qrUrl = `${SUPABASE_URL}/functions/v1/generate-qr?v=${encodeURIComponent(v.vehicle_public_id)}&size=200`;
 
   // Check if current user is owner
   const { data: { session } } = await sb.auth.getSession();
