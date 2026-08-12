@@ -378,10 +378,15 @@ document.getElementById('form-vehicle').addEventListener('submit', async e => {
 
   const slug = slugify(`${year}-${make}-${model}${nickname ? '-' + nickname : ''}-${Date.now().toString(36)}`);
 
-  // Concurrency-safe creation via RPC: the server generates vehicle_public_id
-  // inside a retry loop that catches only the public-id unique violation, so
-  // simultaneous inserts cannot fail on a collision (create_vehicle). owner_id is
-  // set from auth.uid() server-side (the client cannot spoof it).
+  // Idempotency key: stable per creation intent, reused if the user retries after a
+  // lost response (the slug carries a Date.now() suffix so it cannot dedup a retry).
+  // Persists across retries; cleared on confirmed success below.
+  window.__vehicleSubmitKey = window.__vehicleSubmitKey || crypto.randomUUID();
+
+  // Concurrency-safe + idempotent creation via RPC: the server generates
+  // vehicle_public_id in a retry loop (public-id collisions retried), sets owner_id
+  // from auth.uid() server-side, and returns the existing vehicle if this
+  // idempotency key was already used — no duplicate on a retried/double submit.
   const { data: vehicle, error: vErr } = await sb.rpc('create_vehicle', {
     p_year: year,
     p_make: make,
@@ -389,7 +394,8 @@ document.getElementById('form-vehicle').addEventListener('submit', async e => {
     p_trim: trim || null,
     p_color: color || null,
     p_nickname: nickname || null,
-    p_slug: slug
+    p_slug: slug,
+    p_idempotency_key: window.__vehicleSubmitKey
   });
 
   if (vErr) { setLoading(btn, false); return showMsg(vErr.message); }
@@ -420,6 +426,7 @@ document.getElementById('form-vehicle').addEventListener('submit', async e => {
     });
   }
 
+  window.__vehicleSubmitKey = null; // creation confirmed — next add-vehicle gets a fresh key
   showMsg('Vehicle created! Redirecting...', 'success');
   setTimeout(() => { window.location.href = `../vehicle-profile.html?id=${vehicle.id}`; }, 1500);
 });
