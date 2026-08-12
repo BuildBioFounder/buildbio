@@ -295,7 +295,7 @@ async function loadPartsForBrand() {
   const grid = document.getElementById('part-grid');
   if (!selectedBrand?.id || !selectedCategory?.id) { grid.innerHTML = ''; return; }
 
-  const { data: parts } = await sb.from('parts').select('id, name, part_number')
+  const { data: parts } = await sb.from('parts_public').select('id, name, part_number')
     .eq('brand_id', selectedBrand.id).eq('category_id', selectedCategory.id).order('name').limit(50);
 
   if (!parts || parts.length === 0) {

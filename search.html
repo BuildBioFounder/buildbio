@@ -310,7 +310,7 @@
   async function searchParts(q) {
     const term = '%' + q + '%';
     const { data, error } = await sb
-      .from('parts')
+      .from('parts_public')
       .select('id, name, part_number, brand_id')
       .ilike('name', term)
       .limit(20);
