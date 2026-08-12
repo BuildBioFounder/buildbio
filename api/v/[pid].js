@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const SUPABASE_URL = 'https://bicmwjtkncjkguumbidq.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_vt_RE80rfii-6Pb6wtPLhA_t_hyYiTE';
 
@@ -24,26 +26,39 @@ module.exports = async (req, res) => {
     return res.end();
   }
 
+  // Rate-limit key: SHA-256 of the caller IP. Hashing keeps a raw IP out of the
+  // bb_private.qr_resolver_hits table; the DB enforces 30 resolutions/minute per
+  // key (misses count too, which is what throttles public-id enumeration).
+  const fwd = req.headers['x-forwarded-for'];
+  const callerIp = (typeof fwd === 'string' && fwd.split(',')[0].trim()) ||
+    (req.socket && req.socket.remoteAddress) || 'unknown';
+  const callerKey = crypto.createHash('sha256').update(callerIp).digest('hex');
+
   try {
-    const rpcRes = await fetch(`${SUPABASE_URL}/rest/v1/rpc/resolve_vehicle_qr`, {
+    const rpcRes = await fetch(`${SUPABASE_URL}/rest/v1/rpc/resolve_vehicle_qr_limited`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'apikey': SUPABASE_ANON_KEY,
         'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
       },
-      body: JSON.stringify({ p_public_id: pid }),
+      body: JSON.stringify({ p_public_id: pid, p_caller_key: callerKey }),
     });
 
     if (!rpcRes.ok) {
       // Surface the failure in the Vercel function logs instead of silently
       // bouncing home — a clean dashboard must not hide a broken resolver.
-      console.error(`resolve_vehicle_qr failed: HTTP ${rpcRes.status} for pid=${pid}`);
+      console.error(`resolve_vehicle_qr_limited failed: HTTP ${rpcRes.status} for pid=${pid}`);
       res.writeHead(302, { Location: '/' });
       return res.end();
     }
 
     const rows = await rpcRes.json();
+
+    if (rows && rows.length > 0 && rows[0].rate_limited) {
+      res.writeHead(429, { 'Content-Type': 'text/html', 'Retry-After': '60', ...NO_CACHE });
+      return res.end('<!doctype html><html><head><title>Slow down</title></head><body style="background:#0f0f0f;color:#ccc;font-family:sans-serif;text-align:center;padding:80px"><h1>Too many scans</h1><p>Give it a minute and scan again.</p><a href="/" style="color:#E85D2C">Return home</a></body></html>');
+    }
 
     if (!rows || rows.length === 0) {
       res.writeHead(404, { 'Content-Type': 'text/html', ...NO_CACHE });
