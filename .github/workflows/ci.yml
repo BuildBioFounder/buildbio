@@ -44,3 +44,47 @@ jobs:
           echo "Parsing all .js files (find -exec fails the job on any syntax error)..."
           find . -name '*.js' -not -path './node_modules/*' -print -exec node --check {} \;
           echo "All JS files parsed OK."
+
+  # G-07 (ChatGPT audit 2026-08-13): most application logic is INLINE in HTML,
+  # which the .js-only check never saw. Extract every inline <script> block and
+  # parse it — a syntax error in any page's script can no longer reach main.
+  inline-js-syntax:
+    name: Inline JS syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Extract and parse every inline script block
+        run: |
+          node -e '
+            const fs = require("fs"), path = require("path"), cp = require("child_process"), os = require("os");
+            const files = [];
+            (function walk(d){ for (const e of fs.readdirSync(d,{withFileTypes:true})) {
+              if (e.name === "node_modules" || e.name.startsWith(".git")) continue;
+              const p = path.join(d, e.name);
+              if (e.isDirectory()) walk(p); else if (e.name.endsWith(".html")) files.push(p);
+            }})(".");
+            let fail = 0, blocks = 0;
+            for (const f of files) {
+              const html = fs.readFileSync(f, "utf8");
+              const re = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
+              let m, i = 0;
+              while ((m = re.exec(html))) {
+                i++;
+                if (/\bsrc\s*=/.test(m[1])) continue;      // external scripts: skipped
+                if (!m[2].trim()) continue;
+                blocks++;
+                const tmp = path.join(os.tmpdir(), `inline_${blocks}.js`);
+                fs.writeFileSync(tmp, m[2]);
+                const r = cp.spawnSync("node", ["--check", tmp], { encoding: "utf8" });
+                if (r.status !== 0) {
+                  fail = 1;
+                  console.log(`::error file=${f}::inline <script> #${i} failed to parse:\n${r.stderr}`);
+                }
+              }
+            }
+            console.log(`${blocks} inline script blocks parsed across ${files.length} HTML files.`);
+            process.exit(fail);
+          '
