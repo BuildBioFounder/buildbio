@@ -50,7 +50,7 @@
       transition: all 0.2s; outline: none;
     }
     .field input::placeholder, .field textarea::placeholder { color: #555; }
-    .field input:focus, .field textarea:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(216,90,48,0.1); }
+    .field input:focus, .field textarea:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(232,93,44,0.1); }
     .field textarea { resize: vertical; min-height: 80px; }
     .field-static { font-size: 14px; color: var(--text-dim); padding: 10px 0; }
 
@@ -82,7 +82,7 @@
 
     .tier-badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
     .tier-free { background: rgba(255,255,255,0.06); color: var(--text-dim); }
-    .tier-plus { background: rgba(216,90,48,0.15); color: var(--orange); }
+    .tier-plus { background: rgba(232,93,44,0.15); color: var(--orange); }
     .tier-apex { background: rgba(29,158,117,0.15); color: var(--green); }
 
     @media (max-width: 640px) {
@@ -270,7 +270,7 @@ function showMsg(text, type = 'error') {
         </div>
         <div class="vehicle-actions">
           <a href="vehicle-profile.html?id=${v.id}" class="btn btn-ghost" style="font-size:12px;padding:6px 12px;">View</a>
-          <a href="vehicle/${v.id}/mod/new.html" class="btn btn-primary" style="font-size:12px;padding:6px 12px;">+ Add Mod</a>
+          <a href="/vehicle/mod/new.html?vehicle=${v.id}" class="btn btn-primary" style="font-size:12px;padding:6px 12px;">+ Add Mod</a>
         </div>
       </div>
     `).join('');

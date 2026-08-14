@@ -357,12 +357,12 @@ function initials(first, last, username) {
     ${socialHtml}
   `;
 
-  // Record scan (only for QR scans, not direct nav/search clicks)
-  const referer = document.referrer || '';
-  const isQrScan = params.has('qr') || (!referer.includes(window.location.hostname) && !referer);
-  if (!isOwner && isQrScan) {
-    await sb.from('qr_scans').insert({ vehicle_id: v.id });
-  }
+  // Scan recording REMOVED 2026-08-13 (ChatGPT-audit G-02, founder-authorized):
+  // the QR resolver (api/v/[pid].js) is the SINGLE authoritative qr_scans
+  // writer — it logs the scan server-side before redirecting here. The old
+  // browser insert double-counted every scan and misclassified privacy-stripped
+  // direct visits (empty referrer) as scans, poisoning the data moat. Page-view
+  // analytics are GA4's job, not qr_scans'.
 })();
 </script>
 <script>
