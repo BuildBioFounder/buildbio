@@ -324,8 +324,11 @@ function getAlertAge(reportedAt) {
 
 function escapeHtml(str) {
   if (!str) return '';
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
+
+// XSS hardening (ChatGPT-audit G-03): DB-sourced URLs must be http(s) — blocks javascript: etc.
+function safeUrl(u){try{const p=new URL(String(u??''),location.origin);return ['http:','https:'].includes(p.protocol)?p.href:'#'}catch{return '#'}}
 
 (async () => {
   if (!vehicleId) {
@@ -365,7 +368,7 @@ function escapeHtml(str) {
 
   let photoHtml = '';
   if (a.primary_photo_url) {
-    photoHtml = '<div class="vehicle-photo"><img src="' + escapeHtml(a.primary_photo_url) + '" alt="Vehicle photo"></div>';
+    photoHtml = '<div class="vehicle-photo"><img src="' + escapeHtml(safeUrl(a.primary_photo_url)) + '" alt="Vehicle photo"></div>';
   } else {
     photoHtml = '<div class="vehicle-photo"><div class="vehicle-photo-placeholder">No photo available</div></div>';
   }

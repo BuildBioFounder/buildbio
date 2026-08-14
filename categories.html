@@ -199,8 +199,10 @@
     let html = '<div class="cat-grid">';
     data.forEach((cat, i) => {
       const desc = cat.description ? escapeHtml(cat.description.substring(0, 120)) + (cat.description.length > 120 ? '...' : '') : 'Explore modifications in this category.';
+      // Icons may be stored as HTML entities (&#9889;) — strip tag/attr chars but
+      // leave & intact so entities still render (G-03 hardening).
       const iconHtml = cat.icon
-        ? '<span style="font-size:20px">' + cat.icon + '</span>'
+        ? '<span style="font-size:20px">' + String(cat.icon).replace(/[<>"']/g, c => ({'<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) + '</span>'
         : '<span class="cat-icon-text">' + escapeHtml(cat.name.charAt(0)) + '</span>';
 
       html += '<a class="cat-card fu" style="animation-delay:' + (0.05 * Math.min(i, 12)) + 's" href="/search.html?category=' + encodeURIComponent(cat.slug) + '">'
@@ -216,7 +218,7 @@
 
   function escapeHtml(str) {
     if (!str) return '';
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
   loadCategories();

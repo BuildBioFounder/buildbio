@@ -173,6 +173,11 @@ const SUPABASE_URL  = 'https://bicmwjtkncjkguumbidq.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_vt_RE80rfii-6Pb6wtPLhA_t_hyYiTE';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
+// XSS hardening (ChatGPT-audit G-03): every DB-sourced value rendered via
+// innerHTML goes through esc(); DB-sourced URLs go through safeUrl().
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function safeUrl(u){try{const p=new URL(String(u??''),location.origin);return ['http:','https:'].includes(p.protocol)?p.href:'#'}catch{return '#'}}
+
 const params = new URLSearchParams(window.location.search);
 const vehicleId = params.get('id');
 
@@ -219,7 +224,7 @@ function initials(first, last, username) {
   }
 
   if (v.vehicle_status === 'stolen') {
-    window.location.href = '/alert.html?vid=' + v.id;
+    window.location.href = '/alert.html?vid=' + encodeURIComponent(v.id);
     return;
   }
 
@@ -266,7 +271,7 @@ function initials(first, last, username) {
     document.getElementById('nav-cta').href = '/account.html';
     document.getElementById('nav-cta').className = 'btn btn-ghost';
     document.getElementById('sticky-bar').innerHTML = `
-      <a href="/vehicle/mod/new.html?vehicle=${v.id}" class="sticky-btn">+ Add Modification</a>
+      <a href="/vehicle/mod/new.html?vehicle=${encodeURIComponent(v.id)}" class="sticky-btn">+ Add Modification</a>
     `;
   }
 
@@ -279,21 +284,21 @@ function initials(first, last, username) {
 
   let modsHtml = '';
   if (modCount === 0) {
-    modsHtml = `<div class="empty-mods"><div class="empty-mods-title">No modifications yet</div><p>${isOwner ? 'Add your first mod to start building your profile.' : 'This build hasn\'t added any mods yet.'}</p>${isOwner ? '<a href="/vehicle/mod/new.html?vehicle=' + v.id + '" class="btn btn-primary" style="margin-top:16px;padding:12px 24px;">+ Add First Mod</a>' : ''}</div>`;
+    modsHtml = `<div class="empty-mods"><div class="empty-mods-title">No modifications yet</div><p>${isOwner ? 'Add your first mod to start building your profile.' : 'This build hasn\'t added any mods yet.'}</p>${isOwner ? '<a href="/vehicle/mod/new.html?vehicle=' + encodeURIComponent(v.id) + '" class="btn btn-primary" style="margin-top:16px;padding:12px 24px;">+ Add First Mod</a>' : ''}</div>`;
   } else {
     for (const [cat, catMods] of Object.entries(modsByCategory)) {
-      modsHtml += `<div class="cat-label">${cat}</div>`;
+      modsHtml += `<div class="cat-label">${esc(cat)}</div>`;
       for (const m of catMods) {
         const r = reviewMap[m.id] || [];
         const avg = r.length > 0 ? r.reduce((a, b) => a + b, 0) / r.length : 0;
-        const bEsc = (m.brand||'').replace(/'/g,"\\'");
-        const pEsc = (m.product_name||'').replace(/'/g,"\\'");
-        const buyBtn = `<button type="button" class="buy-now-btn coming-soon" onclick="trackComingSoon('${bEsc}','${pEsc}','${v.id}')">Buy Now &middot; Coming Soon</button>`;
+        // Brand/product ride as data-* attributes; a delegated listener below
+        // fires trackComingSoon — no DB value ever lands in an inline handler.
+        const buyBtn = `<button type="button" class="buy-now-btn coming-soon" data-brand="${esc(m.brand||'')}" data-product="${esc(m.product_name||'')}" data-vehicle="${esc(v.id)}">Buy Now &middot; Coming Soon</button>`;
         modsHtml += `
           <div class="mod-card">
-            <div class="mod-name">${m.product_name}</div>
-            <div class="mod-brand">${m.brand || 'Unknown brand'}${m.part_number ? ' &middot; Part #' + m.part_number : ''}</div>
-            ${m.ai_spec_description ? '<div class="mod-spec">' + m.ai_spec_description + '</div>' : ''}
+            <div class="mod-name">${esc(m.product_name)}</div>
+            <div class="mod-brand">${esc(m.brand) || 'Unknown brand'}${m.part_number ? ' &middot; Part #' + esc(m.part_number) : ''}</div>
+            ${m.ai_spec_description ? '<div class="mod-spec">' + esc(m.ai_spec_description) + '</div>' : ''}
             <div class="mod-bottom">
               ${r.length > 0 ? stars(avg, r.length) : '<span style="font-size:11px;color:var(--text-muted)">No reviews yet</span>'}
               <div class="mod-actions">
@@ -309,17 +314,17 @@ function initials(first, last, username) {
   // Social links
   let socialHtml = '';
   const socials = [];
-  if (owner?.social_instagram) socials.push(`<a href="https://instagram.com/${owner.social_instagram.replace('@','')}" class="social-pill" target="_blank">Instagram</a>`);
-  if (owner?.social_youtube) socials.push(`<a href="${owner.social_youtube.startsWith('http') ? owner.social_youtube : 'https://youtube.com/' + owner.social_youtube}" class="social-pill" target="_blank">YouTube</a>`);
-  if (owner?.social_tiktok) socials.push(`<a href="https://tiktok.com/@${owner.social_tiktok.replace('@','')}" class="social-pill" target="_blank">TikTok</a>`);
+  if (owner?.social_instagram) socials.push(`<a href="https://instagram.com/${encodeURIComponent(owner.social_instagram.replace('@',''))}" class="social-pill" target="_blank">Instagram</a>`);
+  if (owner?.social_youtube) socials.push(`<a href="${esc(owner.social_youtube.startsWith('http') ? safeUrl(owner.social_youtube) : 'https://youtube.com/' + encodeURIComponent(owner.social_youtube))}" class="social-pill" target="_blank">YouTube</a>`);
+  if (owner?.social_tiktok) socials.push(`<a href="https://tiktok.com/@${encodeURIComponent(owner.social_tiktok.replace('@',''))}" class="social-pill" target="_blank">TikTok</a>`);
   if (socials.length > 0) {
-    socialHtml = `<section class="social-section"><div class="social-label">Find ${owner?.first_name || owner?.username || 'the owner'} on</div><div class="social-pills">${socials.join('')}</div></section>`;
+    socialHtml = `<section class="social-section"><div class="social-label">Find ${esc(owner?.first_name || owner?.username || 'the owner')} on</div><div class="social-pills">${socials.join('')}</div></section>`;
   }
 
   document.getElementById('content').innerHTML = `
     <section class="hero">
       <div class="hero-photo">
-        ${v.primary_photo ? '<img src="' + v.primary_photo + '" alt="' + title + '">' : '<div class="hero-photo-placeholder">No photo yet</div>'}
+        ${v.primary_photo ? '<img src="' + esc(safeUrl(v.primary_photo)) + '" alt="' + esc(title) + '">' : '<div class="hero-photo-placeholder">No photo yet</div>'}
       </div>
       <div>
         <div class="badge-row">
@@ -327,11 +332,11 @@ function initials(first, last, username) {
           ${owner?.founder_member ? '<span class="badge badge-founder">Founder</span>' : ''}
           ${owner?.membership_tier === 'apex' ? '<span class="badge badge-founder">APEX</span>' : ''}
         </div>
-        <div class="vehicle-name">${title}</div>
-        ${v.nickname ? '<div class="vehicle-nick">' + v.nickname + '</div>' : ''}
+        <div class="vehicle-name">${esc(title)}</div>
+        ${v.nickname ? '<div class="vehicle-nick">' + esc(v.nickname) + '</div>' : ''}
         <div class="owner-row">
-          <div class="owner-avatar">${ini}</div>
-          <span class="owner-name">by ${ownerName}${location ? ' &middot; ' + location : ''}</span>
+          <div class="owner-avatar">${esc(ini)}</div>
+          <span class="owner-name">by ${esc(ownerName)}${location ? ' &middot; ' + esc(location) : ''}</span>
         </div>
         <div class="stats-row">
           <div class="stat"><div class="stat-n">${modCount}</div><div class="stat-l">Mods</div></div>
@@ -343,7 +348,7 @@ function initials(first, last, username) {
           <div class="qr-img"><img src="${qrUrl}" alt="QR Code"></div>
           <div class="qr-text">Scan this code to view this profile<br>on any device.</div>
         </div>
-        ${isOwner ? '<div class="owner-actions"><a href="/vehicle/mod/new.html?vehicle=' + v.id + '" class="btn btn-primary" style="padding:10px 20px;font-size:13px;">+ Add Mod</a><a href="/account.html" class="btn btn-ghost" style="padding:10px 20px;font-size:13px;">Edit Vehicle</a></div>' : ''}
+        ${isOwner ? '<div class="owner-actions"><a href="/vehicle/mod/new.html?vehicle=' + encodeURIComponent(v.id) + '" class="btn btn-primary" style="padding:10px 20px;font-size:13px;">+ Add Mod</a><a href="/account.html" class="btn btn-ghost" style="padding:10px 20px;font-size:13px;">Edit Vehicle</a></div>' : ''}
       </div>
     </section>
     <div class="divider"></div>
@@ -356,6 +361,13 @@ function initials(first, last, username) {
     </section>
     ${socialHtml}
   `;
+
+  // Delegated Buy Now handler — reads the data-* attributes set on each
+  // .buy-now-btn above, so no DB value ever sits inside an inline onclick.
+  document.getElementById('content').addEventListener('click', e => {
+    const btn = e.target.closest('.buy-now-btn');
+    if (btn) trackComingSoon(btn.dataset.brand, btn.dataset.product, btn.dataset.vehicle);
+  });
 
   // Scan recording REMOVED 2026-08-13 (ChatGPT-audit G-02, founder-authorized):
   // the QR resolver (api/v/[pid].js) is the SINGLE authoritative qr_scans

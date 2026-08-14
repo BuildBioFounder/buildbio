@@ -220,6 +220,11 @@ const SUPABASE_URL  = 'https://bicmwjtkncjkguumbidq.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_vt_RE80rfii-6Pb6wtPLhA_t_hyYiTE';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
+// XSS hardening (ChatGPT-audit G-03): every DB-sourced value rendered via
+// innerHTML goes through esc(); DB-sourced URLs go through safeUrl().
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function safeUrl(u){try{const p=new URL(String(u??''),location.origin);return ['http:','https:'].includes(p.protocol)?p.href:'#'}catch{return '#'}}
+
 let currentUser = null;
 let profile = null;
 
@@ -265,12 +270,12 @@ function showMsg(text, type = 'error') {
     list.innerHTML = vehicles.map(v => `
       <div class="vehicle-card">
         <div class="vehicle-info">
-          <div class="vehicle-name">${v.year} ${v.make} ${v.model}${v.trim ? ' ' + v.trim : ''}</div>
-          ${v.nickname ? '<div class="vehicle-nick">' + v.nickname + '</div>' : ''}
+          <div class="vehicle-name">${esc(v.year)} ${esc(v.make)} ${esc(v.model)}${v.trim ? ' ' + esc(v.trim) : ''}</div>
+          ${v.nickname ? '<div class="vehicle-nick">' + esc(v.nickname) + '</div>' : ''}
         </div>
         <div class="vehicle-actions">
-          <a href="vehicle-profile.html?id=${v.id}" class="btn btn-ghost" style="font-size:12px;padding:6px 12px;">View</a>
-          <a href="/vehicle/mod/new.html?vehicle=${v.id}" class="btn btn-primary" style="font-size:12px;padding:6px 12px;">+ Add Mod</a>
+          <a href="vehicle-profile.html?id=${encodeURIComponent(v.id)}" class="btn btn-ghost" style="font-size:12px;padding:6px 12px;">View</a>
+          <a href="/vehicle/mod/new.html?vehicle=${encodeURIComponent(v.id)}" class="btn btn-primary" style="font-size:12px;padding:6px 12px;">+ Add Mod</a>
         </div>
       </div>
     `).join('');

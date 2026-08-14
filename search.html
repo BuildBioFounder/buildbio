@@ -428,7 +428,7 @@
         + '</div>';
       results.brands.forEach(b => {
         const logoHtml = b.logo_url
-          ? '<img src="' + escapeHtml(b.logo_url) + '" alt="' + escapeHtml(b.name) + '" loading="lazy">'
+          ? '<img src="' + escapeHtml(safeUrl(b.logo_url)) + '" alt="' + escapeHtml(b.name) + '" loading="lazy">'
           : '<span class="letter-fb">' + escapeHtml(b.name.charAt(0)) + '</span>';
         const desc = b.description ? b.description.substring(0, 80) : '';
         html += '<div class="brand-card">'
@@ -477,8 +477,11 @@
 
   function escapeHtml(str) {
     if (!str) return '';
-    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
+
+  // XSS hardening (ChatGPT-audit G-03): DB-sourced URLs must be http(s) — blocks javascript: etc.
+  function safeUrl(u){try{const p=new URL(String(u??''),location.origin);return ['http:','https:'].includes(p.protocol)?p.href:'#'}catch{return '#'}}
 </script>
 </body>
 </html>

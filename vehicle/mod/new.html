@@ -190,6 +190,11 @@ const SUPABASE_URL  = 'https://bicmwjtkncjkguumbidq.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_vt_RE80rfii-6Pb6wtPLhA_t_hyYiTE';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
+// XSS hardening (ChatGPT-audit G-03): every DB-sourced value rendered via
+// innerHTML goes through esc(); DB-sourced URLs go through safeUrl().
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function safeUrl(u){try{const p=new URL(String(u??''),location.origin);return ['http:','https:'].includes(p.protocol)?p.href:'#'}catch{return '#'}}
+
 const params = new URLSearchParams(window.location.search);
 const vehicleId = params.get('vehicle');
 let currentUser = null;
@@ -221,7 +226,7 @@ function goStep(n) {
   if (!vehicleId) {
     const { data: vehicles } = await sb.from('vehicles').select('id, year, make, model').eq('owner_id', currentUser.id).limit(1);
     if (vehicles && vehicles.length > 0) {
-      window.location.href = `new.html?vehicle=${vehicles[0].id}`;
+      window.location.href = `new.html?vehicle=${encodeURIComponent(vehicles[0].id)}`;
     } else {
       showMsg('No vehicle found. Add a vehicle first.');
     }
@@ -242,7 +247,7 @@ function goStep(n) {
 
 function renderCategories(list) {
   const grid = document.getElementById('cat-grid');
-  grid.innerHTML = list.map(c => `<div class="option-card" data-id="${c.id}" data-name="${c.name}">${c.name}</div>`).join('');
+  grid.innerHTML = list.map(c => `<div class="option-card" data-id="${esc(c.id)}" data-name="${esc(c.name)}">${esc(c.name)}</div>`).join('');
   grid.querySelectorAll('.option-card').forEach(card => {
     card.addEventListener('click', () => {
       selectedCategory = { id: card.dataset.id, name: card.dataset.name };
@@ -261,7 +266,7 @@ document.getElementById('cat-search').addEventListener('input', e => {
 
 function renderBrands(list) {
   const grid = document.getElementById('brand-grid');
-  grid.innerHTML = list.map(b => `<div class="option-card" data-id="${b.id}" data-name="${b.name}">${b.name}</div>`).join('');
+  grid.innerHTML = list.map(b => `<div class="option-card" data-id="${esc(b.id)}" data-name="${esc(b.name)}">${esc(b.name)}</div>`).join('');
   grid.querySelectorAll('.option-card').forEach(card => {
     card.addEventListener('click', () => {
       selectedBrand = { id: card.dataset.id, name: card.dataset.name };
@@ -303,7 +308,7 @@ async function loadPartsForBrand() {
     return;
   }
 
-  grid.innerHTML = parts.map(p => `<div class="option-card" data-id="${p.id}" data-name="${p.name}" data-pn="${p.part_number || ''}">${p.name}${p.part_number ? '<br><small style="color:var(--text-dim)">' + p.part_number + '</small>' : ''}</div>`).join('');
+  grid.innerHTML = parts.map(p => `<div class="option-card" data-id="${esc(p.id)}" data-name="${esc(p.name)}" data-pn="${esc(p.part_number || '')}">${esc(p.name)}${p.part_number ? '<br><small style="color:var(--text-dim)">' + esc(p.part_number) + '</small>' : ''}</div>`).join('');
   grid.querySelectorAll('.option-card').forEach(card => {
     card.addEventListener('click', () => {
       selectedPart = { id: card.dataset.id, name: card.dataset.name, pn: card.dataset.pn };
@@ -345,7 +350,7 @@ document.getElementById('btn-submit').addEventListener('click', async () => {
   if (error) return showMsg(error.message);
 
   showMsg('Modification added!', 'success');
-  setTimeout(() => { window.location.href = `../../vehicle-profile.html?id=${vehicleId}`; }, 1500);
+  setTimeout(() => { window.location.href = `../../vehicle-profile.html?id=${encodeURIComponent(vehicleId)}`; }, 1500);
 });
 </script>
 </body>

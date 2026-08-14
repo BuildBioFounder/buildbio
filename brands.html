@@ -229,10 +229,10 @@
       groups[letter].forEach(b => {
         const desc = b.description ? escapeHtml(b.description.substring(0, 100)) + (b.description.length > 100 ? '...' : '') : '';
         const logoHtml = b.logo_url
-          ? '<img src="' + escapeHtml(b.logo_url) + '" alt="' + escapeHtml(b.name) + '" loading="lazy">'
+          ? '<img src="' + escapeHtml(safeUrl(b.logo_url)) + '" alt="' + escapeHtml(b.name) + '" loading="lazy">'
           : '<span class="letter-fallback">' + escapeHtml(b.name.charAt(0)) + '</span>';
         const linkHtml = b.website_url
-          ? '<a class="brand-link" href="' + escapeHtml(b.website_url) + '" target="_blank" rel="noopener">Visit website &#8594;</a>'
+          ? '<a class="brand-link" href="' + escapeHtml(safeUrl(b.website_url)) + '" target="_blank" rel="noopener">Visit website &#8594;</a>'
           : '';
         html += '<div class="brand-card">'
           + '<div class="brand-logo">' + logoHtml + '</div>'
@@ -250,8 +250,11 @@
 
   function escapeHtml(str) {
     if (!str) return '';
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
+
+  // XSS hardening (ChatGPT-audit G-03): DB-sourced URLs must be http(s) — blocks javascript: etc.
+  function safeUrl(u){try{const p=new URL(String(u??''),location.origin);return ['http:','https:'].includes(p.protocol)?p.href:'#'}catch{return '#'}}
 
   // Client-side filter
   document.getElementById('brandSearch').addEventListener('input', function() {
