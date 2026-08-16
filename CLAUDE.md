@@ -21,6 +21,14 @@ built*; Notion is truth for *what was decided and why*.
 
 ---
 
+## MOBILE-FIRST STANDARD (founder-locked 2026-08-16)
+
+**The QR visitor is a phone. Every page is designed mobile-first; desktop adapts from mobile, never the reverse.** This checklist is the ACCEPTANCE BAR for any new or edited page — verify before commit (render at 360x800 / 390x844 / 412x915; audit harness pattern in `docs/mobile-audit-20260816.md`):
+
+(a) viewport meta present; (b) zero horizontal overflow at 360px; (c) fluid containers, no fixed pixel widths; (d) NEW pages write breakpoints `min-width`-up from a mobile base (existing `max-width` pages convert as they're edited); (e) tap targets ≥44px; (f) base font ≥16px AND inputs ≥16px (zoom-jump); (g) correct input types + autocomplete attrs; (h) primary CTA in the thumb zone; (i) images `max-width:100%` (+srcset when heavy); (j) lists/tables stack or scroll-wrap, never break layout; (k) touch-usable nav; (l) the QR landing page loads lean on cellular.
+
+Every page carries a cascade-last `Mobile-first base` CSS block (16px floor, bounded images, 44px controls) — do not remove it; page-level classes may override it deliberately.
+
 ## THE BRIGHT LINES (do not cross without explicit founder say-so)
 
 - **HARD GATE:** NOT launched. The Pre-Launch MVP Stress Test (all 5 layers) must pass before

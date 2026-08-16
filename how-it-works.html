@@ -117,6 +117,16 @@
       .footer-in{flex-direction:column;align-items:flex-start}
       .ncta{padding:12px 16px;font-size:13px;min-height:44px}
     }
+  
+    /* ── Mobile-first base (founder standard 2026-08-16) ──────────────────
+       Appended last so it wins the cascade. Locks the mechanical minimums:
+       16px base + inputs (kills Samsung/iOS zoom-jump), bounded images,
+       44px tap-height on buttons. Class-level rules above still override. */
+    body { font-size: 16px; }
+    input, select, textarea { font-size: 16px !important; } /* floor: class rules set 14-15px, which triggers mobile zoom-jump */
+    .nav-link { padding-top: 12px; padding-bottom: 12px; } /* 44px touch height inside the fixed nav */
+    img { max-width: 100%; height: auto; }
+    .btn, .mod-btn, button { min-height: 44px; }
   </style>
 </head>
 <body>
