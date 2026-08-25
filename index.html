@@ -91,6 +91,16 @@
     .snum{width:28px;height:28px;border-radius:50%;background:rgba(232,93,44,.12);border:1px solid rgba(232,93,44,.3);color:var(--orange);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
     .stxt{font-size:14px;color:var(--muted);line-height:1.6}.stxt strong{color:var(--text);font-weight:500}
     .qdw{display:flex;flex-direction:column;align-items:center;gap:20px}
+    .benef{margin-top:22px;display:flex;flex-direction:column;gap:10px}
+    .bene{position:relative;padding-left:26px;font-size:13.5px;color:var(--muted);line-height:1.5}
+    .bene::before{content:'';position:absolute;left:0;top:2px;width:16px;height:16px;border-radius:50%;background:rgba(232,93,44,.14);border:1px solid rgba(232,93,44,.4)}
+    .bene::after{content:'';position:absolute;left:4.5px;top:6px;width:7px;height:4px;border-left:2px solid var(--orange);border-bottom:2px solid var(--orange);transform:rotate(-45deg)}
+    .qdw-owner{align-items:center;justify-content:center}
+    .stick-card{display:flex;flex-direction:column;align-items:center;gap:14px}
+    .stick-card img{width:min(240px,60vw);height:auto;border-radius:50%;box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.05)}
+    .stick-lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+    .scan-in2{margin-top:64px}
+    @media (max-width:640px){.scan-in2{margin-top:44px}}
     /* ILLUSTRATED TUTORIAL (founder art, 2026-08-25) */
     .tut{width:min(340px,88vw);margin:0 auto;flex-shrink:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
     .tut-frame{position:relative;width:100%;aspect-ratio:1/1;border-radius:16px;overflow:hidden;border:1px solid var(--border-l);box-shadow:0 18px 44px rgba(0,0,0,.5)}
@@ -287,16 +297,34 @@
 <section class="scan" id="how-it-works">
   <div class="scan-in">
     <div>
-      <div class="slbl">The core idea</div>
-      <h2 class="sh2">Scan the code.<br><em>See everything.</em></h2>
-      <p class="sbody">Every time you see a modified vehicle and wonder "what parts is that running?" — BuildBio answers that question in seconds.</p>
+      <div class="slbl">For the builder</div>
+      <h2 class="sh2">Your build speaks.<br><em>You don't have to.</em></h2>
+      <p class="sbody">You built something worth asking about. BuildBio answers the questions — so you don't answer them fifty times.</p>
       <div class="ssteps">
-        <div class="sstep"><div class="snum">1</div><div class="stxt"><strong>Owner creates a profile</strong> — lists every mod, part number, and spec. About 2 minutes per modification.</div></div>
-        <div class="sstep"><div class="snum">2</div><div class="stxt"><strong>Gets their unique QR code</strong> — download it to your digital wallet, post it on your socials, or get it printed on a weatherproof sticker and apply it directly to your vehicle.</div></div>
-        <div class="sstep"><div class="snum">3</div><div class="stxt"><strong>Anyone scans it</strong> — full build profile opens instantly on their phone. No app needed.</div></div>
+        <div class="sstep"><div class="snum">1</div><div class="stxt"><strong>Create your profile</strong> — list every mod, part, and spec. About 2 minutes per modification.</div></div>
+        <div class="sstep"><div class="snum">2</div><div class="stxt"><strong>Put your QR on the glass</strong> — weatherproof sticker, digital wallet, or your socials. Update your mods anytime; the code never changes.</div></div>
+        <div class="sstep"><div class="snum">3</div><div class="stxt"><strong>Walk away</strong> — the car answers for you, whether you're there or not.</div></div>
+      </div>
+      <div class="benef">
+        <div class="bene">Answer "what lift is that?" once — not every weekend</div>
+        <div class="bene">Shows your build — not your name, number, or location</div>
+        <div class="bene">Works while you sleep, at the trailhead, or across the lot</div>
+        <div class="bene">One sticker, forever — edits show up instantly, no reprints</div>
       </div>
     </div>
-    <div class="qdw">
+    <div class="qdw qdw-owner">
+      <div class="stick-card">
+        <img src="/assets/qr/qr-demo-master-v6-final.webp" alt="BuildBio QR sticker — scan to view the build" />
+        <div class="stick-lbl">Your sticker. Their answers.</div>
+      </div>
+    </div>
+  </div>
+  <div class="scan-in scan-in2">
+    <div>
+      <div class="slbl">For the curious</div>
+      <h2 class="sh2">See a build you like?<br><em>Scan it.</em></h2>
+      <p class="sbody">No owner interview. No forum digging. Point your camera at the sticker and the whole build is in your hand — every part, every spec. No app needed.</p>
+    </div>
       <!-- ILLUSTRATED TUTORIAL (founder art, 2026-08-25): sticker -> scan -> land -> browse; auto-advances, tap to step -->
       <div class="tut" id="qrTut" role="img" aria-label="Four steps: spot the BuildBio sticker on the rear glass, scan it with your camera, the build profile opens, browse the full parts list">
         <div class="tut-frame">
@@ -308,7 +336,6 @@
         <div class="tut-cap"><span class="on">Spot a BuildBio sticker</span><span>Scan it with your camera</span><span>The build opens instantly</span><span>Browse every part on it</span></div>
         <div class="tut-dots"><i class="on"></i><i></i><i></i><i></i></div>
       </div>
-    </div>
   </div>
 </section>
 
