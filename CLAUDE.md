@@ -159,3 +159,6 @@ what is pending, exact next steps.
 
 *Keep this file current. When the Close Protocol or a bright line changes in Notion, mirror the
 change here in the same session, or the terminal building goes stale again.*
+
+## COPY STYLE — EASE LANGUAGE (founder rule 2026-08-25, ledger 1529)
+Wherever a line can honestly signal simpler / faster / less time wasted, say it: "simply", "instantly", "in seconds", "no waiting", "before your first visitor asks". Tasteful, never corny or fake; never claim speed the product does not deliver. Applies to every page and all future copy. Pairs with the free-vs-paid QR media rule (ledger 1528: free = wallet QR + PDF; paid = permanent weatherproof sticker, on-off magnet, future QR merch).
