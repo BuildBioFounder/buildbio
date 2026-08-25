@@ -1,0 +1,45 @@
+<!doctype html><meta charset="utf-8">
+<style>
+  body{margin:0;background:#222}
+  .panel{position:relative;width:618px;height:618px;overflow:hidden}
+  .panel img.bg{position:absolute;inset:0;width:100%;height:100%}
+  .stk{position:absolute;border-radius:50%;box-shadow:0 0 10px 3px rgba(255,240,200,.85)}
+  .patch{position:absolute;background:#faf7f2;display:flex;align-items:center;gap:6px;justify-content:flex-start}
+  .patch .bmark{height:170%;width:auto;margin-left:-8px;margin-right:-16px}
+  .patch .wm{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.5px}
+  .patch .wm .o{color:#E85D2C}.patch .wm .g{color:#5C6B3A}
+  .hdr{position:absolute;background:#faf7f2;display:flex;align-items:center;padding:0 12px;gap:8px;border-bottom:3px solid #232323;box-sizing:border-box}
+  .hdr .bmark{height:150%;width:auto;margin:0 -14px 0 -10px}
+  .hdr .wm{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.5px}
+  .hdr .wm .o{color:#E85D2C}.hdr .wm .g{color:#5C6B3A}
+  .hdr .ham{margin-left:auto;display:flex;flex-direction:column;gap:4px}
+  .hdr .ham i{display:block;width:22px;height:3.5px;background:#232323;border-radius:2px}
+  .hdr .arr{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:26px;color:#232323;margin-right:2px}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet">
+<div class="panel" id="p1">
+  <img class="bg" src="p1_raw.png">
+  <img class="stk" src="../qr/qr-demo-master-v6-final.webp" style="left:301px;top:274px;width:48px;height:48px">
+</div>
+<div class="panel" id="p2">
+  <img class="bg" src="p2_raw.png">
+  <img class="stk" src="../qr/qr-demo-master-v6-final.webp" style="left:166px;top:242px;width:53px;height:53px">
+  <img class="stk" src="../qr/qr-demo-master-v6-final.webp" style="left:353px;top:240px;width:60px;height:60px;box-shadow:0 0 14px 4px rgba(255,220,160,.9)">
+</div>
+<div class="panel" id="p3">
+  <img class="bg" src="p3_raw.png">
+  <div class="hdr" style="left:233px;top:57px;width:238px;height:54px;border-radius:10px 10px 0 0">
+    <img class="bmark" src="../../images/bg/bb-logo.png">
+    <div class="wm" style="font-size:31px"><span class="o">BUILD</span><span class="g">BIO</span></div>
+    <div class="ham"><i></i><i></i><i></i></div>
+  </div>
+</div>
+<div class="panel" id="p4">
+  <img class="bg" src="p4_raw.png">
+  <div class="hdr" style="left:170px;top:30px;width:300px;height:62px;transform:rotate(-2.7deg);border-radius:12px 12px 0 0">
+    <div class="arr">&#8592;</div>
+    <img class="bmark" src="../../images/bg/bb-logo.png">
+    <div class="wm" style="font-size:27px"><span class="o">BUILD</span><span class="g">BIO</span></div>
+    <div class="ham"><i></i><i></i><i></i></div>
+  </div>
+</div>
