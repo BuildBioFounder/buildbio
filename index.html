@@ -91,23 +91,18 @@
     .snum{width:28px;height:28px;border-radius:50%;background:rgba(232,93,44,.12);border:1px solid rgba(232,93,44,.3);color:var(--orange);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
     .stxt{font-size:14px;color:var(--muted);line-height:1.6}.stxt strong{color:var(--text);font-weight:500}
     .qdw{display:flex;flex-direction:column;align-items:center;gap:20px}
-    .qsticker{position:relative;width:200px;height:200px;background:var(--card);border-radius:14px;border:1px solid var(--border-l);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:18px;overflow:hidden}
-    .qsticker::before{content:'';position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--orange),transparent);animation:scanline 3s ease-in-out infinite;opacity:.5}
-    .qbrand{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700}.qbrand .q1{color:var(--orange)}.qbrand .q2{color:var(--olive-light)}
-    .qlbl{font-size:9px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;text-align:center}
-    .qr{width:150px;height:150px;position:relative;flex-shrink:0} /* v7 master carries its own tread ring — no white box */
-    .qr svg{width:100%;height:100%}
-    .qarrow{font-size:22px;color:var(--dim)}
-    .pmock{width:170px;background:var(--card);border:1px solid var(--border-l);border-radius:22px;overflow:hidden;padding:10px}
-    .pscreen{background:var(--dark2);border-radius:14px;overflow:hidden}
-    .pnav{background:var(--dark);padding:7px 10px;border-bottom:1px solid var(--border)}
-    .plogo{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700}.plogo .p1{color:var(--orange)}.plogo .p2{color:var(--olive-light)}
-    .pcont{padding:9px}
-    .pimg{width:100%;height:55px;background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);border-radius:7px;margin-bottom:7px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--dim)}
-    .pvname{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text);margin-bottom:5px}
-    .pmod{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:4px;padding:4px 6px;margin-bottom:4px}
-    .pcat{font-size:8px;color:var(--olive-light);text-transform:uppercase;letter-spacing:.05em}
-    .pname{font-size:9px;color:var(--text)}
+    /* ILLUSTRATED TUTORIAL (founder art, 2026-08-25) */
+    .tut{width:min(340px,88vw);margin:0 auto;flex-shrink:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+    .tut-frame{position:relative;width:100%;aspect-ratio:1/1;border-radius:16px;overflow:hidden;border:1px solid var(--border-l);box-shadow:0 18px 44px rgba(0,0,0,.5)}
+    .tut-p{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.03);transition:opacity .6s ease,transform 4.5s linear}
+    .tut-p.on{opacity:1;transform:scale(1)}
+    .tut-cap{position:relative;height:22px;margin-top:12px;text-align:center;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+    .tut-cap span{position:absolute;left:0;right:0;opacity:0;transition:opacity .4s}
+    .tut-cap span.on{opacity:1;color:var(--text)}
+    .tut-dots{display:flex;gap:7px;justify-content:center;margin-top:8px}
+    .tut-dots i{width:6px;height:6px;border-radius:50%;background:var(--border-l);transition:background .3s,transform .3s}
+    .tut-dots i.on{background:var(--orange);transform:scale(1.25)}
+    @media (prefers-reduced-motion:reduce){.tut-p{transition:opacity .2s;transform:none!important}}
 
     /* HOW */
     .how{padding:96px 28px;background:var(--black);position:relative;overflow:hidden}
@@ -216,7 +211,7 @@
     .mob-menu.open{opacity:1;pointer-events:auto}
     .mob-menu a{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;text-transform:uppercase;color:#fff;text-decoration:none;padding:16px 0;letter-spacing:.04em;transition:opacity .15s}
     .mob-menu a:hover{opacity:.8}
-    .mob-menu .mob-cta{margin-top:20px;background:rgba(0,0,0,.25);padding:16px 40px;border-radius:12px;font-size:22px}
+    .mob-menu .mob-cta{margin-top:20px;background:rgba(0,0,0,.25);padding:16px 40px;border-radius:12px;font-size:22px;text-align:center}
 
     @media(max-width:640px){
       .nav{padding:0 16px}.nav-r .nl{display:none}
@@ -226,7 +221,7 @@
       .qdw{flex-direction:column}
       .footer-in{flex-direction:column;align-items:flex-start}
       .hstats{display:grid;grid-template-columns:1fr 1fr;gap:18px 12px;max-width:320px;margin-left:auto;margin-right:auto} /* 2x2 on mobile — no orphaned 4th stat */
-      .eyebrow{font-size:10px;letter-spacing:0.12em} /* beta pill stays one line at 360px */
+      .eyebrow{font-size:10px;letter-spacing:0.12em} /* wraps to 2 lines at 360-412 (measured 2026-08-20); acceptable */
       .img-band{height:180px}
       .ncta{padding:12px 16px;font-size:13px;min-height:44px}
       .pbtn{padding:14px;min-height:44px}
@@ -238,7 +233,7 @@
        44px tap-height on buttons. Class-level rules above still override. */
     body { font-size: 16px; }
     input, select, textarea { font-size: 16px !important; } /* floor: class rules set 14-15px, which triggers mobile zoom-jump */
-    .nav-link { padding-top: 12px; padding-bottom: 12px; } /* 44px touch height inside the fixed nav */
+    .nl, .nav-link { padding-top: 12px; padding-bottom: 12px; } /* 44px touch height inside the fixed nav (.nl is the live class) */
     img { max-width: 100%; height: auto; }
     .btn, .mod-btn, button { min-height: 44px; }
   </style>
@@ -302,25 +297,16 @@
       </div>
     </div>
     <div class="qdw">
-      <div class="qsticker">
-        <div class="qbrand"><span class="q1">BUILD</span><span class="q2">BIO</span></div>
-        <div class="qr">
-          <img src="/assets/qr/qr-demo-master-v7.webp" alt="BuildBio QR code — scan to view the build" style="width:100%;height:100%;display:block;"/>
+      <!-- ILLUSTRATED TUTORIAL (founder art, 2026-08-25): sticker -> scan -> land -> browse; auto-advances, tap to step -->
+      <div class="tut" id="qrTut" role="img" aria-label="Four steps: spot the BuildBio sticker on the rear glass, scan it with your camera, the build profile opens, browse the full parts list">
+        <div class="tut-frame">
+          <img class="tut-p on" src="/assets/tutorial/tut-p1.webp" alt="">
+          <img class="tut-p" src="/assets/tutorial/tut-p2.webp" alt="" loading="lazy">
+          <img class="tut-p" src="/assets/tutorial/tut-p3.webp" alt="" loading="lazy">
+          <img class="tut-p" src="/assets/tutorial/tut-p4.webp" alt="" loading="lazy">
         </div>
-        <div class="qlbl">Scan for full build specs</div>
-      </div>
-      <div class="qarrow">↓</div>
-      <div class="pmock">
-        <div class="pscreen">
-          <div class="pnav"><div class="plogo"><span class="p1">BUILD</span><span class="p2">BIO</span></div></div>
-          <div class="pcont">
-            <div class="pimg">Vehicle photo</div>
-            <div class="pvname">2019 Toyota 4Runner TRD Pro</div>
-            <div class="pmod"><div class="pcat">Suspension</div><div class="pname">Fox 2.5 Coilovers</div></div>
-            <div class="pmod"><div class="pcat">Lighting</div><div class="pname">Baja Designs LP6 Pro</div></div>
-            <div class="pmod"><div class="pcat">Wheels &amp; Tires</div><div class="pname">Nitto Ridge Grappler</div></div>
-          </div>
-        </div>
+        <div class="tut-cap"><span class="on">Spot a BuildBio sticker</span><span>Scan it with your camera</span><span>The build opens instantly</span><span>Browse every part on it</span></div>
+        <div class="tut-dots"><i class="on"></i><i></i><i></i><i></i></div>
       </div>
     </div>
   </div>
@@ -510,6 +496,12 @@
 
 <script>
 function toggleMenu(){var h=document.querySelector('.ham'),m=document.getElementById('mobMenu');h.classList.toggle('open');m.classList.toggle('open');document.body.style.overflow=m.classList.contains('open')?'hidden':''}
+(function(){var t=document.getElementById('qrTut');if(!t)return;var ps=t.querySelectorAll('.tut-p'),cs=t.querySelectorAll('.tut-cap span'),ds=t.querySelectorAll('.tut-dots i');
+var i=0,n=ps.length,dur=[3200,3400,3600,4200],timer=null;
+function show(k){i=(k+n)%n;for(var j=0;j<n;j++){ps[j].classList.toggle('on',j===i);cs[j].classList.toggle('on',j===i);ds[j].classList.toggle('on',j===i);}}
+function tick(){timer=setTimeout(function(){show(i+1);tick();},dur[i]);}
+t.addEventListener('click',function(){clearTimeout(timer);show(i+1);tick();});
+tick();})();
 document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('click',function(){document.querySelector('.ham').classList.remove('open');document.getElementById('mobMenu').classList.remove('open');document.body.style.overflow=''})})
 </script>
 </body>

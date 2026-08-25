@@ -29,6 +29,10 @@ built*; Notion is truth for *what was decided and why*.
 
 Every page carries a cascade-last `Mobile-first base` CSS block (16px floor, bounded images, 44px controls) — do not remove it; page-level classes may override it deliberately.
 
+## PRICE DISPLAY RULE (founder-approved 2026-08-19, D-a)
+
+Wherever a catalog part price renders: a missing/null MSRP displays **"See retailer"** — never "$0", never blank, never a dash. (No page renders prices as of 2026-08-19; this rule binds the first one that does and all after.)
+
 ## THE BRIGHT LINES (do not cross without explicit founder say-so)
 
 - **HARD GATE:** NOT launched. The Pre-Launch MVP Stress Test (all 5 layers) must pass before
