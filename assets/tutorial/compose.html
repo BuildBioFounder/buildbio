@@ -4,28 +4,28 @@
   .panel{position:relative;width:618px;height:618px;overflow:hidden}
   .panel img.bg{position:absolute;inset:0;width:100%;height:100%}
   .stk{position:absolute;border-radius:50%;box-shadow:0 0 10px 3px rgba(255,240,200,.85)}
-  .patch{position:absolute;background:#faf7f2;display:flex;align-items:center;gap:6px;justify-content:flex-start}
-  .patch .bmark{height:170%;width:auto;margin-left:-8px;margin-right:-16px}
-  .patch .wm{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.5px}
-  .patch .wm .o{color:#E85D2C}.patch .wm .g{color:#5C6B3A}
   .hdr{position:absolute;background:#faf7f2;display:flex;align-items:center;padding:0 12px;gap:8px;border-bottom:3px solid #232323;box-sizing:border-box}
   .hdr .bmark{height:150%;width:auto;margin:0 -14px 0 -10px}
   .hdr .wm{font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.5px}
   .hdr .wm .o{color:#E85D2C}.hdr .wm .g{color:#5C6B3A}
   .hdr .ham{margin-left:auto;display:flex;flex-direction:column;gap:4px}
   .hdr .ham i{display:block;width:22px;height:3.5px;background:#232323;border-radius:2px}
-  .hdr .arr{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:26px;color:#232323;margin-right:2px}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet">
+
 <div class="panel" id="p1">
   <img class="bg" src="p1_raw.png">
-  <img class="stk" src="../qr/qr-demo-master-v6-final.webp" style="left:301px;top:274px;width:48px;height:48px">
+  <div style="position:absolute;left:297px;top:270px;width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 45% 40%,#20241f 0%,#161a16 60%,#121512 100%)"></div>
+  <img class="stk" src="../qr/qr-demo-master-v6-final.webp" style="left:306px;top:279px;width:38px;height:38px;box-shadow:0 0 9px 2px rgba(255,236,190,.8)">
+  <div style="position:absolute;left:150px;top:178px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:40px;color:#2a2a26;transform:rotate(9deg);text-shadow:-2px -2px 0 #e8e2d2,2px -2px 0 #e8e2d2,-2px 2px 0 #e8e2d2,2px 2px 0 #e8e2d2,0 3px 6px rgba(0,0,0,.35)">?</div>
 </div>
+
 <div class="panel" id="p2">
   <img class="bg" src="p2_raw.png">
   <img class="stk" src="../qr/qr-demo-master-v6-final.webp" style="left:163px;top:239px;width:60px;height:60px">
   <img class="stk" src="../qr/qr-demo-master-v6-final.webp" style="left:347px;top:242px;width:66px;height:66px;box-shadow:0 0 14px 4px rgba(255,220,160,.9)">
 </div>
+
 <div class="panel" id="p3">
   <img class="bg" src="p3_raw.png">
   <div class="hdr" style="left:233px;top:57px;width:238px;height:54px;border-radius:10px 10px 0 0">
@@ -33,12 +33,15 @@
     <div class="wm" style="font-size:31px"><span class="o">BUILD</span><span class="g">BIO</span></div>
     <div class="ham"><i></i><i></i><i></i></div>
   </div>
+  <div style="position:absolute;left:196px;top:288px;width:236px;height:194px;background:linear-gradient(135deg,#ece1d3,#e2d6c6);transform:rotate(8deg);transform-origin:left top"></div>
+  <div style="position:absolute;left:212px;top:296px;transform:rotate(8deg);transform-origin:left top;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:39px;line-height:.98;letter-spacing:.5px;color:#26231a">SEE IT.<br>SCAN IT.<br><span style="color:#c2571e">BUILD IT.</span><div style="font-family:Arial,Helvetica,sans-serif;font-weight:500;font-size:15.5px;letter-spacing:.2px;color:#2b281f;margin-top:12px">Your Aftermarket Blueprint.</div></div>
 </div>
+
 <div class="panel" id="p4">
   <img class="bg" src="p4_raw.png">
-  <div style="position:absolute;inset:0;background:#e8ded0;clip-path:polygon(182px 39.5px,250px 41px,395px 41px,452px 37.5px,458px 90px,180px 84px)"></div>
-  <div style="position:absolute;left:180px;top:82.5px;width:279px;height:3px;background:#232323;transform:rotate(1.24deg);transform-origin:left top;border-radius:2px"></div>
-  <div style="position:absolute;left:190px;top:45px;width:256px;height:38px;transform:rotate(-1deg);display:flex;align-items:center;gap:7px">
+  <div style="position:absolute;inset:0;background:#e8ded0;clip-path:polygon(182px 39.5px,250px 41px,395px 41px,452px 37.5px,458px 92px,181px 92px)"></div>
+  <div style="position:absolute;left:182px;top:88px;width:274px;height:3px;background:#232323;transform:rotate(-2.4deg);transform-origin:left top;border-radius:2px"></div>
+  <div style="position:absolute;left:190px;top:42px;width:256px;height:38px;transform:rotate(-2.4deg);display:flex;align-items:center;gap:7px">
     <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:24px;color:#232323">&#8592;</div>
     <img src="../../images/bg/bb-logo.png" style="height:58px;width:auto;margin:0 -14px 0 -10px">
     <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:25px;letter-spacing:.5px"><span style="color:#E85D2C">BUILD</span><span style="color:#5C6B3A">BIO</span></div>
