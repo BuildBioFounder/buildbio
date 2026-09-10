@@ -131,6 +131,7 @@ what is pending, exact next steps.
 
 ## REPO FACTS
 
+- **DEV PREVIEW URL (pinned 2026-09-03, verified live):** `https://buildbio-mu.vercel.app` — the Vercel project `buildbio` production alias (verified domain). Serves `index.html` (HTTP 200, title "BuildBio — Your Build. Your Story."). Deployment Protection is ON (Vercel Authentication, `all_except_custom_domains`): per-deployment URLs such as `buildbio-<hash>-buildbiofounders-projects.vercel.app` and the git-branch aliases redirect to Vercel login (302); the production alias is the only public URL until `buildbio.app` is connected at launch (HARD GATE). Use this URL for every page check, screenshot, and QA run; never the per-deployment hostname. Canon: `canonical_references` row "Vercel production URL"; `agent_status` mvp_pages / preview_url_pin.
 - Frontend repo: `BuildBioFounder/buildbio` (this repo) — static HTML, Vercel auto-deploys on
   push to main.
 - Backend repo: `BuildBioFounder/buildbio-supabase` (private) — migrations, edge functions

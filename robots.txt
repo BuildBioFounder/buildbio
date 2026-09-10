@@ -1,0 +1,18 @@
+# BuildBio — pre-launch. The site is behind a coming-soon gate; everything except
+# the landing page and the public QR scan path redirects to "/", so there is
+# nothing else for a crawler to index yet. This file states that intent plainly
+# rather than leaving crawlers to discover it by following redirects.
+
+User-agent: *
+Allow: /$
+Allow: /v/
+Disallow: /account.html
+Disallow: /login.html
+Disallow: /signup.html
+Disallow: /welcome.html
+Disallow: /password-reset.html
+Disallow: /password-reset-confirm.html
+Disallow: /home.html
+Disallow: /vehicle/
+
+Sitemap: https://buildbio.app/sitemap.xml

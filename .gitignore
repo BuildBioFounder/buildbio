@@ -3,3 +3,6 @@
 
 # Non-production reference snapshots (underscore prefix). Never deployed, never linked.
 _reference-landing.html
+
+# Playwright MCP scratch output (page QA rigs) — never deployed.
+.playwright-mcp
