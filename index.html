@@ -108,6 +108,16 @@ input::placeholder{color:var(--dim)}
 }
 .stage.revealed .headline{display:none}
 
+/* What BuildBio is. Every claim here is a feature that already exists —
+   profiles, mod lists, photos, QR. Nothing about revenue share, messaging,
+   feeds or recovery alerts, none of which have shipped. */
+.blurb{
+  font-size:clamp(14px,3.7vw,16px);line-height:1.55;color:var(--muted);
+  text-align:center;max-width:38ch;margin-inline:auto;
+}
+.blurb strong{color:var(--text);font-weight:500}
+.stage.revealed .blurb{display:none}
+
 /* Waitlist — stacked full-width, per Main.dc.html */
 .wl{display:flex;flex-direction:column;gap:10px}
 .wl input[type=email]{
@@ -183,6 +193,7 @@ input::placeholder{color:var(--dim)}
   .wordmark{font-size:clamp(56px,6vw,88px)}
   .tagline{font-size:clamp(16px,1.3vw,18px);text-align:left}
   .headline{font-size:clamp(26px,2.4vw,34px);text-align:left}
+  .blurb{font-size:clamp(15px,1.15vw,17px);text-align:left;margin-inline:0;max-width:46ch}
 
   .wl{flex-direction:row;flex-wrap:wrap;gap:10px}
   .wl input[type=email]{flex:1 1 220px;height:56px;padding:0 18px}
@@ -212,6 +223,7 @@ input::placeholder{color:var(--dim)}
   .wordmark{font-size:clamp(30px,7vh,40px)}
   .tagline{font-size:13px;text-align:left}
   .headline{font-size:16px;text-align:left}
+  .blurb{font-size:12.5px;line-height:1.4;text-align:left;margin-inline:0;max-width:52ch}
   .wl{flex-direction:row;flex-wrap:wrap;gap:8px}
   .wl input[type=email]{flex:1 1 180px;height:44px}
   .wl button{width:auto;flex:0 0 auto;height:44px;padding:0 20px;font-size:17px;white-space:nowrap}
@@ -242,6 +254,12 @@ input::placeholder{color:var(--dim)}
     </div>
 
     <p class="headline" id="headline">Coming soon. Be first on the list.</p>
+
+    <p class="blurb">
+      A social site for car enthusiasts, built around <strong>your build</strong>.
+      Every mod, every part, every photo on one profile &mdash; and a QR code
+      that takes anyone straight to it.
+    </p>
 
     <form class="wl" id="wlForm" novalidate>
       <label for="wlEmail" class="hp">Email</label>
