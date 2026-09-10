@@ -55,14 +55,32 @@ a{color:var(--muted)}
 a:hover{color:var(--text)}
 input::placeholder{color:var(--dim)}
 
+/* ---- SITE TYPOGRAPHY RULE: no stranded line endings ----------------------
+   Founder rule 2026-09-10: a continued sentence must never leave fewer than
+   three words alone on a line; the short tail moves down instead.
+   Two layers. text-wrap does the work natively where supported (balance for
+   short headings, pretty for prose), and the script at the bottom of the page
+   enforces the three-word minimum exactly, for browsers that have neither and
+   for the cases text-wrap still leaves ragged. */
+.headline,.wordmark,.tagline{text-wrap:balance}
+.blurb,.wl-note,.legal,#vault .vhint{text-wrap:pretty}
+
 /* ================= STACKED (default: phones, portrait tablets) ========= */
 .stage{
   position:relative;min-height:100svh;
-  display:flex;flex-direction:column;justify-content:flex-end;
+  display:flex;flex-direction:column;
   padding-bottom:env(safe-area-inset-bottom);
 }
+/* The hero takes exactly the room the panel does not, rather than a fixed
+   share of the viewport. A fixed 58svh assumed a panel height; on a device
+   with larger system text or a different aspect — reported on a Galaxy S26
+   Ultra — the panel grew past that and covered most of the mark, leaving
+   only the top of the B visible. As a flex sibling the two can no longer
+   disagree: the panel takes what it needs, the hero frames the B in what is
+   left, at any text size on any screen. */
 .heroWrap{
-  position:absolute;top:0;left:0;width:100%;height:58svh;overflow:hidden;
+  position:relative;flex:1 1 auto;width:100%;
+  min-height:clamp(150px,22svh,260px);overflow:hidden;
 }
 /* No fade fixed to the hero. The panel grows and shrinks with its content —
    adding the descriptive blurb pushed it up far enough that the wordmark
@@ -79,7 +97,7 @@ input::placeholder{color:var(--dim)}
 }
 
 .panel{
-  position:relative;z-index:1;background:var(--black);
+  position:relative;z-index:1;background:var(--black);flex:0 0 auto;
   display:flex;flex-direction:column;gap:clamp(14px,3.2vh,22px);
   padding:0 var(--gut) clamp(24px,4vh,36px);
   width:100%;max-width:520px;margin-inline:auto;
@@ -284,6 +302,72 @@ input::placeholder{color:var(--dim)}
 </div>
 
 <script>
+/* ---------- SITE TYPOGRAPHY RULE: no stranded sentence openings ----------
+   Founder rule 2026-09-10, from a real case on the live page: the sentence
+   "Every mod, every part..." began at the end of a line with only the word
+   "Every" fitting, and the rest ran on below. A sentence must never start a
+   line-end with fewer than three of its words; the fragment moves down whole.
+
+   Mechanism: bind the first three words of every sentence after the first
+   with non-breaking spaces. The space BEFORE the sentence stays breakable, so
+   if all three do not fit, all three wrap together and nothing is stranded.
+   Layout-independent — no re-run needed on resize, and no reflow cost.
+
+   Guard: skipped when those three words exceed 26 characters, since forcing a
+   long group onto one line could overflow a narrow phone. Wrapping ugly beats
+   overflowing.                                                              */
+(function () {
+  const MIN_WORDS = 3, MAX_CHARS = 26;
+
+  function typeset(el) {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    let n;
+    while ((n = walker.nextNode())) nodes.push(n);
+
+    // Flatten to one string, remembering which node/offset each char came from,
+    // so inline markup (<strong>, <a>) survives untouched.
+    let full = '';
+    const map = [];
+    for (const nd of nodes) {
+      for (let i = 0; i < nd.textContent.length; i++) map.push({ node: nd, offset: i });
+      full += nd.textContent;
+    }
+
+    const bind = [];
+    const boundary = /[.!?]["')\]]?\s+/g;
+    let m;
+    while ((m = boundary.exec(full))) {
+      let cursor = m.index + m[0].length;      // first char of the next sentence
+      if (cursor >= full.length) continue;
+
+      const spaces = [];
+      let words = 0, chars = 0;
+      while (cursor < full.length && words < MIN_WORDS) {
+        const start = cursor;
+        while (cursor < full.length && !/\s/.test(full[cursor])) cursor++;
+        chars += cursor - start;
+        words++;
+        if (words < MIN_WORDS) {
+          if (full[cursor] === ' ') { spaces.push(cursor); chars++; cursor++; }
+          else break;                          // ran out of sentence
+        }
+      }
+      if (words === MIN_WORDS && chars <= MAX_CHARS) bind.push(...spaces);
+    }
+
+    // One char replaced by one char, so recorded offsets stay valid.
+    const NBSP = String.fromCharCode(160);   // explicit: an invisible literal is fragile
+    for (const i of bind) {
+      const { node, offset } = map[i];
+      const t = node.textContent;
+      node.textContent = t.slice(0, offset) + NBSP + t.slice(offset + 1);
+    }
+  }
+
+  document.querySelectorAll('.blurb, .legal, .wl-note, .tagline').forEach(typeset);
+})();
+
 /* ---------- Waitlist ---------- */
 (function () {
   const form = document.getElementById('wlForm');
