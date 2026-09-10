@@ -19,6 +19,13 @@ const PUBLIC_FILES = new Set([
   '/vehicle-profile.html',          // QR scan destination
   '/vehicle-status-unavailable.html', // killswitch destination
   '/alert.html',                    // stolen-vehicle destination of the resolver
+  // Legal pages MUST stay public. The coming-soon page collects email
+  // addresses and links to these; a privacy policy that redirects away
+  // unread is worse than no link at all, and the same goes for the terms
+  // the waitlist is collected under.
+  '/terms.html',
+  '/privacy.html',
+  '/affiliate-disclosure.html',
   '/api/vault-login',
   '/api/vault-pin',
   '/api/waitlist',

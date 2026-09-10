@@ -12,6 +12,9 @@ Disallow: /signup.html
 Disallow: /welcome.html
 Disallow: /password-reset.html
 Disallow: /password-reset-confirm.html
+Allow: /terms.html
+Allow: /privacy.html
+Allow: /affiliate-disclosure.html
 Disallow: /home.html
 Disallow: /vehicle/
 
