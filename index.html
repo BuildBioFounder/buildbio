@@ -80,7 +80,14 @@ input::placeholder{color:var(--dim)}
    left, at any text size on any screen. */
 .heroWrap{
   position:relative;flex:1 1 auto;width:100%;
-  min-height:clamp(150px,22svh,260px);overflow:hidden;
+  /* The minimum is tied to WIDTH, not viewport height. The mark is square, so
+     the height it needs to stay recognisable scales with how wide it is drawn.
+     An earlier height-based minimum (22svh) collapsed on a Galaxy S26 Ultra —
+     browser chrome plus larger system text left the hero at its floor, and
+     cover cropped a square image down to a thin centre band showing the piston
+     and pipe but no B. 72vw keeps the great majority of the mark at any width;
+     the svh term stops it eating the screen on a short landscape viewport. */
+  min-height:min(72vw,46svh);overflow:hidden;
 }
 /* No fade fixed to the hero. The panel grows and shrinks with its content —
    adding the descriptive blurb pushed it up far enough that the wordmark
