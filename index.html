@@ -210,20 +210,19 @@ input::placeholder{color:var(--dim)}
      meaningless here and is switched off below. This rule previously set
      properties on a pseudo-element that had no `content`, so it never
      rendered at all and the image met the panel at a hard vertical cut.
-     Wide and multi-stop on purpose: a two-stop gradient over 300px still
-     reads as an edge, which is what made it look abrupt. */
+     Multi-stop but NARROW: it has to dissolve the plate edge without ever
+     reaching the mark, which sits left of centre in this column. */
   .heroWrap::after{
     content:'';position:absolute;inset:0 0 0 auto;
-    width:min(560px,62%);height:100%;pointer-events:none;
+    width:min(300px,34%);height:100%;pointer-events:none;
     background:linear-gradient(90deg,
       rgba(13,13,13,0) 0%,
-      rgba(13,13,13,.30) 32%,
-      rgba(13,13,13,.62) 55%,
-      rgba(13,13,13,.88) 76%,
-      rgba(13,13,13,.98) 90%,
+      rgba(13,13,13,.28) 34%,
+      rgba(13,13,13,.70) 66%,
+      rgba(13,13,13,.94) 86%,
       var(--black) 100%);
   }
-  .stage.revealed .heroWrap::after{width:min(600px,66%)}
+  .stage.revealed .heroWrap::after{width:min(330px,37%)}
   /* vertical fade belongs to the stacked layout only */
   .panel::before{display:none}
   .hero{object-position:center center}
