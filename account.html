@@ -100,7 +100,18 @@
     .nav-link { padding-top: 12px; padding-bottom: 12px; } /* 44px touch height inside the fixed nav */
     img { max-width: 100%; height: auto; }
     .btn, .mod-btn, button { min-height: 44px; }
-  </style>
+  
+  /* QR delivery — founder ruling 2026-09-08 (ledger 1545): the MVP QR is a
+     DIGITAL asset first. Shown large enough to long-press on iOS ("Add to
+     Photos") and offered as a PNG download for Android and desktop. */
+  .qr-panel { flex-basis:100%; margin-top:12px; padding:16px; border:1px solid var(--border,#2E2E2E);
+              border-radius:10px; background:#141414; display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  .qr-panel img { width:180px; height:180px; border-radius:10px; background:#fff; padding:6px; flex:0 0 auto; }
+  .qr-panel .qr-side { flex:1 1 200px; min-width:0; display:flex; flex-direction:column; gap:10px; }
+  .qr-panel .qr-hint { font-size:12.5px; line-height:1.5; color:var(--text-muted,#B4B2A9); }
+  .qr-panel .qr-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .qr-panel .qr-err { font-size:12.5px; color:#E85D2C; }
+</style>
 </head>
 <body>
 
@@ -272,7 +283,7 @@ function showMsg(text, type = 'error') {
     if (p.founder_member) badge.textContent += ' (FOUNDER)';
   }
 
-  const { data: vehicles } = await sb.from('vehicles').select('id, year, make, model, trim, nickname, slug').eq('owner_id', currentUser.id).order('created_at', { ascending: false });
+  const { data: vehicles } = await sb.from('vehicles').select('id, year, make, model, trim, nickname, slug, vehicle_public_id').eq('owner_id', currentUser.id).order('created_at', { ascending: false });
   const list = document.getElementById('vehicle-list');
   if (!vehicles || vehicles.length === 0) {
     list.innerHTML = '<div class="empty-state">No vehicles yet. Add your first vehicle to get started.</div>';
@@ -287,6 +298,8 @@ function showMsg(text, type = 'error') {
           <a href="vehicle-profile.html?id=${encodeURIComponent(v.id)}" class="btn btn-ghost" style="font-size:12px;padding:6px 12px;">View</a>
           <a href="/vehicle/mod/new.html?vehicle=${encodeURIComponent(v.id)}" class="btn btn-primary" style="font-size:12px;padding:6px 12px;">+ Add Mod</a>
         </div>
+        <button type="button" class="btn btn-ghost qr-toggle" data-pid="${esc(v.vehicle_public_id || "")}" data-label="${esc(v.year)}-${esc(v.make)}-${esc(v.model)}" style="font-size:12px;padding:6px 12px;">QR code</button>
+        <div class="qr-panel" hidden></div>
       </div>
     `).join('');
   }
@@ -347,6 +360,118 @@ document.getElementById('btn-logout').addEventListener('click', async () => {
   await sb.auth.signOut();
   window.location.href = 'index.html';
 });
+
+/* ---------- QR delivery: view, save to photos, download -------------------
+   Founder ruling 2026-09-08 (ledger 1545): MVP QR delivery is digital-first —
+   wallet, phone gallery, and clickable in profile settings — and independent
+   of sticker printing. This is the profile-settings half.
+
+   Why the PNG is built client-side: generate-qr emits SVG only, and phones do
+   not reliably save an SVG to the photo gallery. Rasterising in a canvas would
+   normally taint it, because the QR embeds the BuildBio logo from storage as an
+   external <image>. So the logo is fetched separately and inlined as a data URI
+   first; the canvas then stays clean and toBlob works. If that fetch fails we
+   fall back to the no_logo variant rather than handing back a broken file. */
+(function () {
+  var QR_DISPLAY = 512, QR_EXPORT = 1024;
+
+  function qrEndpoint(pid, size, noLogo) {
+    return SUPABASE_URL + '/functions/v1/generate-qr?v=' + encodeURIComponent(pid) +
+           '&size=' + size + (noLogo ? '&no_logo=true' : '');
+  }
+
+  async function inlineLogo(svgText) {
+    var m = svgText.match(/(?:xlink:)?href="(https?:\/\/[^"]+)"/);
+    if (!m) return svgText;
+    var res = await fetch(m[1], { mode: 'cors' });
+    if (!res.ok) throw new Error('logo fetch ' + res.status);
+    var blob = await res.blob();
+    var dataUri = await new Promise(function (ok, no) {
+      var r = new FileReader();
+      r.onload = function () { ok(r.result); };
+      r.onerror = no;
+      r.readAsDataURL(blob);
+    });
+    return svgText.split(m[1]).join(dataUri);
+  }
+
+  async function svgToPngBlob(svgText) {
+    var url = URL.createObjectURL(new Blob([svgText], { type: 'image/svg+xml' }));
+    try {
+      var img = await new Promise(function (ok, no) {
+        var i = new Image();
+        i.onload = function () { ok(i); };
+        i.onerror = function () { no(new Error('svg decode')); };
+        i.src = url;
+      });
+      var c = document.createElement('canvas');
+      c.width = QR_EXPORT; c.height = QR_EXPORT;
+      var ctx = c.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, QR_EXPORT, QR_EXPORT);
+      ctx.drawImage(img, 0, 0, QR_EXPORT, QR_EXPORT);
+      return await new Promise(function (ok) { c.toBlob(ok, 'image/png'); });
+    } finally { URL.revokeObjectURL(url); }
+  }
+
+  async function buildPng(pid) {
+    var svgText;
+    try {
+      var r = await fetch(qrEndpoint(pid, QR_EXPORT, false));
+      svgText = await inlineLogo(await r.text());
+    } catch (e) {
+      var r2 = await fetch(qrEndpoint(pid, QR_EXPORT, true));   // logo-less fallback
+      svgText = await r2.text();
+    }
+    return svgToPngBlob(svgText);
+  }
+
+  document.addEventListener('click', async function (e) {
+    var btn = e.target.closest('.qr-toggle');
+    if (!btn) return;
+    var panel = btn.parentElement.querySelector('.qr-panel');
+    var pid = btn.dataset.pid;
+
+    if (!panel.hidden) { panel.hidden = true; btn.textContent = 'QR code'; return; }
+    btn.textContent = 'Hide QR';
+    panel.hidden = false;
+    if (panel.dataset.ready) return;
+
+    if (!pid) {
+      panel.innerHTML = '<p class="qr-err">This vehicle has no public ID yet. Open its profile once to generate one.</p>';
+      return;
+    }
+
+    panel.innerHTML =
+      '<img alt="QR code for this vehicle" src="' + qrEndpoint(pid, QR_DISPLAY, false) + '">' +
+      '<div class="qr-side">' +
+        '<p class="qr-hint"><strong>On your phone:</strong> press and hold the code, then choose Add to Photos or Download image.</p>' +
+        '<div class="qr-actions"><button type="button" class="btn btn-primary qr-dl" style="font-size:12px;padding:8px 14px;">Download PNG</button></div>' +
+        '<p class="qr-hint">Prints and scans at any size. The code never changes, even when you update your mods.</p>' +
+      '</div>';
+    panel.dataset.ready = '1';
+
+    panel.querySelector('.qr-dl').addEventListener('click', async function () {
+      var b = this, original = b.textContent;
+      b.disabled = true; b.textContent = 'Building…';
+      try {
+        var blob = await buildPng(pid);
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'buildbio-qr-' + (btn.dataset.label || pid).replace(/[^a-z0-9-]+/gi, '-').toLowerCase() + '.png';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function () { URL.revokeObjectURL(a.href); }, 10000);
+        b.textContent = 'Saved';
+        setTimeout(function () { b.textContent = original; b.disabled = false; }, 2000);
+      } catch (err) {
+        b.textContent = original; b.disabled = false;
+        panel.querySelector('.qr-actions').insertAdjacentHTML('beforeend',
+          '<span class="qr-err">Could not build the file. Press and hold the code instead.</span>');
+      }
+    });
+  });
+})();
+
 </script>
 </body>
 </html>
