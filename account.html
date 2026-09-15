@@ -111,6 +111,7 @@
   .qr-panel .qr-hint { font-size:12.5px; line-height:1.5; color:var(--text-muted,#B4B2A9); }
   .qr-panel .qr-actions { display:flex; gap:8px; flex-wrap:wrap; }
   .qr-panel .qr-err { font-size:12.5px; color:#E85D2C; }
+  .qr-panel .qr-wallet[hidden] { display:none; }   /* .btn is inline-flex, which would beat the hidden attribute */
 </style>
 </head>
 <body>
@@ -446,10 +447,32 @@ document.getElementById('btn-logout').addEventListener('click', async () => {
       '<img alt="QR code for this vehicle" src="' + qrEndpoint(pid, QR_DISPLAY, false) + '">' +
       '<div class="qr-side">' +
         '<p class="qr-hint"><strong>On your phone:</strong> press and hold the code, then choose Add to Photos or Download image.</p>' +
-        '<div class="qr-actions"><button type="button" class="btn btn-primary qr-dl" style="font-size:12px;padding:8px 14px;">Download PNG</button></div>' +
+        '<div class="qr-actions">' +
+          '<button type="button" class="btn btn-primary qr-dl" style="font-size:12px;padding:8px 14px;">Download PNG</button>' +
+          '<a class="btn btn-ghost qr-wallet" style="font-size:12px;padding:8px 14px;" hidden target="_blank" rel="noopener">Add to Google Wallet</a>' +
+        '</div>' +
         '<p class="qr-hint">Prints and scans at any size. The code never changes, even when you update your mods.</p>' +
       '</div>';
     panel.dataset.ready = '1';
+
+    // Google Wallet (founder ruling 2026-09-12). wallet-pass answers 503
+    // wallet_not_configured until the issuer is set up, and 429 under the
+    // per-IP limiter; in both cases the link simply stays hidden. Only a
+    // signed save URL unhides it, so the button never points at nothing.
+    // Apple Wallet is bookmarked — needs the $99/yr developer program.
+    (async function () {
+      var link = panel.querySelector('.qr-wallet');
+      try {
+        var r = await fetch(SUPABASE_URL + '/functions/v1/wallet-pass?v=' + encodeURIComponent(pid),
+                            { headers: { apikey: SUPABASE_ANON } });
+        if (!r.ok) return;
+        var j = await r.json();
+        if (j && j.ok && j.saveUrl.indexOf("https://pay.google.com/") === 0) {
+          link.href = j.saveUrl;
+          link.hidden = false;
+        }
+      } catch (e) { /* stays hidden */ }
+    })();
 
     panel.querySelector('.qr-dl').addEventListener('click', async function () {
       var b = this, original = b.textContent;
