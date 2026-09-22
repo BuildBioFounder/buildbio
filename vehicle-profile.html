@@ -347,10 +347,13 @@ function initials(first, last, username) {
   // Other builds on the same account. The QR that brought the visitor here
   // resolved to ONE vehicle by public id; siblings are discovery, never the
   // landing. Stolen vehicles are excluded (they have their own alert page).
+  // Garage visibility (founder ruling 2026-09-22): a PRIVATE vehicle shows no
+  // strip at all and is never listed on its siblings; only PUBLIC vehicles
+  // surface each other.
   let moreHtml = '';
-  const { data: siblings } = await sb.from('vehicles')
+  const { data: siblings } = v.garage_visibility === 'private' ? { data: [] } : await sb.from('vehicles')
     .select('id, year, make, model, trim, nickname, primary_photo, vehicle_status')
-    .eq('owner_id', v.owner_id).neq('id', v.id).neq('vehicle_status', 'stolen')
+    .eq('owner_id', v.owner_id).neq('id', v.id).neq('vehicle_status', 'stolen').eq('garage_visibility', 'public')
     .order('created_at', { ascending: false }).limit(6);
   if (siblings && siblings.length > 0) {
     const gated = !session;   // ledger 1503: anything beyond the scanned build prompts a FREE account

@@ -302,6 +302,7 @@
     const { data, error } = await sb
       .from('vehicles')
       .select('id, year, make, model, nickname, slug')
+      .eq('garage_visibility', 'public')   // Private Garage builds are reachable only by their own QR (founder ruling 2026-09-22)
       .or('make.ilike.' + term + ',model.ilike.' + term + ',year.ilike.' + term + ',nickname.ilike.' + term)
       .limit(20);
     return error ? [] : (data || []);
