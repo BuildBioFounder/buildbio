@@ -104,6 +104,19 @@
     .social-pills { display: flex; gap: 8px; flex-wrap: wrap; }
     .social-pill { font-size: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 4px 14px; color: #fff; text-decoration: none; transition: border-color 0.15s; }
     .social-pill:hover { border-color: var(--orange); }
+    /* "More from this owner" — founder ruling 2026-09-22: a QR lands on THAT exact
+       build, never a sibling; the owner's other builds are offered beneath it.
+       Anonymous visitors see the cards but a tap routes to account creation
+       (ledger 1503 gated-browsing direction); signed-in visitors go straight through. */
+    .more-section { max-width: var(--max-width); margin: 28px auto 0; padding: 20px 28px; border-top: 1px solid var(--border); }
+    .more-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+    .more-card { display: flex; flex-direction: column; gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px; color: #fff; text-decoration: none; transition: border-color 0.15s; min-height: 44px; }
+    .more-card:hover, .more-card:focus-visible { border-color: var(--orange); outline: none; }
+    .more-thumb { aspect-ratio: 4 / 3; border-radius: 6px; background: var(--dark); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .more-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .more-name { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; line-height: 1.15; text-transform: uppercase; letter-spacing: 0.3px; }
+    .more-nick { font-size: 12px; color: var(--text-muted); }
+    .more-gate { font-size: 11px; color: var(--orange); margin-top: auto; }
 
     .empty-mods { text-align: center; padding: 48px 20px; color: var(--text-muted); }
     .empty-mods-title { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
@@ -133,7 +146,7 @@
       .ham{display:flex}
       .hero { grid-template-columns: 1fr; padding: 20px 16px; gap: 20px; }
       .vehicle-name { font-size: 24px; } .stats-row { gap: 16px; }
-      .mods-section { padding: 20px 16px 0; } .social-section { padding: 16px; }
+      .mods-section { padding: 20px 16px 0; } .social-section { padding: 16px; } .more-section { padding: 16px; } .more-grid { grid-template-columns: repeat(2, 1fr); }
       .sticky-bar { flex-direction: column; gap: 8px; padding: 12px 16px; }
       .sticky-text { font-size: 12px; text-align: center; } .sticky-btn { width: 100%; text-align: center; }
       .mod-bottom { flex-direction: column; align-items: flex-start; }
@@ -331,6 +344,30 @@ function initials(first, last, username) {
     socialHtml = `<section class="social-section"><div class="social-label">Find ${esc(owner?.first_name || owner?.username || 'the owner')} on</div><div class="social-pills">${socials.join('')}</div></section>`;
   }
 
+  // Other builds on the same account. The QR that brought the visitor here
+  // resolved to ONE vehicle by public id; siblings are discovery, never the
+  // landing. Stolen vehicles are excluded (they have their own alert page).
+  let moreHtml = '';
+  const { data: siblings } = await sb.from('vehicles')
+    .select('id, year, make, model, trim, nickname, primary_photo, vehicle_status')
+    .eq('owner_id', v.owner_id).neq('id', v.id).neq('vehicle_status', 'stolen')
+    .order('created_at', { ascending: false }).limit(6);
+  if (siblings && siblings.length > 0) {
+    const gated = !session;   // ledger 1503: anything beyond the scanned build prompts a FREE account
+    const cards = siblings.map(sv => {
+      const nm = `${sv.year} ${sv.make} ${sv.model}${sv.trim ? ' ' + sv.trim : ''}`;
+      const href = gated ? '/start.html' : '/vehicle-profile.html?id=' + encodeURIComponent(sv.id);
+      return `<a class="more-card" href="${href}">
+        <div class="more-thumb">${sv.primary_photo ? '<img src="' + esc(safeUrl(sv.primary_photo)) + '" alt="' + esc(nm) + '" loading="lazy">' : '<span class="hero-photo-placeholder">No photo yet</span>'}</div>
+        <div class="more-name">${esc(nm)}</div>
+        ${sv.nickname ? '<div class="more-nick">' + esc(sv.nickname) + '</div>' : ''}
+        ${gated ? '<div class="more-gate">Free account to view</div>' : ''}
+      </a>`;
+    }).join('');
+    const who = esc(owner?.first_name || owner?.username || 'this owner');
+    moreHtml = `<section class="more-section"><div class="mods-header"><div class="mods-title">More from ${who}</div><div class="mods-count">${siblings.length} other build${siblings.length !== 1 ? 's' : ''}</div></div><div class="more-grid">${cards}</div></section>`;
+  }
+
   document.getElementById('content').innerHTML = `
     <section class="hero">
       <div class="hero-photo">
@@ -369,6 +406,7 @@ function initials(first, last, username) {
       </div>
       ${modsHtml}
     </section>
+    ${moreHtml}
     ${socialHtml}
   `;
 
