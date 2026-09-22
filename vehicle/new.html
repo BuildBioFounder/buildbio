@@ -198,7 +198,7 @@ function setLoading(btn, loading) {
   if (!session) { window.location.href = '../login.html'; return; }
   currentUser = session.user;
 
-  // Tier cap (founder ruling 2026-09-22): FREE/PLUS = 1 vehicle, APEX = 2.
+  // Tier cap (founder ruling 2026-09-22): FREE/PLUS = 1 vehicle, APEX = 3.
   // The DB enforces this inside create_vehicle; this guard just keeps a capped
   // member from filling in a form that cannot submit.
   {
@@ -206,7 +206,7 @@ function setLoading(btn, loading) {
       sb.from('profiles').select('membership_tier').eq('id', currentUser.id).maybeSingle(),
       sb.from('vehicles').select('id', { count: 'exact', head: true }).eq('owner_id', currentUser.id),
     ]);
-    const cap = ((prof?.membership_tier || 'free').toLowerCase() === 'apex') ? 2 : 1;
+    const cap = ((prof?.membership_tier || 'free').toLowerCase() === 'apex') ? 3 : 1;
     if ((count || 0) >= cap) {
       document.getElementById('form-vehicle').innerHTML =
         '<p style="color:var(--text-muted,#B4B2A9);line-height:1.6">Your account already has its vehicle profile. Additional vehicle profiles are <strong>coming soon</strong>.</p>' +
