@@ -197,6 +197,23 @@ function setLoading(btn, loading) {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) { window.location.href = '../login.html'; return; }
   currentUser = session.user;
+
+  // Tier cap (founder ruling 2026-09-22): FREE/PLUS = 1 vehicle, APEX = 2.
+  // The DB enforces this inside create_vehicle; this guard just keeps a capped
+  // member from filling in a form that cannot submit.
+  {
+    const [{ data: prof }, { count }] = await Promise.all([
+      sb.from('profiles').select('membership_tier').eq('id', currentUser.id).maybeSingle(),
+      sb.from('vehicles').select('id', { count: 'exact', head: true }).eq('owner_id', currentUser.id),
+    ]);
+    const cap = ((prof?.membership_tier || 'free').toLowerCase() === 'apex') ? 2 : 1;
+    if ((count || 0) >= cap) {
+      document.getElementById('form-vehicle').innerHTML =
+        '<p style="color:var(--text-muted,#B4B2A9);line-height:1.6">Your account already has its vehicle profile. Additional vehicle profiles are <strong>coming soon</strong>.</p>' +
+        '<a href="../account.html" class="btn btn-primary" style="margin-top:16px;display:inline-flex">Back to account</a>';
+      return;
+    }
+  }
   await loadYears();
   await loadDisciplines();
 })();
@@ -408,7 +425,7 @@ document.getElementById('form-vehicle').addEventListener('submit', async e => {
     p_idempotency_key: window.__vehicleSubmitKey
   });
 
-  if (vErr) { setLoading(btn, false); return showMsg(vErr.message); }
+  if (vErr) { setLoading(btn, false); return showMsg(/vehicle_cap_reached/.test(vErr.message) ? 'Your account already has its vehicle profile. Additional vehicle profiles are coming soon.' : vErr.message); }
 
   // Upload photos
   let primaryPhoto = null;

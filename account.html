@@ -63,7 +63,11 @@
     .btn-danger { background: transparent; border: 1px solid var(--red); color: var(--red); } .btn-danger:hover { background: rgba(224,85,85,0.1); }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-    .btn-row { display: flex; gap: 10px; margin-top: 16px; }
+    .btn-row { display: flex; gap: 10px; margin-top: 16px; align-items: flex-start; }
+    /* Vehicle cap (founder ruling 2026-09-22, to-do 12j): FREE = 1 profile, APEX = 2
+       (Terms 4.1 / 4.3). At the cap the add button greys out with a coming-soon note. */
+    .add-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .add-soon { font-size: 11px; color: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase; }
 
     .vehicle-list { display: flex; flex-direction: column; gap: 10px; }
     .vehicle-card { display: flex; align-items: center; justify-content: space-between; background: var(--dark-4); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; transition: border-color 0.2s; }
@@ -119,7 +123,7 @@
 <nav class="nav">
   <a href="index.html" class="logo"><span class="b1">BUILD</span><span class="b2">BIO</span></a>
   <div class="nav-r">
-    <a href="vehicle/new.html" class="nav-link">+ Add Vehicle</a>
+    <a href="vehicle/new.html" class="nav-link" id="nav-add-vehicle">+ Add Vehicle</a>
     <a class="nav-link" id="btn-logout">Sign Out</a>
   </div>
 </nav>
@@ -136,7 +140,7 @@
     <div class="vehicle-list" id="vehicle-list">
       <div class="empty-state">Loading...</div>
     </div>
-    <div class="btn-row">
+    <div class="btn-row" id="add-vehicle-row">
       <a href="vehicle/new.html" class="btn btn-primary">+ Add Vehicle</a>
     </div>
   </div>
@@ -286,6 +290,16 @@ function showMsg(text, type = 'error') {
 
   const { data: vehicles } = await sb.from('vehicles').select('id, year, make, model, trim, nickname, slug, vehicle_public_id').eq('owner_id', currentUser.id).order('created_at', { ascending: false });
   const list = document.getElementById('vehicle-list');
+
+  // Tier cap: FREE/PLUS = 1, APEX = 2 (mirrors vehicle_cap_for() in the DB,
+  // which is what actually enforces it inside create_vehicle).
+  const cap = ((p.membership_tier || 'free').toLowerCase() === 'apex') ? 2 : 1;
+  if ((vehicles || []).length >= cap) {
+    document.getElementById('nav-add-vehicle').hidden = true;
+    document.getElementById('add-vehicle-row').innerHTML =
+      '<div class="add-wrap"><button type="button" class="btn btn-primary" disabled aria-disabled="true">Add Additional Vehicle</button><span class="add-soon">(Coming soon)</span></div>';
+  }
+
   if (!vehicles || vehicles.length === 0) {
     list.innerHTML = '<div class="empty-state">No vehicles yet. Add your first vehicle to get started.</div>';
   } else {
