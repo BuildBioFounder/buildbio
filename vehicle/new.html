@@ -408,9 +408,11 @@ photoDrop.addEventListener('drop', e => {
 });
 photoInput.addEventListener('change', () => addFiles(photoInput.files));
 
+// Photos are downscaled client-side before upload (see shrinkImage), so no
+// size gate here. The old 5 MB skip silently dropped most Galaxy camera JPGs
+// (tester-kit finding, 2026-09-22).
 function addFiles(files) {
   for (const f of files) {
-    if (f.size > 5 * 1024 * 1024) continue;
     if (!f.type.startsWith('image/')) continue;
     if (photoFiles.length >= 10) break;
     photoFiles.push(f);
@@ -474,13 +476,29 @@ document.getElementById('form-vehicle').addEventListener('submit', async e => {
 
   if (vErr) { setLoading(btn, false); return showMsg(/vehicle_cap_reached/.test(vErr.message) ? 'Your account already has its vehicle profile. Additional vehicle profiles are coming soon.' : vErr.message); }
 
-  // Upload photos
+  // Upload photos — each one re-encoded as a JPEG no larger than 2048px on
+  // its long edge (a 12 MP phone photo becomes ~400 KB). If the browser cannot
+  // decode a format (rare HEIC cases), the original goes up only when it is
+  // under 5 MB; otherwise it is skipped rather than failing the whole save.
+  async function shrinkImage(file, max = 2048, quality = 0.85) {
+    const bmp = await createImageBitmap(file);
+    const scale = Math.min(1, max / Math.max(bmp.width, bmp.height));
+    const w = Math.round(bmp.width * scale), h = Math.round(bmp.height * scale);
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    c.getContext('2d').drawImage(bmp, 0, 0, w, h);
+    bmp.close && bmp.close();
+    return await new Promise((ok, no) => c.toBlob(b => b ? ok(b) : no(new Error('encode failed')), 'image/jpeg', quality));
+  }
   let primaryPhoto = null;
   for (let i = 0; i < photoFiles.length; i++) {
-    const file = photoFiles[i];
-    const ext = file.name.split('.').pop();
+    let file = photoFiles[i], ext = 'jpg', type = 'image/jpeg';
+    try { file = await shrinkImage(photoFiles[i]); }
+    catch (e) {
+      if (photoFiles[i].size > 5 * 1024 * 1024) { console.warn('photo skipped, could not decode and over 5 MB:', photoFiles[i].name); continue; }
+      ext = photoFiles[i].name.split('.').pop(); type = photoFiles[i].type;
+    }
     const path = `vehicles/${vehicle.id}/${i}.${ext}`;
-    const { error: upErr } = await sb.storage.from('images').upload(path, file, { contentType: file.type, upsert: true });
+    const { error: upErr } = await sb.storage.from('images').upload(path, file, { contentType: type, upsert: true });
     if (!upErr && i === 0) {
       const { data: urlData } = sb.storage.from('images').getPublicUrl(path);
       primaryPhoto = urlData.publicUrl;

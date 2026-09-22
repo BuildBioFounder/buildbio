@@ -773,6 +773,7 @@ document.getElementById('form-signup').addEventListener('submit', async e => {
   if (!usernameRe.test(username)) return showMsg('Username must be 3-24 characters: letters, numbers, or underscore.');
   if (!email || !password) return showMsg('Please enter your email and password.');
   if (password.length < 8)  return showMsg('Password must be at least 8 characters.');
+  // start.html hands off email + username in the query string (never the password)
 
   setLoading(btn, true);
   const { data, error } = await sb.auth.signUp({
@@ -792,11 +793,21 @@ document.getElementById('form-signup').addEventListener('submit', async e => {
 
   if (isRepeated) {
     showMsg('An account with this email already exists. Try signing in or resetting your password.', 'error');
+  } else if (data.session) {
+    // Email confirmation is off (or auto-confirmed): the account is live now.
+    window.location.href = '/welcome.html';
   } else {
-    showMsg('Check your email to confirm your account, then come back to sign in.', 'success');
-    document.getElementById('form-signup').reset();
-    usernameHint.textContent = '';
-    usernameHint.className = 'field-hint';
+    // Confirmation required. Replace the form with a clear next step instead of
+    // clearing it and leaving a one-line message (tester-kit finding, 2026-09-22).
+    const form = document.getElementById('form-signup');
+    form.innerHTML =
+      '<div class="confirm-panel">' +
+        '<h2 style="font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:26px;text-transform:uppercase;margin:0 0 10px">Check your email</h2>' +
+        '<p style="color:var(--text-dim,#B4B2A9);line-height:1.6;margin:0 0 18px">A confirmation link is on its way to <strong style="color:var(--text,#fff);font-weight:500">' + esc(email) + '</strong>. Open it on this phone, then sign in and add your first build.</p>' +
+        '<a href="/login.html" class="btn btn-primary" style="display:inline-flex;min-height:44px;align-items:center">Go to sign in</a>' +
+        '<p style="font-size:12px;color:var(--text-muted,#6B6B6B);margin:16px 0 0">Nothing after a minute? Check spam, then sign in — the sign-in page can resend it.</p>' +
+      '</div>';
+    form.scrollIntoView({ block: 'start', behavior: 'smooth' });
   }
 });
 
@@ -829,6 +840,18 @@ document.getElementById('forgot-pw').addEventListener('click', async e => {
   if (error) return showMsg(error.message);
   showMsg('Password reset link sent — check your email.', 'success');
 });
+
+// Escape a DB/user value before it lands in innerHTML (same pattern as account.html).
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+// Prefill from start.html's Save My Build hand-off (email + username only; never a password).
+(function(){
+  const q = new URLSearchParams(window.location.search);
+  const e = q.get('email'), u = q.get('username');
+  if (e) document.getElementById('signup-email').value = e;
+  if (u) document.getElementById('signup-username').value = u;
+  if (e || u) history.replaceState(null, '', '/signup.html');   // keep the address bar clean
+})();
 
 // ── Redirect if already signed in ──
 (async () => {

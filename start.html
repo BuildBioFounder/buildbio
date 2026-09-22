@@ -454,7 +454,6 @@
       <div class="save-fields">
         <input type="email" placeholder="Email address" id="save-email" autocomplete="email" inputmode="email">
         <input type="text" placeholder="Username" id="save-user" autocomplete="username">
-        <input type="password" placeholder="Password" id="save-pass" autocomplete="new-password">
       </div>
       <button class="btn-primary" onclick="handleSave()">Save My Build</button>
       <div class="save-terms">By signing up you agree to the <a href="/terms.html">Terms of Service</a> and <a href="/privacy.html">Privacy Policy</a>.</div>
@@ -878,15 +877,17 @@
     slides[currentSlide].classList.add('active');
   },5000);
 
+  // Hands off to the real signup flow with email + username prefilled (the
+  // password is chosen on signup.html, never carried in a URL). Replaced the
+  // "preview of the save flow" alert — tester-kit finding, 2026-09-22.
   window.handleSave=function(){
     var email=document.getElementById('save-email').value.trim();
     var user=document.getElementById('save-user').value.trim();
-    var pass=document.getElementById('save-pass').value;
-    if(!email||!user||!pass){
-      alert('Please fill in all fields to save your build.');
+    if(!email||!user){
+      document.getElementById('save-email').focus();
       return;
     }
-    alert('Account creation will be connected to Supabase. For now, this is a preview of the save flow.');
+    window.location.href='/signup.html?email='+encodeURIComponent(email)+'&username='+encodeURIComponent(user);
   };
 
 })();
