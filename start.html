@@ -14,12 +14,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Start building your vehicle profile on BuildBio. Upload photos, list your mods, and share your build with the world.">
   <title>Start Your Build — BuildBio</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-192.png">
-  <link rel="apple-touch-icon" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+  <link rel="apple-touch-icon" href="/favicon-192.png">
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    :root{--orange:#E85D2C;--olive:#5C6B3A;--olive-light:#7A8C50;--black:#000;--dark:#0D0D0D;--dark2:#111;--card:#1A1A1A;--border:#2E2E2E;--border-l:#3A3A3A;--text:#fff;--muted:#B4B2A9;--dim:#6B6B6B;--green:#1D9E75;--blue:#378ADD;--max:720px}
+    :root{--orange:#E85D2C;--olive:#5C6B3A;--olive-light:#7A8C50;--black:#0D0D0D;--dark:#0D0D0D;--dark2:#111;--card:#1A1A1A;--border:#2E2E2E;--border-l:#3A3A3A;--text:#fff;--muted:#B4B2A9;--dim:#6B6B6B;--green:#1D9E75;--blue:#378ADD;--max:720px}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{font-family:'DM Sans',sans-serif;background:var(--black);color:var(--text);font-size:15px;line-height:1.6;overflow-x:hidden}
@@ -172,7 +172,7 @@
     .fcp{font-size:12px;color:var(--dim)}
 
     /* HAMBURGER MENU */
-    .ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:10px;margin-right:-10px;z-index:301}
+    .ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:11px;margin-right:-10px;z-index:301;background:none;border:none}
     .ham span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:transform .3s,opacity .3s}
     .ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
     .ham.open span:nth-child(2){opacity:0}
@@ -215,17 +215,30 @@
       .field input,.field select{padding:14px 16px;font-size:16px;min-height:48px}
       .mod-entry input,.mod-entry select{padding:12px 14px;font-size:14px;min-height:44px}
       .footer-in{flex-direction:column;align-items:flex-start}
+      .flink{padding:12px 0}
     }
-  
+
+    /* ── Type weights (Typography Law v2) ─────────────────────────────── */
+    strong{font-weight:500}
+    h3{font-family:'Barlow Condensed',sans-serif;font-weight:700}
+
+    /* Inline prose links: 44px tap height (mobile audit 2026-09-15) */
+    .itap{display:inline-block;padding:13px 0;line-height:18px}
+
+    /* ── Line-setting (Typography Law §2, ledger 1560) ────────────────────
+       Layer 1 of 2. Layer 2 is the sentence-opening binder at page bottom. */
+    h1,h2,h3,.h1,.eyebrow,.page-title{text-wrap:balance}
+    p,li,.hint,.blurb,.sub,.lead{text-wrap:pretty}
+
     /* ── Mobile-first base (founder standard 2026-08-16) ──────────────────
-       Appended last so it wins the cascade. Locks the mechanical minimums:
-       16px base + inputs (kills Samsung/iOS zoom-jump), bounded images,
-       44px tap-height on buttons. Class-level rules above still override. */
+       Appended last so it wins the cascade. */
     body { font-size: 16px; }
-    input, select, textarea { font-size: 16px !important; } /* floor: class rules set 14-15px, which triggers mobile zoom-jump */
-    .nav-link { padding-top: 12px; padding-bottom: 12px; } /* 44px touch height inside the fixed nav */
+    input, select, textarea { font-size: 16px !important; }
     img { max-width: 100%; height: auto; }
-    .btn, .mod-btn, button { min-height: 44px; }
+    .btn, .mod-btn, button, select { min-height: 44px; }
+    .nav .logo { padding: 8px 0; }                 /* 28px wordmark -> 44px tap height */
+    .footer .fl2 { padding: 7px 0; display: inline-flex; align-items: baseline; }
+    a.nl, a.flink, .mfoot a { min-height: 44px; display: inline-flex; align-items: center; }
   </style>
 </head>
 <body>
@@ -235,19 +248,19 @@
   <a href="/" class="logo"><span class="BL">B</span><span class="rb">UILD</span><span class="BL2">B</span><span class="rb2">IO</span></a>
   <div class="nav-r">
     <a href="/how-it-works.html" class="nl">How it works</a>
-    <a href="/#features" class="nl">Features</a>
+    <a href="/home.html#features" class="nl">Features</a>
     <a href="/pricing.html" class="nl">Pricing</a>
     <a href="/login.html" class="nl">Log in</a>
-    <a href="/signup.html" class="ncta">Sign Up Direct</a>
-    <div class="ham" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+    <a href="/signup.html" class="ncta">Create Your Free Profile</a>
+    <button type="button" class="ham" aria-label="Menu" aria-expanded="false" onclick="toggleMenu()"><span></span><span></span><span></span></button>
   </div>
 </nav>
 <div class="mob-menu" id="mobMenu">
   <a href="/how-it-works.html">How It Works</a>
-  <a href="/#features">Features</a>
+  <a href="/home.html#features">Features</a>
   <a href="/pricing.html">Pricing</a>
   <a href="/login.html">Log In</a>
-  <a href="/start.html" class="mob-cta">Start Your Build</a>
+  <a href="/signup.html" class="mob-cta">Create Your Free Profile</a>
 </div>
 
 <!-- HERO -->
@@ -439,9 +452,9 @@
       <p>Create a free account to save your profile, get your QR code, and share your build with the world.</p>
       <p style="font-size:13px;color:var(--orange);margin-bottom:24px;line-height:1.6;margin-top:-12px">Shout out your socials on your profile -- link your Instagram, YouTube, TikTok, and more so people who scan your build can follow you everywhere.</p>
       <div class="save-fields">
-        <input type="email" placeholder="Email address" id="save-email">
-        <input type="text" placeholder="Username" id="save-user">
-        <input type="password" placeholder="Password" id="save-pass">
+        <input type="email" placeholder="Email address" id="save-email" autocomplete="email" inputmode="email">
+        <input type="text" placeholder="Username" id="save-user" autocomplete="username">
+        <input type="password" placeholder="Password" id="save-pass" autocomplete="new-password">
       </div>
       <button class="btn-primary" onclick="handleSave()">Save My Build</button>
       <div class="save-terms">By signing up you agree to the <a href="/terms.html">Terms of Service</a> and <a href="/privacy.html">Privacy Policy</a>.</div>
@@ -461,8 +474,12 @@
     <a href="/" class="fl2"><span class="f1">BUILD</span><span class="f2">BIO</span></a>
     <div class="flinks">
       <a href="/how-it-works.html" class="flink">How it works</a>
-      <a href="/#features" class="flink">Features</a>
+      <a href="/home.html#features" class="flink">Features</a>
       <a href="/pricing.html" class="flink">Pricing</a>
+      <a href="/brands.html" class="flink">Brands</a>
+      <a href="/categories.html" class="flink">Categories</a>
+      <a href="/disciplines.html" class="flink">Disciplines</a>
+      <a href="/search.html" class="flink">Search</a>
       <a href="/shop.html" class="flink">Shop</a>
       <a href="/community.html" class="flink">Community</a>
       <a href="/mission.html" class="flink">Mission</a>
@@ -839,11 +856,14 @@
     var menu=document.getElementById('mobMenu');
     ham.classList.toggle('open');
     menu.classList.toggle('open');
+    ham.setAttribute('aria-expanded',menu.classList.contains('open')?'true':'false');
     document.body.style.overflow=menu.classList.contains('open')?'hidden':'';
   };
   document.querySelectorAll('#mobMenu a').forEach(function(a){
     a.addEventListener('click',function(){
-      document.querySelector('.ham').classList.remove('open');
+      var ham=document.querySelector('.ham');
+      ham.classList.remove('open');
+      ham.setAttribute('aria-expanded','false');
       document.getElementById('mobMenu').classList.remove('open');
       document.body.style.overflow='';
     });
@@ -869,6 +889,76 @@
     alert('Account creation will be connected to Supabase. For now, this is a preview of the save flow.');
   };
 
+})();
+
+/* ---------- SITE TYPOGRAPHY RULE: no stranded sentence openings ----------
+   Founder rule 2026-09-10, from a real case on the live page: the sentence
+   "Every mod, every part..." began at the end of a line with only the word
+   "Every" fitting, and the rest ran on below. A sentence must never start a
+   line-end with fewer than three of its words; the fragment moves down whole.
+
+   Mechanism: bind the first three words of every sentence after the first
+   with non-breaking spaces. The space BEFORE the sentence stays breakable, so
+   if all three do not fit, all three wrap together and nothing is stranded.
+   Layout-independent — no re-run needed on resize, and no reflow cost.
+
+   Guard: skipped when those three words exceed 26 characters, since forcing a
+   long group onto one line could overflow a narrow phone. Wrapping ugly beats
+   overflowing.                                                              */
+(function () {
+  const MIN_WORDS = 3, MAX_CHARS = 26;
+
+  function typeset(el) {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    let n;
+    while ((n = walker.nextNode())) nodes.push(n);
+
+    // Flatten to one string, remembering which node/offset each char came from,
+    // so inline markup (<strong>, <a>) survives untouched.
+    let full = '';
+    const map = [];
+    for (const nd of nodes) {
+      for (let i = 0; i < nd.textContent.length; i++) map.push({ node: nd, offset: i });
+      full += nd.textContent;
+    }
+
+    const bind = [];
+    const boundary = /[.!?]["')\]]?\s+/g;
+    let m;
+    while ((m = boundary.exec(full))) {
+      let cursor = m.index + m[0].length;      // first char of the next sentence
+      if (cursor >= full.length) continue;
+
+      const spaces = [];
+      let words = 0, chars = 0, ended = false;
+      while (cursor < full.length && words < MIN_WORDS) {
+        const start = cursor;
+        while (cursor < full.length && !/\s/.test(full[cursor])) cursor++;
+        chars += cursor - start;
+        words++;
+        // Never bind across a sentence end. Fix 2026-09-22: back-to-back short
+        // sentences ("What suspension? What bumper? What light bar") chained
+        // their bindings into one unbreakable run that overflowed a phone.
+        if (/[.!?]["')\]]?$/.test(full.slice(start, cursor))) { ended = true; break; }
+        if (words < MIN_WORDS) {
+          if (full[cursor] === ' ') { spaces.push(cursor); chars++; cursor++; }
+          else break;                          // ran out of sentence
+        }
+      }
+      if ((words === MIN_WORDS || ended) && spaces.length && chars <= MAX_CHARS) bind.push(...spaces);
+    }
+
+    // One char replaced by one char, so recorded offsets stay valid.
+    const NBSP = String.fromCharCode(160);   // explicit: an invisible literal is fragile
+    for (const i of bind) {
+      const { node, offset } = map[i];
+      const t = node.textContent;
+      node.textContent = t.slice(0, offset) + NBSP + t.slice(offset + 1);
+    }
+  }
+
+  document.querySelectorAll('p, li, .hint, .sub, .lead, .qr-hint, .empty-state').forEach(typeset);
 })();
 </script>
 

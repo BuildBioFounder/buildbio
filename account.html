@@ -13,29 +13,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BuildBio — Account Settings</title>
-  <link rel="icon" type="image/png" href="https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+  <link rel="apple-touch-icon" href="/favicon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --orange: #E85D2C; --orange-dim: #B84820; --olive: #5C6B3A; --olive-light: #7A8C50;
-      --dark: #0F0F0F; --dark-2: #161616; --dark-3: #1E1E1E; --dark-4: #2A2A2A;
-      --border: rgba(255,255,255,0.08); --border-l: #3A3A3A;
-      --text: #fff; --text-dim: #B4B2A9; --green: #1D9E75; --red: #e05555;
+      --max: 640px; --black: #0D0D0D; --dark: #0D0D0D; --dark-2: #161616; --dark-3: #1E1E1E; --dark-4: #2A2A2A;
+      --border: rgba(255,255,255,0.08); --border-l: #3A3A3A; --dim: #6B6B6B;
+      --text: #fff; --text-dim: #B4B2A9; --muted: #B4B2A9; --text-muted: #B4B2A9; --green: #1D9E75; --red: #e05555;
       --font-display: 'Barlow Condensed', sans-serif; --font-body: 'DM Sans', sans-serif;
     }
     html { background: var(--dark); color: var(--text); font-family: var(--font-body); }
-    body { padding-bottom: 60px; }
+    body { padding-top: 58px; padding-bottom: 60px; }
 
-    .nav { position: sticky; top: 0; z-index: 100; background: rgba(15,15,15,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); height: 58px; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; }
-    .logo { font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: 0.3px; text-decoration: none; }
-    .logo .b1 { color: var(--orange); } .logo .b2 { color: var(--olive-light); }
-    .nav-r { display: flex; gap: 14px; align-items: center; }
-    .nav-link { color: var(--text-dim); font-size: 13px; text-decoration: none; cursor: pointer; } .nav-link:hover { color: var(--text); }
+    /* NAV (shared-components §2 — verbatim from home.html) */
+    [hidden]{display:none!important} /* .nl/.mob-menu a are inline-flex in the base block, which would beat the hidden attribute */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .logo{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;letter-spacing:.3px;line-height:1;text-decoration:none;display:flex;align-items:baseline}
+    .logo .BL{font-size:28px;color:var(--orange)}.logo .rb{color:var(--orange)}.logo .BL2{font-size:28px;color:var(--olive-light)}.logo .rb2{color:var(--olive-light)}
+    .nav-r{display:flex;align-items:center;gap:24px}
+    .nl{color:var(--muted);font-size:13px;text-decoration:none;transition:color .15s}.nl:hover{color:var(--text)}
+    .ncta{background:var(--orange);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;transition:opacity .15s,transform .1s;display:inline-flex;align-items:center}.ncta:hover{opacity:.88;transform:translateY(-1px)}
+    /* HAMBURGER MENU */
+    .ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:11px;margin-right:-10px;z-index:301;background:none;border:none;-webkit-appearance:none;appearance:none}
+    .ham span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:transform .3s,opacity .3s}
+    .ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0}
+    .ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    .mob-menu{position:fixed;inset:0;z-index:300;background:linear-gradient(to bottom,#E85D2C,#5C6B3A);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;opacity:0;pointer-events:none;transition:opacity .3s}
+    .mob-menu.open{opacity:1;pointer-events:auto}
+    .mob-menu a{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;text-transform:uppercase;color:#fff;text-decoration:none;padding:16px 0;letter-spacing:.04em;transition:opacity .15s}
+    .mob-menu a:hover{opacity:.8}
+    .mob-menu .mob-cta{margin-top:20px;background:rgba(0,0,0,.25);padding:16px 40px;border-radius:12px;font-size:22px}
+
+    /* MICRO-FOOTER (shared-components §3 — app page) */
+    .mfoot{max-width:var(--max,1160px);margin:32px auto 0;padding:18px 28px;border-top:1px solid var(--border);display:flex;gap:18px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--dim,#6B6B6B)}
+    .mfoot a{color:var(--muted,#B4B2A9);text-decoration:none;padding:12px 0;display:inline-flex;align-items:center}
+    .mfoot a:hover{color:var(--text,#fff)}
+    @media(max-width:640px){.mfoot{padding:16px}}
+
+    /* TYPE WEIGHTS (shared-components §5 — only Barlow 600/700 + DM Sans 400/500 exist) */
+    strong{font-weight:500}
+    h3{font-family:'Barlow Condensed',sans-serif;font-weight:700}
+
+    /* LINE-SETTING layer 1 (shared-components §7 / Typography Law §2) */
+    h1,h2,h3,.h1,.eyebrow,.page-title{text-wrap:balance}
+    p,li,.hint,.blurb,.sub,.lead,.page-sub,.qr-hint,.empty-state{text-wrap:pretty}
+    #btn-logout, #btn-logout-m { cursor: pointer; }
 
     .container { max-width: 640px; margin: 0 auto; padding: 32px 20px; }
-    .page-title { font-family: var(--font-display); font-size: 32px; font-weight: 800; margin-bottom: 6px; }
+    .page-title { font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 700; margin-bottom: 6px; }
     .page-sub { font-size: 14px; color: var(--text-dim); margin-bottom: 32px; }
 
     .section { background: var(--dark-3); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 20px; }
@@ -82,7 +113,7 @@
        and searchable). Persists to vehicles.garage_visibility. */
     .gv { display: flex; align-items: center; gap: 10px; flex-basis: 100%; flex-wrap: wrap; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
     .gv-lbl { font-size: 12px; color: var(--text-dim); user-select: none; cursor: pointer; min-height: 44px; display: inline-flex; align-items: center; }
-    .gv-lbl.on { color: var(--text); font-weight: 600; }
+    .gv-lbl.on { color: var(--text); font-weight: 500; }
     .gv-switch { position: relative; width: 46px; height: 24px; border-radius: 12px; background: var(--dark-3); border: 1px solid var(--border); cursor: pointer; padding: 0; flex: 0 0 auto; min-height: 24px; }
     .gv-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--text-dim); transition: left 0.18s, background 0.18s; }
     .gv-switch[aria-checked="true"] { background: rgba(232,93,44,0.25); border-color: var(--orange); }
@@ -98,26 +129,21 @@
 
     .empty-state { text-align: center; padding: 24px; color: var(--text-dim); font-size: 14px; }
 
-    .tier-badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .tier-badge { display: inline-block; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 11px; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
     .tier-free { background: rgba(255,255,255,0.06); color: var(--text-dim); }
     .tier-plus { background: rgba(232,93,44,0.15); color: var(--orange); }
     .tier-apex { background: rgba(29,158,117,0.15); color: var(--green); }
 
     @media (max-width: 640px) {
       .nav { padding: 0 16px; }
+      .nav-r .nl { display: none; }
+      .nav-r .ncta { display: none; }
+      .ham { display: flex; }
+      .ncta { padding: 12px 16px; font-size: 13px; min-height: 44px; }
       .row-2 { grid-template-columns: 1fr; }
       .vehicle-card { flex-direction: column; align-items: flex-start; gap: 10px; }
     }
   
-    /* ── Mobile-first base (founder standard 2026-08-16) ──────────────────
-       Appended last so it wins the cascade. Locks the mechanical minimums:
-       16px base + inputs (kills Samsung/iOS zoom-jump), bounded images,
-       44px tap-height on buttons. Class-level rules above still override. */
-    body { font-size: 16px; }
-    input, select, textarea { font-size: 16px !important; } /* floor: class rules set 14-15px, which triggers mobile zoom-jump */
-    .nav-link { padding-top: 12px; padding-bottom: 12px; } /* 44px touch height inside the fixed nav */
-    img { max-width: 100%; height: auto; }
-    .btn, .mod-btn, button { min-height: 44px; }
   
   /* QR delivery — founder ruling 2026-09-08 (ledger 1545): the MVP QR is a
      DIGITAL asset first. Shown large enough to long-press on iOS ("Add to
@@ -140,17 +166,38 @@
   .qr-full img { width: min(92vw, 92vh, 720px); height: auto; aspect-ratio: 1 / 1; display: block; }
   .qr-full .qr-full-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(18px, 4.5vw, 26px); letter-spacing: 0.04em; text-transform: uppercase; color: #0d0d0d; text-align: center; }
   .qr-full .qr-full-hint { font-size: 12px; color: #6b6b6b; text-align: center; }   /* .btn is inline-flex, which would beat the hidden attribute */
+
+    /* ── Mobile-first base (founder standard 2026-08-16) ──────────────────
+       Appended last so it wins the cascade. */
+    body { font-size: 16px; }
+    input, select, textarea { font-size: 16px !important; }
+    img { max-width: 100%; height: auto; }
+    .btn, .mod-btn, button, select { min-height: 44px; }
+    .nav .logo { padding: 8px 0; }                 /* 28px wordmark -> 44px tap height */
+    .footer .fl2 { padding: 7px 0; display: inline-flex; align-items: baseline; }
+    a.nl, a.flink, .mfoot a { min-height: 44px; display: inline-flex; align-items: center; }
 </style>
 </head>
 <body>
 
 <nav class="nav">
-  <a href="index.html" class="logo"><span class="b1">BUILD</span><span class="b2">BIO</span></a>
+  <a href="/" class="logo"><span class="BL">B</span><span class="rb">UILD</span><span class="BL2">B</span><span class="rb2">IO</span></a>
   <div class="nav-r">
-    <a href="vehicle/new.html" class="nav-link" id="nav-add-vehicle">+ Add Vehicle</a>
-    <a class="nav-link" id="btn-logout">Sign Out</a>
+    <a href="/how-it-works.html" class="nl">How it works</a>
+    <a href="/home.html#features" class="nl">Features</a>
+    <a href="/pricing.html" class="nl">Pricing</a>
+    <a href="/vehicle/new.html" class="nl" id="nav-add-vehicle">+ Add Vehicle</a>
+    <a class="ncta" id="btn-logout">Sign Out</a>
+    <button type="button" class="ham" aria-label="Menu" aria-expanded="false" onclick="toggleMenu()"><span></span><span></span><span></span></button>
   </div>
 </nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="/how-it-works.html">How It Works</a>
+  <a href="/home.html#features">Features</a>
+  <a href="/pricing.html">Pricing</a>
+  <a href="/vehicle/new.html" id="nav-add-vehicle-m">+ Add Vehicle</a>
+  <a class="mob-cta" id="btn-logout-m">Sign Out</a>
+</div>
 
 <div class="container">
   <h1 class="page-title">Account Settings</h1>
@@ -171,7 +218,7 @@
       <div class="empty-state">Loading...</div>
     </div>
     <div class="btn-row" id="add-vehicle-row">
-      <a href="vehicle/new.html" class="btn btn-primary">+ Add Vehicle</a>
+      <a href="/vehicle/new.html" class="btn btn-primary">+ Add Vehicle</a>
     </div>
   </div>
 
@@ -293,7 +340,7 @@ function showMsg(text, type = 'error') {
 
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
-  if (!session) { window.location.href = 'login.html'; return; }
+  if (!session) { window.location.href = '/login.html'; return; }
   currentUser = session.user;
 
   document.getElementById('display-email').textContent = currentUser.email;
@@ -326,6 +373,7 @@ function showMsg(text, type = 'error') {
   const cap = ((p.membership_tier || 'free').toLowerCase() === 'apex') ? 3 : 1;
   if ((vehicles || []).length >= cap) {
     document.getElementById('nav-add-vehicle').hidden = true;
+    document.getElementById('nav-add-vehicle-m').hidden = true;
     document.getElementById('add-vehicle-row').innerHTML =
       '<div class="add-wrap"><button type="button" class="btn btn-primary" disabled aria-disabled="true">Add Additional Vehicle</button><span class="add-soon">(Coming soon)</span></div>';
   }
@@ -430,10 +478,10 @@ document.getElementById('btn-delete').addEventListener('click', () => {
 });
 
 // Logout
-document.getElementById('btn-logout').addEventListener('click', async () => {
+document.querySelectorAll('#btn-logout, #btn-logout-m').forEach(el => el.addEventListener('click', async () => {
   await sb.auth.signOut();
-  window.location.href = 'index.html';
-});
+  window.location.href = '/';
+}));
 
 /* ---------- QR delivery: view, save to photos, download -------------------
    Founder ruling 2026-09-08 (ledger 1545): MVP QR delivery is digital-first —
@@ -581,6 +629,85 @@ document.getElementById('btn-logout').addEventListener('click', async () => {
   });
 })();
 
+function toggleMenu(){var h=document.querySelector('.ham'),m=document.getElementById('mobMenu');var o=m.classList.toggle('open');h.classList.toggle('open',o);h.setAttribute('aria-expanded',o?'true':'false');document.body.style.overflow=o?'hidden':''}
+document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('click',function(){var h=document.querySelector('.ham'),m=document.getElementById('mobMenu');h.classList.remove('open');h.setAttribute('aria-expanded','false');m.classList.remove('open');document.body.style.overflow=''})});
+
+/* ---------- SITE TYPOGRAPHY RULE: no stranded sentence openings ----------
+   Founder rule 2026-09-10, from a real case on the live page: the sentence
+   "Every mod, every part..." began at the end of a line with only the word
+   "Every" fitting, and the rest ran on below. A sentence must never start a
+   line-end with fewer than three of its words; the fragment moves down whole.
+
+   Mechanism: bind the first three words of every sentence after the first
+   with non-breaking spaces. The space BEFORE the sentence stays breakable, so
+   if all three do not fit, all three wrap together and nothing is stranded.
+   Layout-independent — no re-run needed on resize, and no reflow cost.
+
+   Guard: skipped when those three words exceed 26 characters, since forcing a
+   long group onto one line could overflow a narrow phone. Wrapping ugly beats
+   overflowing.                                                              */
+(function () {
+  const MIN_WORDS = 3, MAX_CHARS = 26;
+
+  function typeset(el) {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    let n;
+    while ((n = walker.nextNode())) nodes.push(n);
+
+    // Flatten to one string, remembering which node/offset each char came from,
+    // so inline markup (<strong>, <a>) survives untouched.
+    let full = '';
+    const map = [];
+    for (const nd of nodes) {
+      for (let i = 0; i < nd.textContent.length; i++) map.push({ node: nd, offset: i });
+      full += nd.textContent;
+    }
+
+    const bind = [];
+    const boundary = /[.!?]["')\]]?\s+/g;
+    let m;
+    while ((m = boundary.exec(full))) {
+      let cursor = m.index + m[0].length;      // first char of the next sentence
+      if (cursor >= full.length) continue;
+
+      const spaces = [];
+      let words = 0, chars = 0, ended = false;
+      while (cursor < full.length && words < MIN_WORDS) {
+        const start = cursor;
+        while (cursor < full.length && !/\s/.test(full[cursor])) cursor++;
+        chars += cursor - start;
+        words++;
+        // Never bind across a sentence end. Fix 2026-09-22: back-to-back short
+        // sentences ("What suspension? What bumper? What light bar") chained
+        // their bindings into one unbreakable run that overflowed a phone.
+        if (/[.!?]["')\]]?$/.test(full.slice(start, cursor))) { ended = true; break; }
+        if (words < MIN_WORDS) {
+          if (full[cursor] === ' ') { spaces.push(cursor); chars++; cursor++; }
+          else break;                          // ran out of sentence
+        }
+      }
+      if ((words === MIN_WORDS || ended) && spaces.length && chars <= MAX_CHARS) bind.push(...spaces);
+    }
+
+    // One char replaced by one char, so recorded offsets stay valid.
+    const NBSP = String.fromCharCode(160);   // explicit: an invisible literal is fragile
+    for (const i of bind) {
+      const { node, offset } = map[i];
+      const t = node.textContent;
+      node.textContent = t.slice(0, offset) + NBSP + t.slice(offset + 1);
+    }
+  }
+
+  document.querySelectorAll('p, li, .hint, .sub, .lead, .qr-hint, .empty-state, .page-sub').forEach(typeset);
+})();
+
 </script>
+
+<footer class="mfoot">
+  <span>&copy; 2026 BuildBio</span>
+  <a href="/terms.html">Terms</a>
+  <a href="/privacy.html">Privacy</a>
+</footer>
 </body>
 </html>

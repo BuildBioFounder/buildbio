@@ -288,6 +288,13 @@ input::placeholder{color:var(--dim)}
   .headline{animation-delay:.06s}.wl{animation-delay:.12s}.legal{animation-delay:.18s}
   @keyframes rise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
 }
+
+    /* ── Mobile-first base (founder standard 2026-08-16) ──────────────────
+       Appended last so it wins the cascade. */
+    body { font-size: 16px; }
+    input, select, textarea { font-size: 16px !important; }
+    img { max-width: 100%; height: auto; }
+    .btn, .mod-btn, button, select { min-height: 44px; }
 </style>
 </head>
 <body>
@@ -370,18 +377,22 @@ input::placeholder{color:var(--dim)}
       if (cursor >= full.length) continue;
 
       const spaces = [];
-      let words = 0, chars = 0;
+      let words = 0, chars = 0, ended = false;
       while (cursor < full.length && words < MIN_WORDS) {
         const start = cursor;
         while (cursor < full.length && !/\s/.test(full[cursor])) cursor++;
         chars += cursor - start;
         words++;
+        // Never bind across a sentence end. Fix 2026-09-22: back-to-back short
+        // sentences ("What suspension? What bumper? What light bar") chained
+        // their bindings into one unbreakable run that overflowed a phone.
+        if (/[.!?]["')\]]?$/.test(full.slice(start, cursor))) { ended = true; break; }
         if (words < MIN_WORDS) {
           if (full[cursor] === ' ') { spaces.push(cursor); chars++; cursor++; }
           else break;                          // ran out of sentence
         }
       }
-      if (words === MIN_WORDS && chars <= MAX_CHARS) bind.push(...spaces);
+      if ((words === MIN_WORDS || ended) && spaces.length && chars <= MAX_CHARS) bind.push(...spaces);
     }
 
     // One char replaced by one char, so recorded offsets stay valid.
