@@ -129,7 +129,17 @@
   .qr-panel .qr-hint { font-size:12.5px; line-height:1.5; color:var(--text-muted,#B4B2A9); }
   .qr-panel .qr-actions { display:flex; gap:8px; flex-wrap:wrap; }
   .qr-panel .qr-err { font-size:12.5px; color:#E85D2C; }
-  .qr-panel .qr-wallet[hidden] { display:none; }   /* .btn is inline-flex, which would beat the hidden attribute */
+  .qr-panel .qr-wallet[hidden] { display:none; }
+  .qr-panel img { cursor: zoom-in; }
+  /* Full-screen QR (founder ruling 2026-09-22): tap the code in Account Settings and it
+     fills the phone, alone, like a photo in the gallery, so the owner can hold it up for
+     a prospect to scan. White ground for contrast; the vehicle name so the owner knows
+     which build they are showing. Tap anywhere, Esc, or the back gesture closes it. */
+  .qr-full { position: fixed; inset: 0; z-index: 9999; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 16px; cursor: zoom-out; }
+  .qr-full[hidden] { display: none; }
+  .qr-full img { width: min(92vw, 92vh, 720px); height: auto; aspect-ratio: 1 / 1; display: block; }
+  .qr-full .qr-full-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(18px, 4.5vw, 26px); letter-spacing: 0.04em; text-transform: uppercase; color: #0d0d0d; text-align: center; }
+  .qr-full .qr-full-hint { font-size: 12px; color: #6b6b6b; text-align: center; }   /* .btn is inline-flex, which would beat the hidden attribute */
 </style>
 </head>
 <body>
@@ -147,6 +157,12 @@
   <p class="page-sub">Manage your profile and vehicles.</p>
 
   <div class="msg" id="msg"></div>
+
+  <div class="qr-full" id="qr-full" hidden role="dialog" aria-modal="true" aria-label="Your QR code, full screen">
+    <img id="qr-full-img" alt="QR code, full screen">
+    <div class="qr-full-name" id="qr-full-name"></div>
+    <div class="qr-full-hint">Hold this up for them to scan. Tap anywhere to close.</div>
+  </div>
 
   <!-- Vehicles -->
   <div class="section">
@@ -484,6 +500,19 @@ document.getElementById('btn-logout').addEventListener('click', async () => {
     return svgToPngBlob(svgText);
   }
 
+  // Full-screen QR view
+  (function () {
+    var full = document.getElementById('qr-full'), img = document.getElementById('qr-full-img'), name = document.getElementById('qr-full-name');
+    function close() { if (full.hidden) return; full.hidden = true; document.body.style.overflow = ''; if (history.state && history.state.qrFull) history.back(); }
+    document.addEventListener('click', function (e) {
+      var q = e.target.closest('.qr-panel img.qr-img');
+      if (q) { img.src = qrEndpoint(q.dataset.pid, QR_EXPORT, false); name.textContent = q.dataset.name || ''; full.hidden = false; document.body.style.overflow = 'hidden'; history.pushState({ qrFull: 1 }, ''); return; }
+      if (e.target.closest('#qr-full')) close();
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    window.addEventListener('popstate', function () { if (!full.hidden) { full.hidden = true; document.body.style.overflow = ''; } });
+  })();
+
   document.addEventListener('click', async function (e) {
     var btn = e.target.closest('.qr-toggle');
     if (!btn) return;
@@ -501,7 +530,7 @@ document.getElementById('btn-logout').addEventListener('click', async () => {
     }
 
     panel.innerHTML =
-      '<img alt="QR code for this vehicle" src="' + qrEndpoint(pid, QR_DISPLAY, false) + '">' +
+      '<img alt="QR code for this vehicle — tap to show full screen" class="qr-img" data-pid="' + pid + '" data-name="' + (btn.dataset.label || '').replace(/-/g, ' ') + '" src="' + qrEndpoint(pid, QR_DISPLAY, false) + '">' +
       '<div class="qr-side">' +
         '<p class="qr-hint"><strong>On your phone:</strong> press and hold the code, then choose Add to Photos or Download image.</p>' +
         '<div class="qr-actions">' +
