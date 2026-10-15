@@ -42,7 +42,7 @@
     .page-h1 em{font-style:normal;color:var(--orange)}
     .page-sub{font-size:16px;color:var(--muted);max-width:560px;margin:0 auto;line-height:1.7}
 
-    /* PRICING GRID — matches index.html exactly */
+    /* PRICING GRID — matches home.html pricing section */
     .pricing{padding:80px 28px 60px;position:relative;overflow:hidden}
     .pricing::before{content:'';position:absolute;inset:0;background-image:url('https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/pricing-bg.jpg');background-size:cover;background-position:center 40%;opacity:0.20;z-index:0}
     .pricing .pg{position:relative;z-index:1}
@@ -151,7 +151,7 @@
     .btn, .mod-btn, button, select { min-height: 44px; }
     .nav .logo { padding: 8px 0; }                 /* 28px wordmark -> 44px tap height */
     .footer .fl2 { padding: 7px 0; display: inline-flex; align-items: baseline; }
-    a.nl, a.flink, .mfoot a { min-height: 44px; display: inline-flex; align-items: center; }
+    a.nl, a.flink, .mfoot a { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
   </style>
 </head>
 <body>
@@ -186,7 +186,7 @@
   </div>
 </section>
 
-<!-- PRICING CARDS — matches index.html pricing section -->
+<!-- PRICING CARDS — matches home.html pricing section -->
 <section class="pricing">
   <div class="pg">
     <div class="pc">

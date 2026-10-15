@@ -134,7 +134,7 @@
     .btn, .mod-btn, button, select { min-height: 44px; }
     .nav .logo { padding: 8px 0; }                 /* 28px wordmark -> 44px tap height */
     .footer .fl2 { padding: 7px 0; display: inline-flex; align-items: baseline; }
-    a.nl, a.flink, .mfoot a { min-height: 44px; display: inline-flex; align-items: center; }
+    a.nl, a.flink, .mfoot a { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
   </style>
 </head>
 <body>
@@ -146,7 +146,7 @@
     <a href="/home.html#features" class="nl">Features</a>
     <a href="/pricing.html" class="nl">Pricing</a>
     <a href="/account.html" class="nl" id="nav-login">Account</a>
-    <a class="ncta" id="btn-logout">Sign Out</a>
+    <a class="ncta" id="btn-logout" role="button" tabindex="0">Sign Out</a>
     <button type="button" class="ham" aria-label="Menu" aria-expanded="false" onclick="toggleMenu()"><span></span><span></span><span></span></button>
   </div>
 </nav>
@@ -155,7 +155,7 @@
   <a href="/home.html#features">Features</a>
   <a href="/pricing.html">Pricing</a>
   <a href="/account.html" id="nav-login-m">Account</a>
-  <a class="mob-cta" id="btn-logout-m">Sign Out</a>
+  <a class="mob-cta" id="btn-logout-m" role="button" tabindex="0">Sign Out</a>
 </div>
 
 <div class="container">
@@ -175,14 +175,14 @@
   <!-- Step 1: Category -->
   <div class="step active" id="step-1">
     <div class="step-title">1. Choose Category</div>
-    <div class="search-box"><input type="text" id="cat-search" placeholder="Search categories..." autocomplete="off"></div>
+    <div class="search-box"><input type="text" id="cat-search" placeholder="Search categories..." autocomplete="off" style="min-height:44px"></div>
     <div class="option-grid" id="cat-grid"></div>
   </div>
 
   <!-- Step 2: Brand -->
   <div class="step" id="step-2">
     <div class="step-title">2. Choose Brand</div>
-    <div class="search-box"><input type="text" id="brand-search" placeholder="Search brands..." autocomplete="off"></div>
+    <div class="search-box"><input type="text" id="brand-search" placeholder="Search brands..." autocomplete="off" style="min-height:44px"></div>
     <div class="option-grid" id="brand-grid"></div>
     <p style="font-size:12px;color:var(--text-dim);margin-top:8px;">Brand not listed? You can type it manually below.</p>
     <div class="field" style="margin-top:8px;">
