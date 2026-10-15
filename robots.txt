@@ -1,21 +1,16 @@
-# BuildBio — pre-launch. The site is behind a coming-soon gate; everything except
-# the landing page and the public QR scan path redirects to "/", so there is
-# nothing else for a crawler to index yet. This file states that intent plainly
-# rather than leaving crawlers to discover it by following redirects.
+# BuildBio — live as of 2026-10-15 (founder ruling: site live, not yet advertised,
+# organic discovery welcome). The content pages are crawlable. Only the account and
+# auth flow pages, which carry no public content, are kept out of the index.
 
 User-agent: *
-Allow: /$
-Allow: /v/
+Allow: /
 Disallow: /account.html
 Disallow: /login.html
 Disallow: /signup.html
 Disallow: /welcome.html
 Disallow: /password-reset.html
 Disallow: /password-reset-confirm.html
-Allow: /terms.html
-Allow: /privacy.html
-Allow: /affiliate-disclosure.html
-Disallow: /home.html
-Disallow: /vehicle/
+Disallow: /index.html
+Disallow: /api/
 
 Sitemap: https://buildbio.app/sitemap.xml
