@@ -37,6 +37,14 @@ Every page carries a cascade-last `Mobile-first base` CSS block (16px floor, bou
   revert that commit). Launch deadline 2026-10-24. No advertising until the founder says so;
   organic discovery is welcome (robots.txt and sitemap.xml opened 509c54c). Every push to main is
   a production change on the branded domain: verify against the deployed URL, not only local renders.
+- **LAUNCH-STATE COHERENCE (founder 2026-10-16, ruling 7, ledger 1599):** Only the FREE tier is
+  open. No page may present paid-tier (PLUS/APEX) benefits as live-now. Marketing surfaces tease
+  them: card bodies blurred, headlines sharp, one olive badge "APEX MEMBERS — PLAN DETAILS COMING
+  SOON" with an orange "Join free today" link (shared pattern in `assets/css/tier-tease.css`);
+  paid pricing cards keep their real founding prices but carry a COMING SOON pill and a join-free
+  CTA; copy about paid benefits is future tense ("will earn", "when APEX opens"). Exempt: terms.html
+  and affiliate-disclosure.html (factual program statements). ambassadors.html carries a banner,
+  never blur. Applies to every current and future page until tiers open.
 - **BB Bucks vs BB Points (load-bearing tax line):** Bucks = elected cash cut of affiliate
   rev-share only (W-9 / 1099 / Stripe Connect). Points = everything else (referrals, events,
   builds, surveys incl. paid brand surveys, rebates, streaks) — **merch-only, never cash, ever.**

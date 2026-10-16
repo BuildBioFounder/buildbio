@@ -1,0 +1,41 @@
+/* tier-tease.css — LAUNCH-STATE COHERENCE (founder ruling 2026-10-16)
+   Only the FREE tier is open. Paid-tier (PLUS/APEX) benefits are teased:
+   card bodies blurred, headlines sharp, one COMING SOON badge over the row.
+   Legal pages (terms, affiliate-disclosure) never use this. */
+
+.tier-tease{position:relative}
+.tier-tease .tease-body{filter:blur(6px);-webkit-user-select:none;user-select:none;pointer-events:none}
+
+.tease-badge{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;pointer-events:none;padding:12px}
+.tease-badge-box{pointer-events:auto;background:#5C6B3A;color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:20px;line-height:1.2;padding:14px 18px;border-radius:6px;max-width:92%;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.tease-badge-title{display:block}
+.tease-link{display:inline-block;min-height:44px;padding:12px 4px;box-sizing:border-box;margin-top:4px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:15px;line-height:1.35;letter-spacing:0;text-transform:none;color:#E85D2C;text-decoration:none;overflow-wrap:anywhere}
+.tease-link:hover,.tease-link:focus{text-decoration:underline}
+.tease-link:focus-visible{outline:2px solid #E85D2C;outline-offset:2px}
+/* Orange on olive is low-contrast; seat the link on a soft-black chip so it stays legible */
+.tease-badge-box .tease-link{background:#141414;border-radius:6px;padding:12px 14px;color:#E85D2C}
+
+.coming-pill{display:inline-block;vertical-align:middle;margin-left:8px;background:#5C6B3A;color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:.08em;line-height:1.2;padding:4px 10px;border-radius:999px;white-space:nowrap}
+
+.tease-banner{display:block;width:100%;box-sizing:border-box;background:rgba(92,107,58,.18);border:1px solid #5C6B3A;color:#fff;font-family:'DM Sans',sans-serif;font-weight:400;font-size:15px;line-height:1.5;padding:14px 16px;border-radius:8px;margin:0 auto 24px;overflow-wrap:anywhere}
+.tease-banner a{color:#E85D2C;font-weight:500;text-decoration:underline;display:inline-block;min-height:44px;line-height:44px}
+.tease-banner a:hover,.tease-banner a:focus{text-decoration:none}
+
+.tiers-note{font-family:'DM Sans',sans-serif;font-weight:500;color:rgba(255,255,255,.85);margin:0 0 16px;text-align:center;position:relative;z-index:1}
+
+/* Desktop: overlay sits over the lower (body-text) band of the card row so headlines stay readable */
+.tease-badge{align-items:flex-end;padding-bottom:0}
+.tease-badge-box{transform:translateY(50%)}
+
+/* Stacked layouts: an overlay would cover a middle card's headline, so the badge drops into flow after the cards */
+@media (max-width:900px){
+  .tease-badge{position:static;inset:auto;padding:0;pointer-events:auto;justify-content:center}
+  .tease-badge-box{max-width:100%;width:100%;box-sizing:border-box;transform:none}
+}
+
+@media (max-width:480px){
+  .tease-badge{padding:0}
+  .tease-badge-box{font-size:clamp(15px,4.6vw,18px);padding:12px 12px;max-width:96%}
+  .tease-link{font-size:14px}
+  .tease-banner{font-size:14px;padding:12px 14px}
+}
