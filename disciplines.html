@@ -56,6 +56,13 @@
     .page-h1 em{font-style:normal;color:var(--orange)}
     .page-sub{font-size:17px;color:var(--muted);max-width:560px;margin:0 auto;line-height:1.7}
 
+    /* HERO IMAGE (founder ruling 2026-10-16 — same pattern as about.html) */
+    .page-header.hero{min-height:55vh;display:flex;flex-direction:column;justify-content:center}
+    .hero-img{position:absolute;inset:0;background-image:url('images/bg/web/jeep-pnw-forest.jpg');background-size:cover;background-position:center;background-repeat:no-repeat}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.78) 0%,rgba(0,0,0,.65) 40%,rgba(0,0,0,.88) 100%)}
+    .page-header.hero .page-sub{color:rgba(255,255,255,.8)}
+    @media(max-width:768px){.page-header.hero{min-height:50vh}}
+
     /* DISCIPLINE GRID */
     .disc-section{max-width:var(--max);margin:0 auto;padding:0 28px 96px}
     .disc-grid{display:flex;flex-direction:column;gap:16px}
@@ -175,7 +182,9 @@
 </div>
 
 <!-- PAGE HEADER -->
-<section class="page-header">
+<section class="page-header hero">
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
   <div class="page-header-content">
     <div class="page-eyebrow fu">Build Disciplines</div>
     <h1 class="page-h1 fu d1">What do you <em>build for?</em></h1>

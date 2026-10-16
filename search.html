@@ -47,6 +47,13 @@
     /* SEARCH HEADER */
     .search-header{padding:100px 28px 32px;background:var(--dark);border-bottom:1px solid var(--border)}
     .search-header-inner{max-width:var(--max);margin:0 auto}
+
+    /* HERO IMAGE (founder ruling 2026-10-16 — same pattern as about.html; kept short so results stay near the top) */
+    .search-header.hero{position:relative;overflow:hidden;min-height:45vh;display:flex;flex-direction:column;justify-content:center}
+    .hero-img{position:absolute;inset:0;background-image:url('images/bg/web/bronco-mud-trail.jpg');background-size:cover;background-position:center;background-repeat:no-repeat}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.78) 0%,rgba(0,0,0,.65) 40%,rgba(0,0,0,.88) 100%)}
+    .search-header.hero .search-header-inner{position:relative;z-index:1;width:100%}
+    @media(max-width:768px){.search-header.hero{min-height:40vh}}
     .search-h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,4vw,40px);font-weight:700;text-transform:uppercase;color:var(--text);letter-spacing:.2px;line-height:1;margin-bottom:18px}
     .search-form{display:flex;gap:10px;max-width:640px}
     .search-input{flex:1;padding:14px 18px;border-radius:10px;border:1px solid var(--border-l);background:var(--card);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s}
@@ -204,7 +211,9 @@
 </div>
 
 <!-- SEARCH HEADER -->
-<div class="search-header">
+<div class="search-header hero">
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
   <div class="search-header-inner">
     <h1 class="search-h1">Search</h1>
     <form class="search-form" id="searchForm" onsubmit="return handleSearch(event)">
