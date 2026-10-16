@@ -31,9 +31,12 @@ Every page carries a cascade-last `Mobile-first base` CSS block (16px floor, bou
 
 ## THE BRIGHT LINES (do not cross without explicit founder say-so)
 
-- **HARD GATE:** NOT launched. The Pre-Launch MVP Stress Test (all 5 layers) must pass before
-  the domain is connected or real users are invited. Do not connect buildbio.app to Vercel or
-  push anything that goes live to real users until that test clears.
+- **LIVE (founder ruling 2026-10-15, ledger 1598, Option A):** `https://buildbio.app` serves the
+  real site to everyone; the vault gate was retired in commit 97e5fc1 (middleware.js is now a bare
+  `/` -> `/home.html` redirect; the teaser `index.html` and the vault APIs stay dormant, re-dark =
+  revert that commit). Launch deadline 2026-10-24. No advertising until the founder says so;
+  organic discovery is welcome (robots.txt and sitemap.xml opened 509c54c). Every push to main is
+  a production change on the branded domain: verify against the deployed URL, not only local renders.
 - **BB Bucks vs BB Points (load-bearing tax line):** Bucks = elected cash cut of affiliate
   rev-share only (W-9 / 1099 / Stripe Connect). Points = everything else (referrals, events,
   builds, surveys incl. paid brand surveys, rebates, streaks) — **merch-only, never cash, ever.**
@@ -131,7 +134,7 @@ what is pending, exact next steps.
 
 ## REPO FACTS
 
-- **DEV PREVIEW URL (pinned 2026-09-03, verified live):** `https://buildbio-mu.vercel.app` — the Vercel project `buildbio` production alias (verified domain). Serves `index.html` (HTTP 200, title "BuildBio — Your Build. Your Story."). Deployment Protection is ON (Vercel Authentication, `all_except_custom_domains`): per-deployment URLs such as `buildbio-<hash>-buildbiofounders-projects.vercel.app` and the git-branch aliases redirect to Vercel login (302); the production alias is the only public URL until `buildbio.app` is connected at launch (HARD GATE). Use this URL for every page check, screenshot, and QA run; never the per-deployment hostname. Canon: `canonical_references` row "Vercel production URL"; `agent_status` mvp_pages / preview_url_pin.
+- **PRODUCTION URL (ledger 1598, 2026-10-15):** `https://buildbio.app` is LIVE (founder Option A; `www.buildbio.app` 308s to the apex). `https://buildbio-mu.vercel.app` is the secondary alias of the same Vercel project `buildbio` (team `buildbiofounders-projects`) and serves identical content. Deployment Protection stays ON (Vercel Authentication, `all_except_custom_domains`): per-deployment URLs such as `buildbio-<hash>-buildbiofounders-projects.vercel.app` and git-branch aliases redirect to Vercel login (302). Use `https://buildbio.app` for page checks, screenshots, QA runs and OG debuggers; never the per-deployment hostname. Production headers (the `vercel.json` CSP) are part of QA: a page is not PASS until the deployed URL loads with a clean console (H3, 2026-10-15). Canon: `canonical_references` rows "Vercel production alias" and "buildbio.app — live production domain"; `agent_status` mvp_pages / site_live.
 - Frontend repo: `BuildBioFounder/buildbio` (this repo) — static HTML, Vercel auto-deploys on
   push to main.
 - Backend repo: `BuildBioFounder/buildbio-supabase` (private) — migrations, edge functions
@@ -149,7 +152,6 @@ what is pending, exact next steps.
 - ~~**Ambassador page rebuild:** DONE 2026-06-18. 6-tier earned ladder + Creator Ambassador /
   Trusted Influencer permanent-FEEL rate floor. 6-month activation notice. #D85A30 purged.~~
 - **Pending:** Migration `20260618180000` not yet applied to live Supabase via CLI.
-- **Pending:** 24 HTML files still carry retired #D85A30 rgba values — cosmetic pass needed.
 - **Pending:** `reviewer_tier_active` view exists in live DB but not in repo migrations.
 
 ---
