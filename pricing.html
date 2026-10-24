@@ -73,7 +73,7 @@
     .pf-lock{text-align:center;font-size:11px;color:var(--orange);font-weight:500;margin:8px 0 4px;letter-spacing:0.04em;opacity:0.85}
     .pbtn{display:block;width:100%;text-align:center;padding:12px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;text-decoration:none;cursor:pointer;border:none;transition:opacity .15s,transform .1s}.pbtn:hover{opacity:.88;transform:translateY(-1px)}
     .tier-notify{margin-top:10px;display:grid;gap:8px}.tier-notify[hidden]{display:none}.tier-notify .tn-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--olive-light,#7A8C50)}.tier-notify input[type=email]{width:100%;min-height:44px;padding:10px 12px;border-radius:8px;border:1px solid var(--border-l);background:var(--dark2,#111);color:var(--text);font-size:16px;font-family:'DM Sans',sans-serif}.tier-notify .tn-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}.tier-notify .tn-err{font-size:12px;color:#E24B4A}.tier-notify .tn-done{font-size:13px;color:var(--text)}.tier-notify-btn{min-height:44px}
-    .pbp{background:var(--orange);color:#fff}.pbo{background:var(--olive);color:#fff;border:1px solid var(--olive)}.pbo:hover{background:#6a7a44}.pbg{background:transparent;color:var(--muted);border:1px solid var(--border-l)}.pbg:hover{color:var(--text);border-color:#5a5a5a}
+    .pbp{background:var(--orange);color:#fff}.pbo{background:var(--olive);color:#fff;border:1px solid var(--olive);text-wrap:balance;line-height:1.35;padding:12px 18px}.pbo:hover{background:#6a7a44}.pbg{background:transparent;color:var(--muted);border:1px solid var(--border-l)}.pbg:hover{color:var(--text);border-color:#5a5a5a}
 
     /* COMPARISON TABLE */
     .compare-sec{padding:80px 28px;max-width:var(--max);margin:0 auto}
@@ -239,7 +239,7 @@
           <div class="pfi"><span class="pfx">&#10007;</span> <span style="color:var(--dim)">Scan analytics</span></div>
         </div>
       </div>
-      <button type="button" class="pbtn pbo tier-notify-btn" data-tier="plus" aria-controls="notify-plus" aria-expanded="false">Be among the first to know when PLUS opens</button>
+      <button type="button" class="pbtn pbo tier-notify-btn" data-tier="plus" aria-controls="notify-plus" aria-expanded="false">Click here: be first to know when PLUS&nbsp;opens</button>
       <form class="tier-notify" id="notify-plus" data-tier="plus" novalidate hidden><label class="tn-label" for="notify-plus-email">Email</label><input type="email" id="notify-plus-email" placeholder="you@example.com" autocomplete="email" required><input type="text" name="company" class="tn-hp" tabindex="-1" autocomplete="off" aria-hidden="true"><button type="submit" class="pbtn pbp tn-submit">Notify Me</button><div class="tn-err" hidden></div><div class="tn-done" hidden>You are on the list. We will email you the day PLUS opens.</div></form>
       <div style="margin-top:10px;font-size:11px;color:var(--muted);line-height:1.5;text-align:center">Nothing to pay today. Billing starts only when PLUS opens: monthly on the 1st, founding rate locked for early accounts.</div>
     </div>
@@ -261,7 +261,7 @@
           <div class="pfi"><span class="pfc">&#10003;</span> Verified Build badge</div>
         </div>
       </div>
-      <button type="button" class="pbtn pbo tier-notify-btn" data-tier="apex" aria-controls="notify-apex" aria-expanded="false">Be among the first to know when APEX opens</button>
+      <button type="button" class="pbtn pbo tier-notify-btn" data-tier="apex" aria-controls="notify-apex" aria-expanded="false">Click here: be first to know when APEX&nbsp;opens</button>
       <form class="tier-notify" id="notify-apex" data-tier="apex" novalidate hidden><label class="tn-label" for="notify-apex-email">Email</label><input type="email" id="notify-apex-email" placeholder="you@example.com" autocomplete="email" required><input type="text" name="company" class="tn-hp" tabindex="-1" autocomplete="off" aria-hidden="true"><button type="submit" class="pbtn pbp tn-submit">Notify Me</button><div class="tn-err" hidden></div><div class="tn-done" hidden>You are on the list. We will email you the day APEX opens.</div></form>
       <div style="margin-top:10px;font-size:11px;color:var(--muted);line-height:1.5;text-align:center">Nothing to pay today. Billing starts only when APEX opens: monthly on the 1st, founding rate locked for early accounts.</div>
       <div style="margin-top:14px;font-size:11px;color:var(--dim);line-height:1.6;text-align:left">When APEX opens (coming soon), APEX members will earn through the BuildBio rewards program: choose <strong style="color:var(--muted)">BB Points</strong> (merch credit, no paperwork) or <strong style="color:var(--muted)">BB Bucks</strong> (cash via Stripe, W-9 required, 1099-NEC issued if earnings reach $600/year). <a href="/ambassadors.html" class="itap" style="color:var(--orange);text-decoration:none">Full details &rarr;</a></div>
