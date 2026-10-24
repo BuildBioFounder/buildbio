@@ -86,6 +86,20 @@
     .field textarea { resize: vertical; min-height: 80px; }
     .field-static { font-size: 14px; color: var(--text-dim); padding: 10px 0; }
 
+    /* SOCIALS (founder instruction 2026-10-24): the platform address is a fixed
+       prefix inside the field's left edge; the owner types only the handle. */
+    .sx-hint { font-size: 13px; color: var(--text-dim); margin: -8px 0 14px; line-height: 1.5; }
+    .sx-group { display: flex; align-items: center; min-height: 48px; width: 100%; min-width: 0; background: var(--dark-4); border: 1px solid var(--border); border-radius: 10px; transition: border-color 0.2s, box-shadow 0.2s; cursor: text; overflow: hidden; }
+    .sx-group:focus-within { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(232,93,44,0.1); }
+    .sx-group.bad { border-color: var(--red); }
+    .sx-group.is-url .sx-prefix { display: none; }          /* legacy full YouTube URL: the prefix would double up */
+    .field .sx-group.is-url input { padding-left: 14px; }
+    .sx-prefix { flex: 0 1 auto; min-width: 0; padding-left: 14px; font-size: 16px; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; user-select: none; }
+    .field .sx-group input { flex: 1 1 0; min-width: 5ch; width: auto; border: none; background: transparent; box-shadow: none; padding: 12px 14px 12px 1px; border-radius: 0; }
+    .field .sx-group input:focus { border: none; box-shadow: none; }
+    .sx-err { font-size: 13px; color: #f07070; margin-top: 6px; }
+    .sx-err[hidden] { display: none; }
+
     .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
     .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border-radius: 8px; font-family: var(--font-body); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: none; text-decoration: none; }
@@ -267,18 +281,32 @@
         </div>
       </div>
 
-      <div class="section-title" style="margin-top:20px">Social Links</div>
+      <div class="section-title" style="margin-top:20px">Socials</div>
+      <p class="sx-hint">Shown on your public build page so people who scan your build can follow you. Type just your handle.</p>
       <div class="field">
         <label for="f-ig">Instagram</label>
-        <input type="text" id="f-ig" placeholder="@yourusername" autocomplete="off">
+        <div class="sx-group"><span class="sx-prefix" aria-hidden="true">instagram.com/</span><input type="text" id="f-ig" data-sx="instagram" placeholder="yourbuild" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="200" aria-describedby="f-ig-err"></div>
+        <div class="sx-err" id="f-ig-err" role="alert" hidden></div>
+      </div>
+      <div class="field">
+        <label for="f-x">X</label>
+        <div class="sx-group"><span class="sx-prefix" aria-hidden="true">x.com/</span><input type="text" id="f-x" data-sx="x" placeholder="yourbuild" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="200" aria-describedby="f-x-err"></div>
+        <div class="sx-err" id="f-x-err" role="alert" hidden></div>
       </div>
       <div class="field">
         <label for="f-yt">YouTube</label>
-        <input type="text" id="f-yt" placeholder="Channel URL or handle" autocomplete="off">
+        <div class="sx-group"><span class="sx-prefix" aria-hidden="true">youtube.com/@</span><input type="text" id="f-yt" data-sx="youtube" placeholder="yourchannel" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="200" aria-describedby="f-yt-err"></div>
+        <div class="sx-err" id="f-yt-err" role="alert" hidden></div>
       </div>
       <div class="field">
         <label for="f-tt">TikTok</label>
-        <input type="text" id="f-tt" placeholder="@yourusername" autocomplete="off">
+        <div class="sx-group"><span class="sx-prefix" aria-hidden="true">tiktok.com/@</span><input type="text" id="f-tt" data-sx="tiktok" placeholder="yourbuild" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="200" aria-describedby="f-tt-err"></div>
+        <div class="sx-err" id="f-tt-err" role="alert" hidden></div>
+      </div>
+      <div class="field">
+        <label for="f-fb">Facebook</label>
+        <div class="sx-group"><span class="sx-prefix" aria-hidden="true">facebook.com/</span><input type="text" id="f-fb" data-sx="facebook" placeholder="your.page" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="200" aria-describedby="f-fb-err"></div>
+        <div class="sx-err" id="f-fb-err" role="alert" hidden></div>
       </div>
 
       <div class="btn-row">
@@ -322,6 +350,7 @@
 </div>
 
 <script src="/assets/js/supabase.js"></script>
+<script src="/assets/js/bb-socials.js"></script>
 <script>
 const SUPABASE_URL  = 'https://bicmwjtkncjkguumbidq.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_vt_RE80rfii-6Pb6wtPLhA_t_hyYiTE';
@@ -359,8 +388,11 @@ function showMsg(text, type = 'error') {
     document.getElementById('f-city').value = p.location_city || '';
     document.getElementById('f-state').value = p.location_state || '';
     document.getElementById('f-ig').value = p.social_instagram || '';
+    document.getElementById('f-x').value = p.social_x || '';
     document.getElementById('f-yt').value = p.social_youtube || '';
     document.getElementById('f-tt').value = p.social_tiktok || '';
+    document.getElementById('f-fb').value = p.social_facebook || '';
+    document.querySelectorAll('input[data-sx]').forEach(sxSync);
 
     const tier = p.membership_tier || 'free';
     const badge = document.getElementById('display-tier');
@@ -431,9 +463,45 @@ function showMsg(text, type = 'error') {
   }
 })();
 
+// Socials (founder instruction 2026-10-24): normalize each handle on blur and
+// again on save. Rules live in /assets/js/bb-socials.js. Returns the cleaned
+// value, or undefined when the field is invalid (inline message shown).
+function sxSync(input) {
+  input.closest('.sx-group').classList.toggle('is-url', /:\/\//.test(input.value));
+}
+function sxCheck(input) {
+  const err = document.getElementById(input.id + '-err');
+  const group = input.closest('.sx-group');
+  const r = BBSocials.normalize(input.dataset.sx, input.value);
+  if (!r.ok) {
+    err.textContent = r.error; err.hidden = false;
+    group.classList.add('bad'); input.setAttribute('aria-invalid', 'true');
+    return undefined;
+  }
+  err.hidden = true; err.textContent = '';
+  group.classList.remove('bad'); input.removeAttribute('aria-invalid');
+  input.value = r.value || '';
+  sxSync(input);
+  return r.value;
+}
+document.querySelectorAll('input[data-sx]').forEach(input => {
+  input.addEventListener('blur', () => sxCheck(input));
+  input.addEventListener('input', () => sxSync(input));
+  input.closest('.sx-group').addEventListener('click', () => input.focus());
+});
+
 // Save profile
 document.getElementById('form-profile').addEventListener('submit', async e => {
   e.preventDefault();
+  const sx = {};
+  let firstBad = null;
+  document.querySelectorAll('input[data-sx]').forEach(input => {
+    const v = sxCheck(input);
+    if (v === undefined) { if (!firstBad) firstBad = input; }
+    else sx[input.dataset.sx] = v;
+  });
+  if (firstBad) { firstBad.focus(); return; }
+
   const btn = document.getElementById('btn-save');
   btn.disabled = true; btn.textContent = 'Saving...';
 
@@ -443,9 +511,11 @@ document.getElementById('form-profile').addEventListener('submit', async e => {
     bio: document.getElementById('f-bio').value.trim() || null,
     location_city: document.getElementById('f-city').value.trim() || null,
     location_state: document.getElementById('f-state').value.trim() || null,
-    social_instagram: document.getElementById('f-ig').value.trim() || null,
-    social_youtube: document.getElementById('f-yt').value.trim() || null,
-    social_tiktok: document.getElementById('f-tt').value.trim() || null,
+    social_instagram: sx.instagram,
+    social_x: sx.x,
+    social_youtube: sx.youtube,
+    social_tiktok: sx.tiktok,
+    social_facebook: sx.facebook,
     updated_at: new Date().toISOString()
   }).eq('id', currentUser.id);
 

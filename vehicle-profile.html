@@ -133,8 +133,12 @@
     .social-section { max-width: var(--max-width); margin: 28px auto 0; padding: 20px 28px; border-top: 1px solid var(--border); }
     .social-label { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
     .social-pills { display: flex; gap: 8px; flex-wrap: wrap; }
-    .social-pill { font-size: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 4px 14px; color: #fff; text-decoration: none; transition: border-color 0.15s; }
-    .social-pill:hover { border-color: var(--orange); }
+    .social-pill { display: inline-flex; align-items: center; gap: 7px; max-width: 100%; min-width: 0; min-height: 36px; font-size: 13px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px 6px 12px; color: #fff; text-decoration: none; transition: border-color 0.15s; }
+    .social-pill:hover, .social-pill:focus-visible { border-color: var(--orange); }
+    .social-pill svg { flex: 0 0 auto; color: var(--muted); }
+    .social-pill .sp-name { flex: 0 0 auto; font-weight: 500; }
+    .social-pill .sp-handle { min-width: 0; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    @media (max-width: 768px) { .social-pill { min-height: 44px; } }
     /* "More from this owner" — founder ruling 2026-09-22: a QR lands on THAT exact
        build, never a sibling; the owner's other builds are offered beneath it.
        Anonymous visitors see the cards but a tap routes to account creation
@@ -220,6 +224,7 @@
 </div>
 
 <script src="/assets/js/supabase.js"></script>
+<script src="/assets/js/bb-socials.js"></script>
 <script>
 const SUPABASE_URL  = 'https://bicmwjtkncjkguumbidq.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_vt_RE80rfii-6Pb6wtPLhA_t_hyYiTE';
@@ -370,9 +375,16 @@ function initials(first, last, username) {
   // Social links
   let socialHtml = '';
   const socials = [];
-  if (owner?.social_instagram) socials.push(`<a href="https://instagram.com/${encodeURIComponent(owner.social_instagram.replace('@',''))}" class="social-pill" target="_blank">Instagram</a>`);
-  if (owner?.social_youtube) socials.push(`<a href="${esc(owner.social_youtube.startsWith('http') ? safeUrl(owner.social_youtube) : 'https://youtube.com/' + encodeURIComponent(owner.social_youtube))}" class="social-pill" target="_blank">YouTube</a>`);
-  if (owner?.social_tiktok) socials.push(`<a href="https://tiktok.com/@${encodeURIComponent(owner.social_tiktok.replace('@',''))}" class="social-pill" target="_blank">TikTok</a>`);
+  // Public handles (founder instruction 2026-10-24): Instagram, X, YouTube,
+  // TikTok, Facebook, only those set. URLs and labels come from BBSocials.link()
+  // (handle encodeURIComponent'd into the URL); every value is esc()'d here and
+  // every href also passes safeUrl().
+  if (owner && window.BBSocials) BBSocials.ORDER.forEach(k => {
+    const pf = BBSocials.PLATFORMS[k];
+    const l = BBSocials.link(k, owner[pf.col]);
+    if (!l) return;
+    socials.push(`<a href="${esc(safeUrl(l.url))}" class="social-pill" target="_blank" rel="noopener noreferrer" aria-label="${esc(pf.name + ' ' + l.label)}">${BBSocials.ICONS[k]}<span class="sp-name">${esc(pf.name)}</span><span class="sp-handle">${esc(l.label)}</span></a>`);
+  });
   if (socials.length > 0) {
     socialHtml = `<section class="social-section"><div class="social-label">Find ${esc(owner?.first_name || owner?.username || 'the owner')} on</div><div class="social-pills">${socials.join('')}</div></section>`;
   }
