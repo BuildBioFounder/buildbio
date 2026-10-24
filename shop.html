@@ -195,6 +195,23 @@
       .flink{padding:12px 0}
     }
 
+    /* MERCH SIGNUP (founder 2026-10-23) */
+    .merch-sec{scroll-margin-top:70px}
+    .merch-form{max-width:440px;margin:8px auto 0;display:flex;flex-direction:column;gap:14px;text-align:left}
+    .merch-form[hidden]{display:none}
+    .merch-email{width:100%;min-height:48px;padding:12px 16px;background:var(--card);border:1px solid var(--border-l);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;outline:none}
+    .merch-email:focus{border-color:var(--orange)}
+    .merch-email::placeholder{color:var(--dim)}
+    .merch-consent{display:flex;align-items:flex-start;gap:12px;min-height:44px;padding:10px 0;font-size:14px;line-height:1.5;color:var(--muted);cursor:pointer}
+    .merch-consent input{flex:0 0 auto;width:22px;height:22px;margin:0;accent-color:var(--orange);cursor:pointer}
+    .merch-hp{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
+    .merch-btn{justify-content:center;width:100%;min-height:48px;font-size:16px}
+    .merch-btn[disabled]{opacity:.6;cursor:wait;transform:none}
+    .merch-err{font-size:14px;line-height:1.5;color:#F2A27F;margin:0}
+    .merch-err a{color:var(--orange)}
+    .merch-done{max-width:440px;margin:8px auto 0;background:var(--card);border:1px solid rgba(122,140,80,.45);border-radius:14px;padding:24px 20px;text-align:center}
+    .merch-done-h{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;text-transform:uppercase;color:var(--olive-light);margin-bottom:8px}
+    .merch-done p{font-size:15px;line-height:1.6;color:var(--muted);margin:0}
     /* ── Type weights (Typography Law v2) ─────────────────────────────── */
     strong{font-weight:500}
     h3{font-family:'Barlow Condensed',sans-serif;font-weight:700}
@@ -247,6 +264,27 @@
     <div class="page-eyebrow fu d1">BUILDBIO GEAR</div>
     <h1 class="page-h1 fu d2">GEAR THAT EARNS<br><em>ITS PLACE.</em></h1>
     <p class="page-sub fu d3">QR stickers for your build. Merch built for the community. No hype drops. No fast fashion. Just gear that belongs at the trailhead and the car meet.</p>
+  </div>
+</section>
+
+<!-- MERCH SIGNUP (founder 2026-10-23: merch coming soon, sign up for launch updates) -->
+<section id="merch" class="sec-alt merch-sec">
+  <div class="sec sec-center">
+    <div class="sec-eyebrow fu">BB MERCH</div>
+    <h2 class="sec-h2 fu d1">CUSTOM BUILDBIO MERCH.<br><em>COMING SOON.</em></h2>
+    <p class="sec-body">Tees, hats and shop gear designed around the BuildBio mark, made for the trailhead and the car meet.</p>
+    <form class="merch-form" id="merchForm" novalidate>
+      <label class="merch-hp" aria-hidden="true">Company<input type="text" name="company" id="merchCompany" tabindex="-1" autocomplete="off"></label>
+      <label for="merchEmail" class="sec-eyebrow" style="margin-bottom:0">Email</label>
+      <input type="email" id="merchEmail" name="email" class="merch-email" placeholder="you@example.com" autocomplete="email" inputmode="email" required>
+      <label class="merch-consent"><input type="checkbox" id="merchConsent" name="consent" required><span>Yes, email me when BuildBio merch launches. One email, no spam.</span></label>
+      <p class="merch-err" id="merchErr" role="alert" hidden></p>
+      <button type="submit" class="btnl bpl merch-btn" id="merchBtn">Notify Me</button>
+    </form>
+    <div class="merch-done" id="merchDone" hidden>
+      <div class="merch-done-h">You're on the list.</div>
+      <p>We'll email you the moment BuildBio merch drops.</p>
+    </div>
   </div>
 </section>
 
@@ -548,6 +586,29 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
   }
 
   document.querySelectorAll('p, li, .hint, .sub, .lead, .qr-hint, .empty-state').forEach(typeset);
+})();
+</script>
+<script>
+/* Merch launch signup: POST to /api/waitlist tagged referrer merch-updates. */
+(function(){
+  var form=document.getElementById('merchForm');if(!form)return;
+  var email=document.getElementById('merchEmail'),consent=document.getElementById('merchConsent'),hp=document.getElementById('merchCompany');
+  var btn=document.getElementById('merchBtn'),err=document.getElementById('merchErr'),done=document.getElementById('merchDone');
+  function showErr(html){err.innerHTML=html;err.hidden=false}
+  form.addEventListener('submit',async function(e){
+    e.preventDefault();err.hidden=true;
+    var v=email.value.trim();
+    if(!v||!email.checkValidity()){showErr('Enter a valid email address.');email.focus();return}
+    if(!consent.checked){showErr('Check the box so we can email you when merch launches.');consent.focus();return}
+    btn.disabled=true;var label=btn.textContent;btn.textContent='Sending...';
+    try{
+      var r=await fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v,company:hp.value,referrer:'merch-updates'})});
+      if(r.status===200){form.hidden=true;done.hidden=false;return}
+      if(r.status===429){showErr('Too many sign-ups from this connection. Try again in a few minutes.')}
+      else{showErr('Something went wrong. Email <a href="mailto:founder@buildbio.app">founder@buildbio.app</a> and we’ll add you by hand.')}
+    }catch(x){showErr('Something went wrong. Email <a href="mailto:founder@buildbio.app">founder@buildbio.app</a> and we’ll add you by hand.')}
+    btn.disabled=false;btn.textContent=label;
+  });
 })();
 </script>
 </body>
