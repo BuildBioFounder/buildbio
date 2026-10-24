@@ -109,6 +109,60 @@
     .part-name-r{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;text-transform:uppercase;color:var(--text);letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .part-meta-r{font-size:12px;color:var(--dim);margin-top:2px}
 
+    /* FINDER PANELS (Search tab, founder instruction 2026-10-24) — mobile-first, min-width up */
+    .finder{max-width:760px;margin-bottom:14px;background:rgba(13,13,13,.72);border:1px solid var(--border);border-radius:12px;padding:14px}
+    .finder-label{display:block;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--orange);margin-bottom:10px}
+    .finder-label.olive{color:var(--olive-light)}
+    .finder-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .finder-grid .span2{grid-column:1 / -1}
+    .finder-field{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .finder-field label{font-size:12px;color:var(--muted)}
+    .finder-select,.finder-input{width:100%;min-width:0;min-height:44px;padding:10px 12px;border-radius:10px;border:1px solid var(--border-l);background:var(--card);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;outline:none;transition:border-color .2s}
+    .finder-select:focus,.finder-input:focus{border-color:var(--orange)}
+    .finder-select:disabled{opacity:.5}
+    .finder-input::placeholder{color:var(--dim)}
+    .finder-actions{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+    .finder-actions .search-btn{flex:1 1 auto;min-height:44px}
+    .finder-clear{background:transparent;color:var(--muted);border:1px solid var(--border-l);border-radius:10px;padding:10px 18px;font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;min-height:44px}
+    .finder-clear:hover{color:var(--text);border-color:var(--muted)}
+    .finder-hint{font-size:12px;color:var(--dim);margin-top:8px}
+    .search-form.everything{max-width:none}
+    @media(min-width:641px){
+      .finder{padding:18px 20px}
+      .finder-grid{grid-template-columns:110px 1fr 1fr 1.3fr}
+      .finder-grid .span2{grid-column:auto}
+      .finder-actions .search-btn{flex:0 0 auto}
+    }
+
+    /* BUILD CARDS (shared by every vehicle result) */
+    .build-grid{display:grid;grid-template-columns:1fr;gap:14px}
+    @media(min-width:600px){.build-grid{grid-template-columns:1fr 1fr}}
+    @media(min-width:960px){.build-grid{grid-template-columns:1fr 1fr 1fr}}
+    .build-card{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;text-decoration:none;color:var(--text);transition:border-color .2s,transform .12s;min-width:0}
+    .build-card:hover{border-color:rgba(232,93,44,.45);transform:translateY(-2px)}
+    .build-photo{position:relative;aspect-ratio:16/10;background:#222;overflow:hidden}
+    .build-photo img{width:100%;height:100%;object-fit:cover;display:block}
+    .build-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+    .build-body{padding:12px 14px 14px;min-width:0}
+    .build-name{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:.2px;line-height:1.15;overflow-wrap:anywhere}
+    .build-nick{font-size:14px;color:var(--orange);margin-top:2px;overflow-wrap:anywhere}
+    .build-meta{font-size:13px;color:var(--muted);margin-top:6px;overflow-wrap:anywhere}
+    .build-meta .sep{color:var(--dim);margin:0 6px}
+    .more-wrap{display:flex;justify-content:center;margin-top:22px}
+    .more-btn{background:transparent;color:var(--text);border:1px solid var(--orange);border-radius:10px;padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;min-height:44px}
+    .more-btn:hover{background:rgba(232,93,44,.12)}
+    .more-btn:disabled{opacity:.5;cursor:default}
+
+    /* OWNER GROUPS (Find a person) */
+    .owner-group{margin-bottom:36px}
+    .owner-head{margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+    .owner-name{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;color:var(--text);overflow-wrap:anywhere}
+    .owner-handles{font-size:13px;color:var(--dim);margin-top:2px;overflow-wrap:anywhere}
+    .owner-handles span{margin-right:12px;display:inline-block}
+    .owner-empty{font-size:14px;color:var(--dim)}
+    .empty-cta{display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin-top:18px;padding:12px 28px;border-radius:10px;background:var(--orange);color:#fff;text-decoration:none;font-weight:500}
+    .empty-cta:hover{opacity:.88}
+
     /* LOADING */
     .loading{text-align:center;padding:80px 28px}
     .loading-spinner{width:32px;height:32px;border:3px solid var(--border-l);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
@@ -198,6 +252,7 @@
     <a href="/home.html#features" class="nl">Features</a>
     <a href="/pricing.html" class="nl">Pricing</a>
     <a href="/shop.html#merch" class="nl">Merch</a>
+    <a href="/search.html" class="nl">Search</a>
     <a href="/login.html" class="nl">Log in</a>
     <a href="/signup.html" class="ncta">Create Your Free Profile</a>
     <button type="button" class="ham" aria-label="Menu" aria-expanded="false" onclick="toggleMenu()"><span></span><span></span><span></span></button>
@@ -208,6 +263,7 @@
   <a href="/home.html#features">Features</a>
   <a href="/pricing.html">Pricing</a>
   <a href="/shop.html#merch">Merch</a>
+  <a href="/search.html">Search</a>
   <a href="/login.html">Log In</a>
   <a href="/signup.html" class="mob-cta">Create Your Free Profile</a>
 </div>
@@ -218,7 +274,42 @@
   <div class="hero-overlay"></div>
   <div class="search-header-inner">
     <h1 class="search-h1">Search</h1>
-    <form class="search-form" id="searchForm" onsubmit="return handleSearch(event)">
+
+    <!-- FIND A BUILD: year / make / model / part, combined with AND -->
+    <form class="finder" id="buildForm" onsubmit="return handleBuildSearch(event)">
+      <span class="finder-label">Find a build</span>
+      <div class="finder-grid">
+        <div class="finder-field">
+          <label for="fYear">Year</label>
+          <select class="finder-select" id="fYear"><option value="">Any year</option></select>
+        </div>
+        <div class="finder-field">
+          <label for="fMake">Make</label>
+          <select class="finder-select" id="fMake" disabled><option value="">Pick a year first</option></select>
+        </div>
+        <div class="finder-field">
+          <label for="fModel">Model</label>
+          <select class="finder-select" id="fModel" disabled><option value="">Any model</option></select>
+        </div>
+        <div class="finder-field">
+          <label for="fPart">Part or brand</label>
+          <input class="finder-input" type="search" id="fPart" placeholder="e.g. RCI, bumper" autocomplete="off" maxlength="60" enterkeyhint="search">
+        </div>
+      </div>
+      <div class="finder-actions">
+        <button class="search-btn" type="submit">Find builds</button>
+        <button class="finder-clear" type="button" onclick="clearBuildFilters()">Clear</button>
+      </div>
+    </form>
+
+    <!-- FIND A PERSON: username or social handle -->
+    <form class="finder" id="whoForm" onsubmit="return handleWhoSubmit(event)">
+      <label class="finder-label olive" for="whoInput">Find a person</label>
+      <input class="finder-input" type="search" id="whoInput" placeholder="Username or social handle" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="120" enterkeyhint="search">
+      <div class="finder-hint">Type at least 2 characters. Works with @handles and profile links.</div>
+    </form>
+
+    <form class="search-form everything" id="searchForm" onsubmit="return handleSearch(event)">
       <input class="search-input" type="text" id="searchInput" placeholder="Search vehicles, brands, parts..." autocomplete="off">
       <button class="search-btn" type="submit">Search</button>
     </form>
@@ -232,7 +323,7 @@
   <div class="initial-state" id="initialState">
     <div class="initial-icon">&#128269;</div>
     <div class="initial-title">Search BuildBio</div>
-    <div class="initial-text">Search for vehicles, aftermarket brands, or parts. Or browse by directory.</div>
+    <div class="initial-text">Search for vehicles, aftermarket brands, or parts. Narrow it down by year, make, model and part to find builds like yours, or look up a person by username or social handle. Or browse by directory.</div>
     <div class="initial-links">
       <a href="/brands.html" class="initial-link">Browse Brands</a>
       <a href="/categories.html" class="initial-link">Browse Categories</a>
@@ -353,15 +444,38 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
   const initQ = params.get('q') || '';
   const initCategory = params.get('category') || '';
   const initDiscipline = params.get('discipline') || '';
+  const initYear = params.get('year') || '';
+  const initMake = params.get('make') || '';
+  const initModel = params.get('model') || '';
+  const initPart = params.get('part') || '';
+  const initWho = params.get('who') || '';
+
+  // Shared columns for every vehicle card. Owner + mod count come in as embeds.
+  const CARD_COLS = 'id, owner_id, year, make, model, trim, nickname, primary_photo, vehicle_public_id, garage_visibility, vehicle_status, created_at, owner:profiles(username), mods:modifications(count)';
+  const PAGE = 24;
+
+  /* ---------- input hygiene for PostgREST filter strings ----------
+     Anything interpolated into .or() / ilike goes through here: strips the
+     characters that carry meaning in PostgREST filter syntax (comma, parens),
+     LIKE wildcards (%), escapes (\) and quotes, then caps at 60 chars. */
+  function cleanTerm(s) {
+    return String(s || '').replace(/[,()%\\"*]/g, '').replace(/\s+/g, ' ').trim().slice(0, 60);
+  }
+  // "@name", "instagram.com/name", "https://www.youtube.com/@name/" -> "name"
+  function normalizeHandle(s) {
+    let h = String(s || '').trim();
+    h = h.replace(/^[a-z][a-z0-9+.-]*:\/\//i, '').replace(/^www\./i, '');
+    h = h.split(/[?#]/)[0];
+    if (h.indexOf('/') !== -1) {
+      const segs = h.split('/').filter(Boolean);
+      h = segs.length > 1 ? segs[segs.length - 1] : (segs[0] || '');
+    }
+    return h.replace(/^@+/, '').trim();
+  }
 
   // Pre-fill search input
   if (initQ) {
     document.getElementById('searchInput').value = initQ;
-  }
-
-  // Auto-run on load if we have params
-  if (initQ || initCategory || initDiscipline) {
-    runSearch(initQ, initCategory, initDiscipline);
   }
 
   function handleSearch(e) {
@@ -371,15 +485,255 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
 
     // Update URL
     const url = new URL(window.location);
+    url.search = '';
     url.searchParams.set('q', q);
-    url.searchParams.delete('category');
-    url.searchParams.delete('discipline');
     window.history.pushState({}, '', url);
 
     runSearch(q, '', '');
   }
 
+  /* ================= FIND A BUILD ================= */
+  const fYear = document.getElementById('fYear');
+  const fMake = document.getElementById('fMake');
+  const fModel = document.getElementById('fModel');
+  const fPart = document.getElementById('fPart');
+
+  const ACRONYM_MAKES = ['BMW', 'GMC', 'RAM', 'MG', 'AMC', 'BYD', 'VW', 'DS', 'TVR'];
+  function titleMake(s) {
+    return String(s || '').toLowerCase().replace(/[a-z0-9]+/g, function (w) {
+      return ACRONYM_MAKES.indexOf(w.toUpperCase()) !== -1 ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1);
+    });
+  }
+  function setOptions(sel, placeholder, items, disabled) {
+    sel.innerHTML = '<option value="">' + escapeHtml(placeholder) + '</option>'
+      + items.map(function (it) { return '<option value="' + escapeHtml(it.value) + '">' + escapeHtml(it.label) + '</option>'; }).join('');
+    sel.disabled = !!disabled;
+  }
+  // Select a value case-insensitively; if the catalog has no such option, add it so deep links still filter.
+  function selectValue(sel, val, label) {
+    if (!val) return;
+    const want = String(val).toLowerCase();
+    for (const o of sel.options) { if (o.value.toLowerCase() === want) { sel.value = o.value; return; } }
+    const o = document.createElement('option');
+    o.value = val; o.textContent = label || val;
+    sel.appendChild(o); sel.value = val; sel.disabled = false;
+  }
+
+  async function loadMakes(year) {
+    if (!year) { setOptions(fMake, 'Pick a year first', [], true); setOptions(fModel, 'Any model', [], true); return; }
+    setOptions(fMake, 'Loading makes...', [], true);
+    const { data, error } = await sb.from('vehicle_catalog').select('make').eq('year', parseInt(year, 10)).limit(2000);
+    const makes = Array.from(new Set((error ? [] : (data || [])).map(function (r) { return r.make; }).filter(Boolean))).sort();
+    setOptions(fMake, 'Any make', makes.map(function (m) { return { value: m, label: titleMake(m) }; }), false);
+    setOptions(fModel, 'Any model', [], true);
+  }
+  async function loadModels(year, make) {
+    if (!year || !make) { setOptions(fModel, 'Any model', [], true); return; }
+    setOptions(fModel, 'Loading models...', [], true);
+    const { data, error } = await sb.from('vehicle_catalog').select('model').eq('year', parseInt(year, 10)).eq('make', make).limit(2000);
+    const models = Array.from(new Set((error ? [] : (data || [])).map(function (r) { return r.model; }).filter(Boolean)))
+      .sort(function (a, b) { return a.localeCompare(b); });
+    setOptions(fModel, 'Any model', models.map(function (m) { return { value: m, label: m }; }), false);
+  }
+
+  async function initBuildFinder(pre) {
+    const thisYear = new Date().getFullYear();
+    const top = Math.max(2027, thisYear + 1);
+    const years = [];
+    for (let y = top; y >= 1960; y--) years.push({ value: String(y), label: String(y) });
+    setOptions(fYear, 'Any year', years, false);
+    fPart.value = pre.part || '';
+    if (pre.year) { selectValue(fYear, String(parseInt(pre.year, 10) || '')); await loadMakes(fYear.value); }
+    if (pre.make) { selectValue(fMake, pre.make, titleMake(pre.make)); if (fYear.value) await loadModels(fYear.value, fMake.value); }
+    if (pre.model) { selectValue(fModel, pre.model); }
+  }
+  fYear.addEventListener('change', function () { loadMakes(fYear.value); });
+  fMake.addEventListener('change', function () { loadModels(fYear.value, fMake.value); });
+
+  function readBuildFilters() {
+    return {
+      year: (fYear.value || '').replace(/[^0-9]/g, '').slice(0, 4),
+      make: cleanTerm(fMake.value),
+      model: cleanTerm(fModel.value),
+      part: cleanTerm(fPart.value)
+    };
+  }
+  function clearBuildFilters() {
+    fYear.value = ''; fPart.value = '';
+    loadMakes('');
+    const url = new URL(window.location);
+    ['year', 'make', 'model', 'part'].forEach(function (k) { url.searchParams.delete(k); });
+    window.history.pushState({}, '', url);
+  }
+
+  function handleBuildSearch(e) {
+    e.preventDefault();
+    const f = readBuildFilters();
+    if (!f.year && !f.make && !f.model && !f.part) {
+      document.getElementById('searchContext').innerHTML = 'Pick a year, make, model, or type a part to find builds.';
+      return false;
+    }
+    const url = new URL(window.location);
+    url.search = '';
+    if (f.year) url.searchParams.set('year', f.year);
+    if (f.make) url.searchParams.set('make', f.make);
+    if (f.model) url.searchParams.set('model', f.model);
+    if (f.part) url.searchParams.set('part', f.part);
+    window.history.pushState({}, '', url);
+    runBuildSearch(f, 0);
+    return false;
+  }
+
+  let buildSeq = 0;
+  async function runBuildSearch(f, offset) {
+    const seq = ++buildSeq; whoSeq++;
+    const section = document.getElementById('resultsSection');
+    const label = [f.year, f.make ? titleMake(f.make) : '', f.model].filter(Boolean).join(' ');
+    document.getElementById('filterPills').innerHTML = '';
+    document.getElementById('searchContext').innerHTML = 'Builds' + (label ? ' for <strong>' + escapeHtml(label) + '</strong>' : '')
+      + (f.part ? ' with <em>' + escapeHtml(f.part) + '</em>' : '');
+    if (offset === 0) section.innerHTML = '<div class="loading"><div class="loading-spinner"></div><div class="loading-text">Finding builds...</div></div>';
+
+    let cols = CARD_COLS;
+    if (f.part) cols += ', m:modifications!inner(id)';
+    let qb = sb.from('vehicles').select(cols)
+      .eq('garage_visibility', 'public')    // Private Garage builds are reachable only by their own QR (founder ruling 2026-09-22)
+      .neq('vehicle_status', 'stolen');
+    if (f.year) qb = qb.eq('year', f.year);
+    if (f.make) qb = qb.ilike('make', f.make);     // no wildcards: case-insensitive exact (catalog stores UPPERCASE)
+    if (f.model) qb = qb.ilike('model', f.model);
+    if (f.part) qb = qb.or('brand.ilike.%' + f.part + '%,product_name.ilike.%' + f.part + '%', { referencedTable: 'm' });
+    const { data, error } = await qb.order('created_at', { ascending: false }).range(offset, offset + PAGE);
+    if (seq !== buildSeq) return;
+    const rows = error ? [] : (data || []);
+    const hasMore = rows.length > PAGE;
+    const page = rows.slice(0, PAGE);
+
+    if (offset === 0) {
+      if (!page.length) {
+        section.innerHTML = '<div class="empty-state">'
+          + '<div class="empty-state-title">No builds yet for that combination.</div>'
+          + '<div class="empty-state-text">Be the first:</div>'
+          + '<a href="/start.html" class="empty-cta">Start your build</a>'
+          + '</div>';
+        return;
+      }
+      section.innerHTML = '<div class="result-group"><div class="result-group-header">'
+        + '<div class="result-group-title">Builds</div><div class="result-group-count" id="buildCount">0</div></div>'
+        + '<div class="build-grid" id="buildGrid"></div><div class="more-wrap" id="buildMore"></div></div>';
+    }
+    const grid = document.getElementById('buildGrid');
+    if (!grid) return;
+    grid.insertAdjacentHTML('beforeend', page.map(buildCardHtml).join(''));
+    document.getElementById('buildCount').textContent = grid.children.length + (hasMore ? '+' : '');
+    const more = document.getElementById('buildMore');
+    more.innerHTML = hasMore ? '<button type="button" class="more-btn" id="buildMoreBtn">Show more</button>' : '';
+    if (hasMore) {
+      document.getElementById('buildMoreBtn').addEventListener('click', function () {
+        this.disabled = true; this.textContent = 'Loading...';
+        runBuildSearch(f, offset + PAGE);
+      });
+    }
+  }
+
+  // Card for one vehicle row. Every DB value is escaped; the photo only renders from our own storage host (CSP img-src).
+  function buildCardHtml(v) {
+    const name = [v.year, v.make, v.model, v.trim].filter(Boolean).join(' ');
+    const count = (v.mods && v.mods[0] && typeof v.mods[0].count === 'number') ? v.mods[0].count : null;
+    const owner = v.owner && v.owner.username ? v.owner.username : '';
+    const href = v.vehicle_public_id ? '/v/' + encodeURIComponent(v.vehicle_public_id) : '/vehicle-profile.html?id=' + encodeURIComponent(v.id);
+    let photo = '<div class="build-ph">No photo yet</div>';
+    if (v.primary_photo) {
+      const u = safeUrl(v.primary_photo);
+      if (u.indexOf(SUPABASE_URL + '/') === 0) photo = '<img src="' + escapeHtml(u) + '" alt="' + escapeHtml(name) + '" loading="lazy">';
+    }
+    const meta = [];
+    if (count !== null) meta.push(count + (count === 1 ? ' mod' : ' mods'));
+    if (owner) meta.push('by ' + escapeHtml(owner));
+    return '<a class="build-card" href="' + escapeHtml(href) + '">'
+      + '<div class="build-photo">' + photo + '</div>'
+      + '<div class="build-body">'
+      + '<div class="build-name">' + escapeHtml(name) + '</div>'
+      + (v.nickname ? '<div class="build-nick">' + escapeHtml(v.nickname) + '</div>' : '')
+      + (meta.length ? '<div class="build-meta">' + meta.join('<span class="sep">&middot;</span>') + '</div>' : '')
+      + '</div></a>';
+  }
+  function isListable(v) { return v && v.garage_visibility === 'public' && v.vehicle_status !== 'stolen'; }
+
+  /* ================= FIND A PERSON ================= */
+  const whoInput = document.getElementById('whoInput');
+  let whoTimer = null, whoSeq = 0;
+  whoInput.addEventListener('input', function () {
+    clearTimeout(whoTimer);
+    whoTimer = setTimeout(function () { triggerWho(); }, 300);
+  });
+  function handleWhoSubmit(e) { e.preventDefault(); clearTimeout(whoTimer); triggerWho(); return false; }
+  function triggerWho() {
+    const raw = whoInput.value;
+    const term = cleanTerm(normalizeHandle(raw));
+    if (term.length < 2) return;
+    const url = new URL(window.location);
+    url.search = '';
+    url.searchParams.set('who', term);
+    window.history.replaceState({}, '', url);
+    runWhoSearch(raw);
+  }
+
+  const SOCIALS = [['social_instagram', 'IG'], ['social_x', 'X'], ['social_youtube', 'YouTube'], ['social_tiktok', 'TikTok'], ['social_facebook', 'Facebook']];
+  async function runWhoSearch(raw) {
+    const term = cleanTerm(normalizeHandle(raw));
+    if (term.length < 2) return;
+    const seq = ++whoSeq; buildSeq++;
+    const section = document.getElementById('resultsSection');
+    document.getElementById('filterPills').innerHTML = '';
+    document.getElementById('searchContext').innerHTML = 'People matching <strong>"' + escapeHtml(term) + '"</strong>';
+    section.innerHTML = '<div class="loading"><div class="loading-spinner"></div><div class="loading-text">Looking them up...</div></div>';
+
+    const pat = '%' + term + '%';
+    const orStr = ['username'].concat(SOCIALS.map(function (s) { return s[0]; }))
+      .map(function (c) { return c + '.ilike.' + pat; }).join(',');
+    const { data: people, error: pErr } = await sb.from('profiles')
+      .select('id, username, first_name, social_instagram, social_x, social_youtube, social_tiktok, social_facebook')
+      .or(orStr).limit(20);
+    if (seq !== whoSeq) return;
+    const list = pErr ? [] : (people || []);
+    if (!list.length) {
+      section.innerHTML = '<div class="empty-state"><div class="empty-state-title">No one with that handle yet.</div>'
+        + '<div class="empty-state-text">Check the spelling, or try their username instead of a social handle.</div></div>';
+      return;
+    }
+    const { data: cars, error: vErr } = await sb.from('vehicles').select(CARD_COLS)
+      .in('owner_id', list.map(function (p) { return p.id; }))
+      .eq('garage_visibility', 'public')
+      .neq('vehicle_status', 'stolen')
+      .order('created_at', { ascending: false })
+      .limit(200);
+    if (seq !== whoSeq) return;
+    const byOwner = {};
+    (vErr ? [] : (cars || [])).forEach(function (v) { (byOwner[v.owner_id] = byOwner[v.owner_id] || []).push(v); });
+    // Owners with public builds first, then the rest.
+    list.sort(function (a, b) { return (byOwner[b.id] ? 1 : 0) - (byOwner[a.id] ? 1 : 0); });
+    section.innerHTML = list.map(function (p) {
+      const display = p.first_name || p.username || 'BuildBio member';
+      const handles = [];
+      if (p.username) handles.push('<span>@' + escapeHtml(p.username) + '</span>');
+      SOCIALS.forEach(function (s) {
+        const h = normalizeHandle(p[s[0]]);
+        if (h) handles.push('<span>' + s[1] + ' @' + escapeHtml(h) + '</span>');
+      });
+      const vs = byOwner[p.id] || [];
+      return '<div class="owner-group"><div class="owner-head">'
+        + '<div class="owner-name">' + escapeHtml(display) + '</div>'
+        + (handles.length ? '<div class="owner-handles">' + handles.join('') + '</div>' : '')
+        + '</div>'
+        + (vs.length ? '<div class="build-grid">' + vs.map(buildCardHtml).join('') + '</div>'
+                     : '<div class="owner-empty">No public builds yet.</div>')
+        + '</div>';
+    }).join('');
+  }
+
   async function runSearch(q, category, discipline) {
+    buildSeq++; whoSeq++;   // a newer search wins over any in-flight finder query
     const section = document.getElementById('resultsSection');
     section.innerHTML = '<div class="loading"><div class="loading-spinner"></div><div class="loading-text">Searching...</div></div>';
 
@@ -431,19 +785,41 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
   }
 
   async function searchVehicles(q) {
-    // Search vehicles by year, make, model using ilike
-    const term = '%' + q + '%';
-    const { data, error } = await sb
-      .from('vehicles')
-      .select('id, year, make, model, nickname, slug')
-      .eq('garage_visibility', 'public')   // Private Garage builds are reachable only by their own QR (founder ruling 2026-09-22)
-      .or('make.ilike.' + term + ',model.ilike.' + term + ',year.ilike.' + term + ',nickname.ilike.' + term)
-      .limit(20);
-    return error ? [] : (data || []);
+    // Free text over builds. Multi-word queries ("2025 Toyota 4Runner") match when EVERY word hits one of
+    // year / make / model / trim / nickname; the full phrase also matches builds by part or brand.
+    // Terms are sanitized (cleanTerm) before they enter any .or() string.
+    const clean = cleanTerm(q);
+    if (!clean) return [];
+    const words = clean.split(' ').filter(Boolean).slice(0, 6);
+    const anchor = words.slice().sort(function (x, y) { return y.length - x.length; })[0];
+    const term = '%' + anchor + '%';
+    const base = function (cols) {
+      return sb.from('vehicles').select(cols)
+        .eq('garage_visibility', 'public')   // Private Garage builds are reachable only by their own QR (founder ruling 2026-09-22)
+        .neq('vehicle_status', 'stolen');
+    };
+    const [byName, byPart] = await Promise.all([
+      base(CARD_COLS)
+        .or('make.ilike.' + term + ',model.ilike.' + term + ',year.ilike.' + term + ',trim.ilike.' + term + ',nickname.ilike.' + term)
+        .order('created_at', { ascending: false }).limit(200),
+      base(CARD_COLS + ', m:modifications!inner(id)')
+        .or('brand.ilike.%' + clean + '%,product_name.ilike.%' + clean + '%', { referencedTable: 'm' })
+        .order('created_at', { ascending: false }).limit(20)
+    ]);
+    const hay = function (v) { return [v.year, v.make, v.model, v.trim, v.nickname].filter(Boolean).join(' ').toLowerCase(); };
+    const named = (byName.error ? [] : (byName.data || [])).filter(function (v) {
+      const h = hay(v); return words.every(function (w) { return h.indexOf(w.toLowerCase()) !== -1; });
+    });
+    const seen = new Set(), out = [];
+    named.concat(byPart.error ? [] : (byPart.data || [])).forEach(function (v) {
+      if (!seen.has(v.id)) { seen.add(v.id); out.push(v); }
+    });
+    out.sort(function (x, y) { return String(y.created_at).localeCompare(String(x.created_at)); });
+    return out.slice(0, 24);
   }
 
   async function searchBrands(q) {
-    const term = '%' + q + '%';
+    const term = '%' + cleanTerm(q) + '%';
     const { data, error } = await sb
       .from('brands')
       .select('id, name, slug, logo_url, description')
@@ -453,7 +829,7 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
   }
 
   async function searchParts(q) {
-    const term = '%' + q + '%';
+    const term = '%' + cleanTerm(q) + '%';
     const { data, error } = await sb
       .from('parts_public')
       .select('id, name, part_number, brand_id')
@@ -475,7 +851,7 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
     // Get vehicles that have modifications in this category
     const { data, error } = await sb
       .from('modifications')
-      .select('vehicle_id, vehicles(id, year, make, model, nickname, slug)')
+      .select('vehicle_id, vehicles(' + CARD_COLS + ')')
       .eq('category_id', cat.id)
       .limit(50);
 
@@ -485,7 +861,7 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
     const seen = new Set();
     const vehicles = [];
     data.forEach(row => {
-      if (row.vehicles && !seen.has(row.vehicles.id)) {
+      if (isListable(row.vehicles) && !seen.has(row.vehicles.id)) {
         seen.add(row.vehicles.id);
         vehicles.push(row.vehicles);
       }
@@ -506,7 +882,7 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
     // Get vehicles with this discipline
     const { data, error } = await sb
       .from('vehicle_disciplines')
-      .select('vehicle_id, vehicles(id, year, make, model, nickname, slug)')
+      .select('vehicle_id, vehicles(' + CARD_COLS + ')')
       .eq('discipline_id', disc.id)
       .limit(50);
 
@@ -515,7 +891,7 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
     const seen = new Set();
     const vehicles = [];
     data.forEach(row => {
-      if (row.vehicles && !seen.has(row.vehicles.id)) {
+      if (isListable(row.vehicles) && !seen.has(row.vehicles.id)) {
         seen.add(row.vehicles.id);
         vehicles.push(row.vehicles);
       }
@@ -548,19 +924,7 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
         + '<div class="result-group-title">Vehicles</div>'
         + '<div class="result-group-count">' + results.vehicles.length + '</div>'
         + '</div>';
-      results.vehicles.forEach(v => {
-        const name = [v.year, v.make, v.model].filter(Boolean).join(' ');
-        const nick = v.nickname ? v.nickname : '';
-        const profileUrl = v.id ? '/vehicle-profile.html?id=' + encodeURIComponent(v.id) : '#';
-        html += '<div class="vehicle-card">'
-          + '<div class="vehicle-icon">&#128663;</div>'
-          + '<div class="vehicle-info">'
-          + '<div class="vehicle-name">' + escapeHtml(name) + '</div>'
-          + (nick ? '<div class="vehicle-meta">' + escapeHtml(nick) + '</div>' : '')
-          + '</div>'
-          + '<a href="' + profileUrl + '" class="vehicle-link">View profile &#8594;</a>'
-          + '</div>';
-      });
+      html += '<div class="build-grid">' + results.vehicles.map(buildCardHtml).join('') + '</div>';
       html += '</div>';
     }
 
@@ -619,6 +983,20 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
     document.getElementById('resultsSection').innerHTML = document.getElementById('initialState') ? '' : '';
     location.reload();
   }
+
+  // (Runs last so every const/let above is initialized — avoids TDZ errors on deep links.)
+  // Auto-run on load if we have params
+  if (initWho) {
+    document.getElementById('whoInput').value = initWho;
+    runWhoSearch(initWho);
+  } else if (initYear || initMake || initModel || initPart) {
+    initBuildFinder({ year: initYear, make: initMake, model: initModel, part: initPart }).then(function () {
+      runBuildSearch(readBuildFilters(), 0);
+    });
+  } else if (initQ || initCategory || initDiscipline) {
+    runSearch(initQ, initCategory, initDiscipline);
+  }
+  if (!initYear && !initMake && !initModel && !initPart) initBuildFinder({});
 
   function escapeHtml(str) {
     if (!str) return '';
