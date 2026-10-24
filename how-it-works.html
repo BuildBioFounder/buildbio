@@ -73,6 +73,14 @@
     /* SECTIONS */
     .sec{padding:80px 28px;max-width:var(--max);margin:0 auto}
     .sec-alt{background:var(--dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+    /* Alternating sections carry a dimmed overland photo (home.html .how::before pattern); the gradient keeps the copy legible. */
+    .sec-alt{position:relative;overflow:hidden}
+    .sec-alt::before{content:'';position:absolute;inset:0;background-size:cover;background-position:center;opacity:.24;pointer-events:none}
+    .sec-alt::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,var(--black) 0%,rgba(13,13,13,.5) 50%,var(--black) 100%);pointer-events:none}
+    .sec-alt>.sec{position:relative;z-index:1}
+    .sec-alt.bg-profile::before{background-image:url('images/bg/web/cruiser-desert-sunset.jpg')}
+    .sec-alt.bg-scan::before{background-image:url('images/bg/web/jeep-pnw-forest.jpg')}
+    .cta-sec{background:linear-gradient(180deg,var(--black) 0%,rgba(13,13,13,.78) 50%,var(--black) 100%),url('images/bg/web/cars-coffee-sunset.jpg') center/cover no-repeat}
     .sec-h2{font-family:'Barlow Condensed',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:700;text-transform:uppercase;line-height:1.05;margin-bottom:20px;text-align:center}
     .sec-h2 em{font-style:normal;color:var(--orange)}
     .sec-body{color:var(--muted);font-size:15px;line-height:1.8;max-width:680px;margin:0 auto 24px;text-align:center}
@@ -225,7 +233,7 @@
 </div>
 
 <!-- DETAIL: PROFILE CREATION -->
-<div class="sec-alt">
+<div class="sec-alt bg-profile">
   <div class="sec">
     <div class="detail-grid">
       <div class="detail-text">
@@ -267,7 +275,7 @@
 </div>
 
 <!-- DETAIL: SCANNING -->
-<div class="sec-alt">
+<div class="sec-alt bg-scan">
   <div class="sec">
     <div class="detail-grid">
       <div class="detail-text">
@@ -283,7 +291,7 @@
           <div class="feat-item"><div class="feat-check">&#10003;</div><div><strong>Peer reviews</strong> (coming soon) -- real owners rating real parts</div></div>
         </div>
       </div>
-      <div class="detail-visual" style="background:var(--card);border-radius:12px;display:flex;align-items:center;justify-content:center;min-height:300px;color:var(--text-muted);font-size:14px">Screenshot coming soon</div>
+      <figure class="detail-visual" style="margin:0"><img src="/images/bg/web/how-it-works-walkthrough.jpg" srcset="/images/bg/web/how-it-works-walkthrough-800.jpg 800w, /images/bg/web/how-it-works-walkthrough.jpg 1408w" sizes="(max-width: 900px) 100vw, 560px" width="1408" height="1056" loading="lazy" decoding="async" style="width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--border-l,#3A3A3A)" alt="Four panels: a hiker spots the BuildBio sticker on an orange 4Runner at a trailhead; scans it with the phone camera, which previews buildbio.app; lands on the BuildBio page and taps View Vehicle Profile; sees the 2021 Toyota 4Runner TRD Pro profile with its featured mods."></figure>
     </div>
   </div>
 </div>
