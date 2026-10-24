@@ -626,7 +626,7 @@
           </div>
           <div class="field field-pw">
             <label for="signup-password">Password</label>
-            <input type="password" id="signup-password" placeholder="Min. 8 characters" autocomplete="new-password">
+            <input type="password" id="signup-password" placeholder="Min. 10 characters: upper, lower, number, symbol" autocomplete="new-password">
             <button type="button" class="pw-toggle" data-target="signup-password" aria-label="Toggle password">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
@@ -777,14 +777,18 @@ document.getElementById('form-signup').addEventListener('submit', async e => {
   if (!username) return showMsg('Please choose a username.');
   if (!usernameRe.test(username)) return showMsg('Username must be 3-24 characters: letters, numbers, or underscore.');
   if (!email || !password) return showMsg('Please enter your email and password.');
-  if (password.length < 8)  return showMsg('Password must be at least 8 characters.');
+  // Locked policy (ledger 1317): min 10 with upper, lower, number and symbol. Check here so the
+  // user gets one clear sentence instead of the raw server message.
+  if (password.length < 10 || !/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+    return showMsg('Password must be at least 10 characters and include an uppercase letter, a lowercase letter, a number and a symbol.');
+  }
   // start.html hands off email + username in the query string (never the password)
 
   setLoading(btn, true);
   const { data, error } = await sb.auth.signUp({
     email,
     password,
-    options: { data: { username } }
+    options: { data: { username }, emailRedirectTo: window.location.origin + '/welcome.html' }
   });
   setLoading(btn, false);
 
