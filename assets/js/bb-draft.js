@@ -197,7 +197,9 @@
         // Same path pattern as vehicle/new.html. If storage policy rejects it
         // (policy in repo migrations scopes the 2nd folder to the user id),
         // retry under vehicles/<uid>/ which that policy allows.
-        var paths = ['vehicles/' + vid + '/0.' + ext, 'vehicles/' + user.id + '/' + vid + '-0.' + ext];
+        // vehicles/<uid>/ is the path production storage RLS accepts (verified live 2026-10-23);
+        // the vehicle-id path is kept only as a fallback in case the policy changes.
+        var paths = ['vehicles/' + user.id + '/' + vid + '-0.' + ext, 'vehicles/' + vid + '/0.' + ext];
         var tryUpload = function (i) {
           return sb.storage.from('images').upload(paths[i], blob, { contentType: type, upsert: true }).then(function (r) {
             if (!r.error) return paths[i];

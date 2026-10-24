@@ -601,9 +601,16 @@ document.getElementById('form-login').addEventListener('submit', async e => {
   if (vehicles && vehicles.length > 0) {
     window.location.href = 'account.html';
   } else {
-    window.location.href = 'vehicle/new.html';
+    window.location.href = noVehicleTarget();
   }
 });
+
+// A member with no vehicle yet but a builder draft saved on this phone goes to welcome.html,
+// where the draft is published (feat/start-draft-persist). Otherwise the Add Vehicle page.
+function noVehicleTarget() {
+  try { if (localStorage.getItem('bb_draft_v1')) return '/welcome.html'; } catch (e) {}
+  return 'vehicle/new.html';
+}
 
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
@@ -612,7 +619,7 @@ document.getElementById('form-login').addEventListener('submit', async e => {
     if (vehicles && vehicles.length > 0) {
       window.location.href = 'account.html';
     } else {
-      window.location.href = 'vehicle/new.html';
+      window.location.href = noVehicleTarget();
     }
   }
 })();

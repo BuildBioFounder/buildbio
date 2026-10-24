@@ -861,7 +861,11 @@ function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&l
 // ── Redirect if already signed in ──
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
-  if (session) window.location.href = 'account.html';
+  if (session) {
+    var target = 'account.html';
+    try { if (localStorage.getItem('bb_draft_v1')) target = '/welcome.html'; } catch (e) {}
+    window.location.href = target;
+  }
 })();
 </script>
 
