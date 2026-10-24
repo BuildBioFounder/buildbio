@@ -154,7 +154,7 @@
     .more-btn:hover{background:rgba(232,93,44,.12)}
     .more-btn:disabled{opacity:.5;cursor:default}
 
-    /* OWNER GROUPS (Find a person) */
+    /* OWNER GROUPS (Find a particular build) */
     .owner-group{margin-bottom:36px}
     .owner-head{margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
     .owner-name{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;text-transform:uppercase;color:var(--text);overflow-wrap:anywhere}
@@ -303,11 +303,11 @@
       </div>
     </form>
 
-    <!-- FIND A PERSON: username or social handle -->
+    <!-- FIND A PARTICULAR BUILD: username or social handle -->
     <form class="finder" id="whoForm" onsubmit="return handleWhoSubmit(event)">
-      <label class="finder-label olive" for="whoInput">Find a person</label>
-      <input class="finder-input" type="search" id="whoInput" placeholder="Username or social handle" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="120" enterkeyhint="search">
-      <div class="finder-hint">Type at least 2 characters. Works with @handles and profile links.</div>
+      <label class="finder-label olive" for="whoInput">Find a particular build</label>
+      <input class="finder-input" type="search" id="whoInput" placeholder="Owner's username or social handle" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="120" enterkeyhint="search">
+      <div class="finder-hint">Type at least 2 characters. Works with @handles and profile links. Finds the builds behind a username or handle.</div>
     </form>
 
     <form class="search-form everything" id="searchForm" onsubmit="return handleSearch(event)">
@@ -661,7 +661,7 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
   }
   function isListable(v) { return v && v.garage_visibility === 'public' && v.vehicle_status !== 'stolen'; }
 
-  /* ================= FIND A PERSON ================= */
+  /* ================= FIND A PARTICULAR BUILD ================= */
   const whoInput = document.getElementById('whoInput');
   let whoTimer = null, whoSeq = 0;
   whoInput.addEventListener('input', function () {
@@ -687,7 +687,7 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
     const seq = ++whoSeq; buildSeq++;
     const section = document.getElementById('resultsSection');
     document.getElementById('filterPills').innerHTML = '';
-    document.getElementById('searchContext').innerHTML = 'People matching <strong>"' + escapeHtml(term) + '"</strong>';
+    document.getElementById('searchContext').innerHTML = 'Builds behind <strong>"' + escapeHtml(term) + '"</strong>';
     section.innerHTML = '<div class="loading"><div class="loading-spinner"></div><div class="loading-text">Looking them up...</div></div>';
 
     const pat = '%' + term + '%';
@@ -699,7 +699,7 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
     if (seq !== whoSeq) return;
     const list = pErr ? [] : (people || []);
     if (!list.length) {
-      section.innerHTML = '<div class="empty-state"><div class="empty-state-title">No one with that handle yet.</div>'
+      section.innerHTML = '<div class="empty-state"><div class="empty-state-title">No build behind that handle yet.</div>'
         + '<div class="empty-state-text">Check the spelling, or try their username instead of a social handle.</div></div>';
       return;
     }
