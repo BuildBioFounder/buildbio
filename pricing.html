@@ -72,6 +72,7 @@
     .pf-blurred{filter:blur(4px);user-select:none;pointer-events:none;opacity:0.7}
     .pf-lock{text-align:center;font-size:11px;color:var(--orange);font-weight:500;margin:8px 0 4px;letter-spacing:0.04em;opacity:0.85}
     .pbtn{display:block;width:100%;text-align:center;padding:12px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;text-decoration:none;cursor:pointer;border:none;transition:opacity .15s,transform .1s}.pbtn:hover{opacity:.88;transform:translateY(-1px)}
+    .tier-notify{margin-top:10px;display:grid;gap:8px}.tier-notify .tn-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--olive-light,#7A8C50)}.tier-notify input[type=email]{width:100%;min-height:44px;padding:10px 12px;border-radius:8px;border:1px solid var(--border-l);background:var(--dark2,#111);color:var(--text);font-size:16px;font-family:'DM Sans',sans-serif}.tier-notify .tn-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}.tier-notify .tn-err{font-size:12px;color:#E24B4A}.tier-notify .tn-done{font-size:13px;color:var(--text)}.tier-notify-btn{min-height:44px}
     .pbp{background:var(--orange);color:#fff}.pbg{background:transparent;color:var(--muted);border:1px solid var(--border-l)}.pbg:hover{color:var(--text);border-color:#5a5a5a}
 
     /* COMPARISON TABLE */
@@ -218,7 +219,7 @@
         <div class="pfi"><span class="pfx">&#10007;</span> <span style="color:var(--dim)">Revenue share</span></div>
         <div class="pfi"><span class="pfx">&#10007;</span> <span style="color:var(--dim)">Scan analytics</span></div>
       </div>
-      <a href="/start.html" class="pbtn pbg">Start Your Build -- Free</a>
+      <a href="/start.html" class="pbtn pbp">Create Your Profile Now</a>
     </div>
     <div class="pc ft">
       <div class="pbdg">Founder pricing -- limited spots</div>
@@ -238,9 +239,9 @@
           <div class="pfi"><span class="pfx">&#10007;</span> <span style="color:var(--dim)">Scan analytics</span></div>
         </div>
       </div>
-      <a href="/signup.html" class="pbtn pbp">Join free — founding rates go to early members first</a>
-      <div style="margin-top:10px;font-size:11px;color:var(--muted);line-height:1.5;text-align:center">Billed monthly on the 1st. Joining mid-month? Your first charge covers the rest of this month + your first full month (2-month minimum).</div>
-      <div style="margin-top:10px;font-size:11px;color:var(--orange);line-height:1.5;text-align:center">Want in first? <a href="/signup.html" class="itap" style="color:var(--orange);text-decoration:underline">Create a free profile</a> -- PLUS &amp; APEX enrollment alerts go to members before anyone else.</div>
+      <button type="button" class="pbtn pbg tier-notify-btn" data-tier="plus" aria-controls="notify-plus" aria-expanded="false">Be among the first to know when PLUS opens</button>
+      <form class="tier-notify" id="notify-plus" data-tier="plus" novalidate hidden><label class="tn-label" for="notify-plus-email">Email</label><input type="email" id="notify-plus-email" placeholder="you@example.com" autocomplete="email" required><input type="text" name="company" class="tn-hp" tabindex="-1" autocomplete="off" aria-hidden="true"><button type="submit" class="pbtn pbp tn-submit">Notify Me</button><div class="tn-err" hidden></div><div class="tn-done" hidden>You are on the list. We will email you the day PLUS opens.</div></form>
+      <div style="margin-top:10px;font-size:11px;color:var(--muted);line-height:1.5;text-align:center">Nothing to pay today. Billing starts only when PLUS opens: monthly on the 1st, founding rate locked for early accounts.</div>
     </div>
     <div class="pc">
       <div class="pn">APEX <span class="coming-pill">COMING SOON</span></div>
@@ -260,9 +261,9 @@
           <div class="pfi"><span class="pfc">&#10003;</span> Verified Build badge</div>
         </div>
       </div>
-      <a href="/signup.html" class="pbtn pbp">Join free — founding rates go to early members first</a>
-      <div style="margin-top:10px;font-size:11px;color:var(--muted);line-height:1.5;text-align:center">Billed monthly on the 1st. Joining mid-month? Your first charge covers the rest of this month + your first full month (2-month minimum).</div>
-      <div style="margin-top:10px;font-size:11px;color:var(--orange);line-height:1.5;text-align:center">Want in first? <a href="/signup.html" class="itap" style="color:var(--orange);text-decoration:underline">Create a free profile</a> -- PLUS &amp; APEX enrollment alerts go to members before anyone else.</div>
+      <button type="button" class="pbtn pbg tier-notify-btn" data-tier="apex" aria-controls="notify-apex" aria-expanded="false">Be among the first to know when APEX opens</button>
+      <form class="tier-notify" id="notify-apex" data-tier="apex" novalidate hidden><label class="tn-label" for="notify-apex-email">Email</label><input type="email" id="notify-apex-email" placeholder="you@example.com" autocomplete="email" required><input type="text" name="company" class="tn-hp" tabindex="-1" autocomplete="off" aria-hidden="true"><button type="submit" class="pbtn pbp tn-submit">Notify Me</button><div class="tn-err" hidden></div><div class="tn-done" hidden>You are on the list. We will email you the day APEX opens.</div></form>
+      <div style="margin-top:10px;font-size:11px;color:var(--muted);line-height:1.5;text-align:center">Nothing to pay today. Billing starts only when APEX opens: monthly on the 1st, founding rate locked for early accounts.</div>
       <div style="margin-top:14px;font-size:11px;color:var(--dim);line-height:1.6;text-align:left">When APEX opens (coming soon), APEX members will earn through the BuildBio rewards program: choose <strong style="color:var(--muted)">BB Points</strong> (merch credit, no paperwork) or <strong style="color:var(--muted)">BB Bucks</strong> (cash via Stripe, W-9 required, 1099-NEC issued if earnings reach $600/year). <a href="/ambassadors.html" class="itap" style="color:var(--orange);text-decoration:none">Full details &rarr;</a></div>
     </div>
   <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:28px;position:relative;z-index:1">FREE tier is open at launch. PLUS &amp; APEX unlock ~6 months post-launch -- founder pricing honored for early sign-ups.</p>
@@ -481,6 +482,26 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
   }
 
   document.querySelectorAll('p, li, .hint, .sub, .lead, .qr-hint, .empty-state').forEach(typeset);
+})();
+</script>
+<script>
+/* PLUS / APEX notify: each card button reveals an email form; POST to /api/waitlist tagged referrer plus-notify or apex-notify. */
+(function(){
+  document.querySelectorAll('.tier-notify-btn').forEach(function(btn){btn.addEventListener('click',function(){var f=document.getElementById(btn.getAttribute('aria-controls'));if(!f)return;f.hidden=!f.hidden;btn.setAttribute('aria-expanded',String(!f.hidden));if(!f.hidden){var e=f.querySelector('input[type=email]');if(e)e.focus()}});});
+  if(/^#notify-(plus|apex)$/.test(location.hash)){var b=document.querySelector('.tier-notify-btn[aria-controls="'+location.hash.slice(1)+'"]');if(b){b.click();b.scrollIntoView({block:'center'})}}
+  document.querySelectorAll('form.tier-notify').forEach(function(form){
+    var email=form.querySelector('input[type=email]'),hp=form.querySelector('.tn-hp'),btn=form.querySelector('.tn-submit'),err=form.querySelector('.tn-err'),done=form.querySelector('.tn-done'),tier=form.getAttribute('data-tier');
+    function showErr(html){err.innerHTML=html;err.hidden=false}
+    form.addEventListener('submit',async function(e){e.preventDefault();err.hidden=true;var v=email.value.trim();
+      if(!v||!email.checkValidity()){showErr('Enter a valid email address.');email.focus();return}
+      btn.disabled=true;var label=btn.textContent;btn.textContent='Sending...';
+      try{var r=await fetch('/api/waitlist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v,company:hp.value,referrer:tier+'-notify'})});
+        if(r.status===200){email.hidden=true;btn.hidden=true;form.querySelector('.tn-label').hidden=true;done.hidden=false;return}
+        if(r.status===429){showErr('Too many sign-ups from this connection. Try again in a few minutes.')}
+        else{showErr('Something went wrong. Email <a href="mailto:founder@buildbio.app">founder@buildbio.app</a> and we will add you by hand.')}
+      }catch(x){showErr('Something went wrong. Email <a href="mailto:founder@buildbio.app">founder@buildbio.app</a> and we will add you by hand.')}
+      btn.disabled=false;btn.textContent=label;});
+  });
 })();
 </script>
 </body>
