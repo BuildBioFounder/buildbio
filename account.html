@@ -155,6 +155,7 @@
   .qr-panel .qr-side { flex:1 1 200px; min-width:0; display:flex; flex-direction:column; gap:10px; }
   .qr-panel .qr-hint { font-size:12.5px; line-height:1.5; color:var(--text-muted,#B4B2A9); }
   .qr-panel .qr-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .qr-panel .qr-soon { display:inline-flex; align-items:center; padding:6px 12px; border-radius:999px; background:var(--dark-2); border:1px solid rgba(122,140,80,.35); color:var(--olive-light); font-size:11.5px; font-weight:600; letter-spacing:.02em; line-height:1.2; cursor:default; user-select:none; }
   .qr-panel .qr-err { font-size:12.5px; color:#E85D2C; }
   .qr-panel .qr-wallet[hidden] { display:none; }
   .qr-panel img { cursor: zoom-in; }
@@ -415,7 +416,7 @@ function showMsg(text, type = 'error') {
           <a href="vehicle-profile.html?id=${encodeURIComponent(v.id)}" class="btn btn-ghost" style="font-size:12px;padding:6px 12px;">View</a>
           <a href="/vehicle/mod/new.html?vehicle=${encodeURIComponent(v.id)}" class="btn btn-primary" style="font-size:12px;padding:6px 12px;">+ Add Mod</a>
         </div>
-        <button type="button" class="btn btn-ghost qr-toggle" data-pid="${esc(v.vehicle_public_id || "")}" data-label="${esc(v.year)}-${esc(v.make)}-${esc(v.model)}" style="font-size:12px;padding:6px 12px;">QR code</button>
+        <button type="button" class="btn btn-ghost qr-toggle" data-pid="${esc(v.vehicle_public_id || "")}" data-label="${esc(v.year)}-${esc(v.make)}-${esc(v.model)}" style="font-size:12px;padding:6px 12px;">View My Build's QR Code</button>
         <div class="qr-panel" hidden></div>
         <div class="gv" data-vid="${esc(v.id)}">
           <span class="gv-lbl gv-private${v.garage_visibility === 'private' ? ' on' : ''}">Private Garage</span>
@@ -568,8 +569,8 @@ document.querySelectorAll('#btn-logout, #btn-logout-m').forEach(el => el.addEven
     var panel = btn.parentElement.querySelector('.qr-panel');
     var pid = btn.dataset.pid;
 
-    if (!panel.hidden) { panel.hidden = true; btn.textContent = 'QR code'; return; }
-    btn.textContent = 'Hide QR';
+    if (!panel.hidden) { panel.hidden = true; btn.textContent = "View My Build's QR Code"; return; }
+    btn.textContent = 'Hide QR Code';
     panel.hidden = false;
     if (panel.dataset.ready) return;
 
@@ -585,6 +586,8 @@ document.querySelectorAll('#btn-logout, #btn-logout-m').forEach(el => el.addEven
         '<div class="qr-actions">' +
           '<button type="button" class="btn btn-primary qr-dl" style="font-size:12px;padding:8px 14px;">Download PNG</button>' +
           '<a class="btn btn-ghost qr-wallet" style="font-size:12px;padding:8px 14px;" hidden target="_blank" rel="noopener">Add to Google Wallet</a>' +
+          '<span class="qr-soon">Apple Wallet: coming soon</span>' +
+          '<span class="qr-soon">QR sticker: coming soon</span>' +
         '</div>' +
         '<p class="qr-hint">Prints and scans at any size. The code never changes, even when you update your mods.</p>' +
       '</div>';
