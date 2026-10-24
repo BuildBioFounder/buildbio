@@ -109,6 +109,19 @@
 
     #username-display { color: var(--orange); }
 
+    /* DRAFT PUBLISH CARD (bb_draft_v1 from start.html) */
+    .draft-card { background: var(--dark-3); border: 1px solid var(--border); border-left: 3px solid var(--orange); border-radius: 14px; padding: 24px; margin-bottom: 32px; text-align: left; display: none; }
+    .draft-card.show { display: block; }
+    .draft-card h2 { font-family: var(--font-display); font-size: 24px; font-weight: 700; text-transform: uppercase; line-height: 1.1; margin-bottom: 12px; }
+    .draft-line { font-size: 15px; color: var(--text); margin-bottom: 4px; }
+    .draft-meta { font-size: 14px; color: var(--text-dim); margin-bottom: 20px; }
+    .draft-card .cta-btn { width: 100%; justify-content: center; }
+    .draft-card .cta-btn:disabled { opacity: .6; cursor: default; transform: none; box-shadow: none; }
+    .draft-status { font-size: 14px; color: var(--text-dim); margin-top: 14px; min-height: 1px; }
+    .draft-status.error { color: var(--orange); }
+    .draft-alt { display: none; margin-top: 12px; background: transparent; border: 1px solid var(--border); border-radius: 8px; color: var(--text-dim); font-family: var(--font-body); font-size: 15px; padding: 10px 16px; cursor: pointer; width: 100%; }
+    .draft-alt.show { display: block; }
+
     /* ── Mobile-first base (founder standard 2026-08-16) ──────────────────
        Appended last so it wins the cascade. */
     body { font-size: 16px; }
@@ -154,6 +167,16 @@
     <h1 class="welcome-heading">Welcome to<br><span>BuildBio</span>, <span id="username-display"></span></h1>
     <p class="welcome-sub">Your account is ready. Now let's add your first vehicle and start building your profile.</p>
 
+    <!-- Shown by script when this phone holds a build made on start.html -->
+    <div class="draft-card" id="draft-card" role="region" aria-label="Unsaved build">
+      <h2>Finish saving your build</h2>
+      <div class="draft-line" id="draft-vehicle"></div>
+      <div class="draft-meta" id="draft-meta"></div>
+      <button type="button" class="cta-btn" id="btn-publish">Publish My Build</button>
+      <button type="button" class="draft-alt" id="btn-publish-nophoto">Publish without the photo</button>
+      <div class="draft-status" id="draft-status" role="status" aria-live="polite"></div>
+    </div>
+
     <div class="status-card">
       <div class="status-row">
         <div class="status-icon done">&#10003;</div>
@@ -194,6 +217,7 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
 </script>
 
 <script src="/assets/js/supabase.js"></script>
+<script src="/assets/js/bb-draft.js"></script>
 <script>
 const SUPABASE_URL  = 'https://bicmwjtkncjkguumbidq.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_vt_RE80rfii-6Pb6wtPLhA_t_hyYiTE';
@@ -220,12 +244,69 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
     document.getElementById('resend-section').classList.add('show');
   }
 
-  const { data: vehicles } = await sb.from('vehicles').select('id').eq('owner_id', user.id).limit(1);
+  const { data: vehicles } = await sb.from('vehicles').select('id, year, make, model, primary_photo').eq('owner_id', user.id).limit(1);
   if (vehicles && vehicles.length > 0) {
     document.getElementById('cta').textContent = 'Go to Your Profile';
     document.getElementById('cta').href = 'account.html';
   }
+  showDraftCard(user, (vehicles && vehicles[0]) || null);
 })();
+
+// ── Unsaved build from start.html (localStorage bb_draft_v1) ──
+// No draft on this device (e.g. email confirmed on another phone) = nothing
+// shown; the page behaves exactly as before.
+function showDraftCard(user, existing) {
+  const draft = window.BBDraft && BBDraft.read();
+  if (!draft || !BBDraft.hasContent(draft)) return;
+  const v = draft.vehicle || {};
+  // A draft already mid-publish targets the vehicle it created; otherwise an
+  // account that already has its vehicle gets the mods added to that one.
+  const target = draft.publish && draft.publish.vehicleId ? null : existing;
+  const mods = BBDraft.publishableMods(draft).length;
+  const card = document.getElementById('draft-card');
+  const btn = document.getElementById('btn-publish');
+  const alt = document.getElementById('btn-publish-nophoto');
+  const status = document.getElementById('draft-status');
+
+  document.getElementById('draft-vehicle').textContent = target
+    ? 'Add to your ' + [target.year, target.make, target.model].filter(Boolean).join(' ')
+    : (BBDraft.hasVehicle(draft) ? [v.year, v.make, v.model, v.trim].filter(Boolean).join(' ') : 'Vehicle details not finished');
+  document.getElementById('draft-meta').textContent =
+    mods + (mods === 1 ? ' mod' : ' mods') + ' · ' +
+    (target && target.primary_photo ? 'your current profile photo stays' : (draft.photo ? 'profile photo included' : 'no profile photo')) +
+    (draft.photosDropped ? ' · some photos were left out' : '');
+
+  if (!target && !BBDraft.hasVehicle(draft) && !(draft.publish && draft.publish.vehicleId)) {
+    // Nothing publishable yet: send them back to finish the vehicle step.
+    btn.textContent = 'Finish Your Build';
+    btn.addEventListener('click', () => { window.location.href = '/start.html'; });
+  } else {
+    if (target) btn.textContent = 'Add My Mods';
+    const run = async (skipPhoto) => {
+      btn.disabled = true; alt.disabled = true; alt.classList.remove('show');
+      status.className = 'draft-status';
+      try {
+        const res = await BBDraft.publish(sb, user, draft, msg => { status.textContent = msg; },
+          { skipPhoto, existingVehicle: target });
+        BBDraft.clear();
+        status.textContent = 'Your build is live. Opening your profile...';
+        setTimeout(() => { window.location.href = `/vehicle-profile.html?id=${res.vehicleId}`; }, 1200);
+      } catch (e) {
+        status.className = 'draft-status error';
+        status.textContent = (e && e.message ? e.message : 'Something went wrong.') +
+          ' Your build is still saved on this phone. Tap to try again.';
+        btn.disabled = false; alt.disabled = false;
+        if (e && e.step === 'photo') alt.classList.add('show');
+      }
+    };
+    btn.addEventListener('click', () => run(false));
+    alt.addEventListener('click', () => run(true));
+  }
+
+  card.classList.add('show');
+  // The draft card is the next step, so the generic CTA steps aside.
+  document.getElementById('cta').style.display = 'none';
+}
 
 document.getElementById('btn-resend').addEventListener('click', async () => {
   const { data: { session } } = await sb.auth.getSession();

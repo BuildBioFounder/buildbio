@@ -162,6 +162,15 @@
     .save-skip{font-size:13px;color:var(--dim);margin-top:16px;cursor:pointer;transition:color .15s;background:none;border:none;font-family:'DM Sans',sans-serif}
     .save-skip:hover{color:var(--muted)}
 
+    /* DRAFT (bb_draft_v1): resume banner + phone-only note */
+    .draft-banner{background:var(--card);border:1px solid var(--border-l);border-left:3px solid var(--orange);border-radius:14px;padding:18px 20px;margin-bottom:28px}
+    .draft-banner-text{font-size:15px;color:var(--text);line-height:1.5;margin-bottom:4px}
+    .draft-banner-sub{font-size:13px;color:var(--dim);line-height:1.5;margin-bottom:14px}
+    .draft-banner .btn-row{margin-top:0}
+    .draft-note{background:var(--card);border:1px solid var(--border-l);border-left:3px solid var(--olive-light);border-radius:14px;padding:20px;margin-top:24px;max-width:480px;margin-left:auto;margin-right:auto}
+    .draft-note p{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+    .draft-note .draft-warn{font-size:13px;color:var(--dim);margin-top:-8px}
+
     /* BUTTONS */
     .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;text-decoration:none;cursor:pointer;border:none;background:var(--orange);color:#fff;transition:opacity .15s,transform .12s;width:100%}
     .btn-primary:hover{opacity:.88;transform:translateY(-2px)}
@@ -293,6 +302,16 @@
 
 <!-- STEPPER -->
 <div class="stepper">
+
+  <!-- RESUME BANNER (shown by script when a bb_draft_v1 draft exists on this phone) -->
+  <div class="draft-banner" id="draftBanner" style="display:none" role="region" aria-label="Unsaved build">
+    <div class="draft-banner-text" id="draftBannerText">You have an unsaved build.</div>
+    <div class="draft-banner-sub" id="draftBannerSub"></div>
+    <div class="btn-row">
+      <button type="button" class="btn-secondary" id="draftStartOver">Start over</button>
+      <button type="button" class="btn-primary" id="draftResume">Resume</button>
+    </div>
+  </div>
 
   <!-- STEP INDICATORS -->
   <div class="step-bar">
@@ -458,6 +477,13 @@
       </div>
     </div>
 
+    <!-- PHONE-ONLY NOTE (shown after "Continue without saving") -->
+    <div class="draft-note" id="draftNote" style="display:none" role="status">
+      <p>Your build is saved on this phone only. Create a free account any time to publish it and get your QR code.</p>
+      <p class="draft-warn" id="draftNoteWarn" style="display:none"></p>
+      <a href="/signup.html" class="btn-primary">Create Free Account</a>
+    </div>
+
     <div class="save-prompt">
       <h3>SAVE <em>YOUR BUILD.</em></h3>
       <p>Create a free account to save your profile, get your QR code, and share your build with the world.</p>
@@ -468,7 +494,7 @@
       </div>
       <button class="btn-primary" onclick="handleSave()">Save My Build</button>
       <div class="save-terms">By signing up you agree to the <a href="/terms.html" class="itap">Terms of Service</a> and <a href="/privacy.html" class="itap">Privacy Policy</a>.</div>
-      <button class="save-skip">Continue without saving</button>
+      <button type="button" class="save-skip" id="saveSkip">Continue without saving</button>
     </div>
 
     <div class="btn-row" style="justify-content:center">
@@ -502,6 +528,7 @@
   </div>
 </footer>
 
+<script src="/assets/js/bb-draft.js"></script>
 <script>
 (function(){
   // Vehicle data
@@ -596,13 +623,15 @@
     if(!files.length)return;
     var f=files[0];
     if(!f.type.startsWith('image/'))return;
-    var reader=new FileReader();
-    reader.onload=function(e){
-      profilePhoto=e.target.result;
+    // Downscaled once on pick (1600px JPEG) so the preview, the draft and the
+    // later upload all carry the same lean image.
+    BBDraft.downscaleFile(f,BBDraft.PHOTO_MAX).then(function(u){
+      profilePhoto=u;profilePhotoName=f.name||'photo.jpg';
       showThumb();
-    };
-    reader.readAsDataURL(f);
+      scheduleSave();
+    });
   }
+  var profilePhotoName=null;
 
   function showThumb(){
     document.getElementById('dropContent').style.display='none';
@@ -612,7 +641,8 @@
   }
 
   window.removePhoto=function(){
-    profilePhoto=null;
+    profilePhoto=null;profilePhotoName=null;
+    scheduleSave();
     document.getElementById('dropContent').style.display='';
     document.getElementById('thumbPreview').style.display='none';
     document.getElementById('thumbImg').src='';
@@ -716,6 +746,7 @@
       stars.forEach(function(s){s.classList.toggle('active',parseInt(s.dataset.val)<=val)});
       el.closest('.mod-stars').dataset.rating=val;
     }
+    scheduleSave();
   };
 
   // Mod photo handling
@@ -726,15 +757,21 @@
     if(!input.files.length)return;
     var f=input.files[0];
     if(!f.type.startsWith('image/'))return;
-    var reader=new FileReader();
-    reader.onload=function(e){
-      preview.innerHTML='<img src="'+e.target.result+'" alt="Mod photo"><button class="mod-photo-x" onclick="removeModPhoto(this)">&times;</button>';
-      preview.style.display='block';
-      btnLabel.style.display='none';
-    };
-    reader.readAsDataURL(f);
+    BBDraft.downscaleFile(f,BBDraft.PHOTO_MAX).then(function(u){
+      setModPhoto(entry,u);
+      scheduleSave();
+    });
     input.value='';
   };
+
+  function setModPhoto(entry,src){
+    var preview=entry.querySelector('.mod-photo-preview');
+    var btnLabel=entry.querySelector('.mod-photo-btn');
+    preview.innerHTML='<img alt="Mod photo"><button class="mod-photo-x" onclick="removeModPhoto(this)">&times;</button>';
+    preview.querySelector('img').src=src;
+    preview.style.display='block';
+    btnLabel.style.display='none';
+  }
 
   window.removeModPhoto=function(btn){
     var entry=btn.closest('.mod-entry');
@@ -743,6 +780,7 @@
     preview.innerHTML='';
     preview.style.display='none';
     btnLabel.style.display='inline-flex';
+    scheduleSave();
   };
 
   // Mod list
@@ -767,6 +805,8 @@
     starsWrap.querySelectorAll('.mod-star').forEach(function(s){s.classList.remove('active','hovered')});
     list.appendChild(entry);
     updateModCount();
+    scheduleSave();
+    return entry;
   };
 
   window.removeMod=function(btn){
@@ -774,6 +814,7 @@
     if(list.children.length<=1)return;
     btn.closest('.mod-entry').remove();
     updateModCount();
+    scheduleSave();
   };
 
   function updateModCount(){
@@ -898,8 +939,178 @@
       document.getElementById('save-email').focus();
       return;
     }
-    window.location.href='/signup.html?email='+encodeURIComponent(email)+'&username='+encodeURIComponent(user);
+    // Write the draft now (not on the debounce) and keep it: welcome.html
+    // publishes it once the account exists.
+    saveNow().then(function(){
+      window.location.href='/signup.html?email='+encodeURIComponent(email)+'&username='+encodeURIComponent(user);
+    });
   };
+
+  /* ---------- DRAFT PERSISTENCE (bb_draft_v1, assets/js/bb-draft.js) ----------
+     Every change is written to this phone's localStorage so nothing is lost
+     across signup + email confirmation. Storage failures are swallowed by
+     BBDraft; the builder works the same without it. */
+  var localOnly=false;      // set by "Continue without saving"
+  var photosDropped=false;  // sticky once the size cap has left photos out
+  var draftPending=null;    // a draft found on load, waiting for Resume / Start over
+  var saveTimer=null;
+
+  function collectDraft(){
+    var mods=[];
+    document.querySelectorAll('#modList .mod-entry').forEach(function(e){
+      var partVal=e.querySelector('.mod-part').value;
+      var part=partVal==='__other__'?e.querySelector('.mod-part-other').value.trim():partVal.trim();
+      var img=e.querySelector('.mod-photo-preview img');
+      mods.push({
+        category:e.querySelector('.mod-cat').value,
+        brand:e.querySelector('.mod-brand').value.trim(),
+        part:part,
+        notes:e.querySelector('.mod-notes').value.trim(),
+        rating:parseInt(e.querySelector('.mod-stars').dataset.rating)||0,
+        photo:img&&img.getAttribute('src')?{dataUrl:img.getAttribute('src')}:null
+      });
+    });
+    return {
+      version:1,
+      savedAt:Date.now(),
+      vehicle:{
+        year:document.getElementById('v-year').value,
+        make:document.getElementById('v-make').value,
+        model:document.getElementById('v-model').value,
+        trim:document.getElementById('v-trim').value.trim(),
+        color:document.getElementById('v-color').value.trim()
+      },
+      photo:profilePhoto?{dataUrl:profilePhoto,name:profilePhotoName||'photo.jpg'}:null,
+      mods:mods,
+      localOnly:localOnly,
+      photosDropped:photosDropped
+    };
+  }
+
+  function shrinkProfile(src,max){return BBDraft.downscaleDataUrl(src,max,BBDraft.JPEG_Q);}
+
+  function saveNow(){
+    clearTimeout(saveTimer);saveTimer=null;
+    if(draftPending)return Promise.resolve(null);   // never overwrite an unresolved draft
+    var d=collectDraft();
+    if(!BBDraft.hasContent(d)&&!localOnly){BBDraft.clear();showDropWarn(false);return Promise.resolve(null);}
+    return BBDraft.save(d,{shrinkProfile:shrinkProfile}).then(function(saved){
+      if(saved&&saved.photosDropped)photosDropped=true;
+      showDropWarn(photosDropped);
+      return saved;
+    });
+  }
+  function scheduleSave(){
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(saveNow,400);
+  }
+
+  function showDropWarn(on){
+    var w=document.getElementById('draftNoteWarn');
+    w.textContent=on?'Some photos were too large to keep on this phone and were left out. Add them again after you create your account.':'';
+    w.style.display=on?'block':'none';
+  }
+
+  // Any edit inside the builder saves. If a previous draft is still waiting
+  // for Resume / Start over, the first real edit means "new build".
+  var stepperEl=document.querySelector('.stepper');
+  function onEdit(e){
+    if(e.target.closest('#draftBanner')||e.target.closest('.save-fields'))return;
+    if(draftPending)resolveBanner(false);
+    scheduleSave();
+  }
+  stepperEl.addEventListener('change',onEdit);
+  stepperEl.addEventListener('input',onEdit);
+  window.addEventListener('pagehide',function(){if(saveTimer)saveNow();});
+
+  function showLocalNote(){
+    document.getElementById('draftNote').style.display='block';
+  }
+
+  document.getElementById('saveSkip').addEventListener('click',function(){
+    localOnly=true;
+    saveNow();
+    showLocalNote();
+    document.getElementById('draftNote').scrollIntoView({behavior:'smooth',block:'center'});
+  });
+
+  function setSelect(sel,val){
+    if(!val)return false;
+    for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===String(val)){sel.selectedIndex=i;return true;}}
+    return false;
+  }
+
+  function restoreDraft(d){
+    var v=d.vehicle||{};
+    setSelect(document.getElementById('v-year'),v.year);
+    if(setSelect(document.getElementById('v-make'),v.make)){
+      filterModels();
+      setSelect(document.getElementById('v-model'),v.model);
+    }
+    document.getElementById('v-trim').value=v.trim||'';
+    document.getElementById('v-color').value=v.color||'';
+
+    if(d.photo&&d.photo.dataUrl){profilePhoto=d.photo.dataUrl;profilePhotoName=d.photo.name||'photo.jpg';showThumb();}
+
+    var list=document.getElementById('modList');
+    var mods=(d.mods&&d.mods.length)?d.mods:[{}];
+    while(list.children.length<mods.length)addMod();
+    var entries=list.querySelectorAll('.mod-entry');
+    mods.forEach(function(m,i){
+      var e=entries[i];
+      var cat=e.querySelector('.mod-cat');
+      if(setSelect(cat,m.category)){
+        filterParts(cat);
+        if(m.part){
+          var ps=e.querySelector('.mod-part');
+          if(!setSelect(ps,m.part)){
+            setSelect(ps,'__other__');
+            var po=e.querySelector('.mod-part-other');
+            po.style.display='block';po.value=m.part;
+          }
+        }
+      }
+      e.querySelector('.mod-brand').value=m.brand||'';
+      e.querySelector('.mod-notes').value=m.notes||'';
+      var r=parseInt(m.rating)||0;
+      var sw=e.querySelector('.mod-stars');
+      sw.dataset.rating=String(r);
+      sw.querySelectorAll('.mod-star').forEach(function(s){s.classList.toggle('active',parseInt(s.dataset.val)<=r);});
+      if(m.photo&&m.photo.dataUrl)setModPhoto(e,m.photo.dataUrl);
+    });
+    updateModCount();
+    localOnly=!!d.localOnly;
+    if(localOnly)showLocalNote();
+    photosDropped=!!d.photosDropped;
+    showDropWarn(photosDropped);
+  }
+
+  function resolveBanner(resume){
+    var d=draftPending;draftPending=null;
+    document.getElementById('draftBanner').style.display='none';
+    if(resume&&d){
+      restoreDraft(d);
+      goStep(4);
+      saveNow();
+    }else{
+      photosDropped=false;
+      BBDraft.clear();
+    }
+  }
+  document.getElementById('draftResume').addEventListener('click',function(){resolveBanner(true);});
+  document.getElementById('draftStartOver').addEventListener('click',function(){resolveBanner(false);});
+
+  (function initDraft(){
+    var d=BBDraft.read();
+    if(!d||!BBDraft.hasContent(d))return;
+    draftPending=d;
+    var v=d.vehicle||{};
+    var label=(v.year&&v.make&&v.model)?(v.year+' '+v.make+' '+v.model):'build';
+    document.getElementById('draftBannerText').textContent='You have an unsaved build from '+BBDraft.relativeTime(d.savedAt)+'.';
+    var n=BBDraft.publishableMods(d).length;
+    document.getElementById('draftBannerSub').textContent=label.charAt(0).toUpperCase()+label.slice(1)+' · '+n+' mod'+(n===1?'':'s')+(d.photo?' · photo':'')+(d.photosDropped?' · some photos left out':'');
+    document.getElementById('draftBanner').style.display='block';
+  })();
 
 })();
 
