@@ -22,7 +22,9 @@ jobs:
       - name: Forbid leaked keys in frontend source
         run: |
           echo "Scanning .html/.js for secrets that must never ship to the browser..."
-          if grep -rIn --include='*.html' --include='*.js' \
+          # assets/js/supabase.js is the vendored supabase-js UMD (public client, publishable key only); it contains the
+          # JWT header prefix as library code and has tripped this scan on every main build since 2026-10-15 (89e67ac).
+          if grep -rIn --include='*.html' --include='*.js' --exclude='supabase.js' \
                -e 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' \
                -e 'sb_secret_' \
                -e 'BEGIN .*PRIVATE KEY' .; then
