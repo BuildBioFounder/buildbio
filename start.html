@@ -202,10 +202,11 @@
       .field-row{grid-template-columns:1fr}
       .mod-row{grid-template-columns:1fr}
       .mod-row-3{grid-template-columns:1fr 1fr;gap:10px}
-      .mod-row-3 .mod-remove{justify-self:end}
+      .mod-row-3 .mod-remove{grid-column:2;justify-self:end}
+      .mod-photo-btn{min-height:44px;padding:12px 16px}
       .mod-remove{width:44px;height:44px;font-size:18px}
       .mod-star{width:44px;height:44px}.mod-star svg{width:26px;height:26px}
-      .mod-photo-x{width:32px;height:32px;font-size:14px;top:2px;right:2px}
+      .mod-photo-x{width:44px;height:44px;font-size:14px;top:2px;right:2px}
       .add-mod{padding:14px 22px;font-size:14px;width:100%;justify-content:center}
       .photo-remove{width:36px;height:36px;font-size:16px}
       .photo-grid{grid-template-columns:repeat(3,1fr);gap:8px}
@@ -313,20 +314,20 @@
       <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:0">One snap of the camera and anyone has instant access to your full build -- every part, every brand, easy to read, easy to research, easy to buy. <span style="color:var(--orange)">No more dead ends. No more DMs.</span> Just your build, documented.</p>
     </div>
     <div class="field">
-      <label class="field-label">Year</label>
+      <label class="field-label" for="v-year">Year</label>
       <select id="v-year">
         <option value="">Select year</option>
       </select>
     </div>
     <div class="field-row">
       <div class="field">
-        <label class="field-label">Make</label>
+        <label class="field-label" for="v-make">Make</label>
         <select id="v-make" onchange="filterModels()">
           <option value="">Select make</option>
         </select>
       </div>
       <div class="field">
-        <label class="field-label">Model</label>
+        <label class="field-label" for="v-model">Model</label>
         <select id="v-model" disabled>
           <option value="">Select make first</option>
         </select>
@@ -334,12 +335,12 @@
     </div>
     <div class="field-row">
       <div class="field">
-        <label class="field-label">Trim <span style="color:var(--dim);font-weight:400;text-transform:none;letter-spacing:0;font-family:'DM Sans',sans-serif">(optional)</span></label>
-        <input type="text" id="v-trim" placeholder="TRD Pro, Raptor, Type R...">
+        <label class="field-label" for="v-trim">Trim <span style="color:var(--dim);font-weight:400;text-transform:none;letter-spacing:0;font-family:'DM Sans',sans-serif">(optional)</span></label>
+        <input type="text" id="v-trim" autocomplete="off" placeholder="TRD Pro, Raptor, Type R...">
       </div>
       <div class="field">
-        <label class="field-label">Color</label>
-        <input type="text" id="v-color" placeholder="Cement Gray, Cavalry Blue...">
+        <label class="field-label" for="v-color">Color</label>
+        <input type="text" id="v-color" autocomplete="off" placeholder="Cement Gray, Cavalry Blue...">
       </div>
     </div>
     <div class="btn-row">
@@ -404,17 +405,17 @@
             <select class="mod-part" onchange="handlePartSelect(this)" disabled>
               <option value="">Select category first</option>
             </select>
-            <input type="text" class="mod-part-other" placeholder="Describe your part..." style="display:none;margin-top:8px">
+            <input type="text" class="mod-part-other" autocomplete="off" placeholder="Describe your part..." style="display:none;margin-top:8px">
           </div>
         </div>
         <div class="mod-row-3">
           <div>
             <div class="mod-mini-label">Brand</div>
-            <input type="text" class="mod-brand" placeholder="Optional">
+            <input type="text" class="mod-brand" autocomplete="off" placeholder="Optional">
           </div>
           <div>
             <div class="mod-mini-label">Notes</div>
-            <input type="text" class="mod-notes" placeholder="Optional">
+            <input type="text" class="mod-notes" autocomplete="off" placeholder="Optional">
           </div>
           <button class="mod-remove" onclick="removeMod(this)" title="Remove">&times;</button>
         </div>
@@ -464,7 +465,7 @@
         <input type="text" placeholder="Username" id="save-user" autocomplete="username">
       </div>
       <button class="btn-primary" onclick="handleSave()">Save My Build</button>
-      <div class="save-terms">By signing up you agree to the <a href="/terms.html">Terms of Service</a> and <a href="/privacy.html">Privacy Policy</a>.</div>
+      <div class="save-terms">By signing up you agree to the <a href="/terms.html" class="itap">Terms of Service</a> and <a href="/privacy.html" class="itap">Privacy Policy</a>.</div>
       <button class="save-skip">Continue without saving</button>
     </div>
 
