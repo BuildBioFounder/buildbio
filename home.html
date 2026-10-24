@@ -243,15 +243,7 @@
     }
 
     /* HERO SEARCH (2026-10-24) — mobile-first: stacked at 360, one row from 480 up */
-    .hsearch{width:100%;max-width:520px;margin:-28px auto 44px;text-align:left}
-    .hsearch-lbl{display:block;font-size:12px;color:rgba(255,255,255,.6);margin-bottom:6px;letter-spacing:.02em}
-    .hsearch-row{display:flex;flex-direction:column;gap:8px}
-    .hsearch-in{width:100%;min-width:0;min-height:44px;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.22);background:rgba(13,13,13,.72);color:#fff;font-family:'DM Sans',sans-serif;font-size:16px;outline:none;transition:border-color .2s}
-    .hsearch-in::placeholder{color:rgba(255,255,255,.45)}
-    .hsearch-in:focus{border-color:var(--orange)}
-    .hsearch-btn{min-height:44px;padding:10px 22px;border-radius:10px;border:1.5px solid var(--orange);background:rgba(13,13,13,.55);color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:opacity .15s}
-    .hsearch-btn:hover{background:rgba(232,93,44,.18)}
-    @media(min-width:480px){.hsearch-row{flex-direction:row}.hsearch-btn{flex:0 0 auto}}
+    /* hero search box removed 2026-10-24 (founder: no search offer until there are profiles) */
 
     /* Inline prose links: 44px tap height (mobile audit 2026-09-15) */
     .itap{display:inline-block;padding:13px 0;line-height:18px}
@@ -315,14 +307,6 @@
       <a href="/start.html" class="btnl bol">Start your build, no account needed</a>
     </div>
     <div class="hero-free-note fu d3">$0 — Free to get started. No credit card required.</div>
-    <!-- Hero search (founder instruction 2026-10-24): ?q= by default, ?who= when the text starts with @ -->
-    <form class="hsearch fu d3" id="heroSearch" action="/search.html" method="get" role="search">
-      <label class="hsearch-lbl" for="heroSearchInput">Find a build</label>
-      <div class="hsearch-row">
-        <input class="hsearch-in" type="search" id="heroSearchInput" name="q" placeholder="Year, make, model, part, or @handle" autocomplete="off" autocapitalize="none" maxlength="120" enterkeyhint="search">
-        <button class="hsearch-btn" type="submit">Search</button>
-      </div>
-    </form>
     <div class="hstats fu d4">
       <div class="hstat"><div class="hsn">Free</div><div class="hsl">To get started</div></div>
       <div class="hstat"><div class="hsn">2 min</div><div class="hsl">To create a profile</div></div>
@@ -607,22 +591,6 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
 
   document.querySelectorAll('p, li, .hint, .sub, .lead, .qr-hint, .empty-state').forEach(typeset);
 })();
-</script>
-<script>
-  /* Hero search: text starting with @ goes to ?who= (person lookup), everything else to ?q= */
-  (function () {
-    var f = document.getElementById('heroSearch'), i = document.getElementById('heroSearchInput');
-    if (!f || !i) return;
-    f.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var t = i.value.trim();
-      if (!t) { i.focus(); return; }
-      var isWho = t.charAt(0) === '@';
-      var v = isWho ? t.replace(/^@+/, '') : t;
-      if (!v) { i.focus(); return; }
-      window.location.href = '/search.html?' + (isWho ? 'who=' : 'q=') + encodeURIComponent(v);
-    });
-  })();
 </script>
 </body>
 </html>
