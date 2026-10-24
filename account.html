@@ -138,6 +138,17 @@
     .gv-switch[disabled] { opacity: 0.5; cursor: wait; }
     .gv-hint { font-size: 11px; color: var(--text-muted, #B4B2A9); flex-basis: 100%; line-height: 1.4; }
 
+    /* Build discipline select (founder 2026-10-24): primary row in vehicle_disciplines. */
+    .vd { display: flex; align-items: center; gap: 10px; flex-basis: 100%; flex-wrap: wrap; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+    .vd-lbl { font-size: 12px; color: var(--text-dim); }
+    .vd-select { flex: 1 1 180px; min-width: 0; max-width: 280px; height: 44px; min-height: 44px; padding: 0 12px; background: var(--dark-3); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: var(--font-body); font-size: 16px; }
+    .vd-select:focus { outline: none; border-color: var(--orange); }
+    .vd-select:disabled { opacity: 0.6; cursor: wait; }
+    .vd-msg { font-size: 12px; flex-basis: 100%; line-height: 1.4; }
+    .vd-msg:empty { display: none; }
+    .vd-msg.ok { color: #a8c070; }
+    .vd-msg.err { color: #f07070; }
+
     .msg { padding: 12px 14px; border-radius: 8px; font-size: 13px; line-height: 1.5; margin-bottom: 16px; display: none; }
     .msg.error { background: rgba(224,85,85,0.12); border: 1px solid rgba(224,85,85,0.3); color: #f07070; }
     .msg.success { background: rgba(92,107,58,0.2); border: 1px solid rgba(92,107,58,0.4); color: #a8c070; }
@@ -407,6 +418,42 @@ function showMsg(text, type = 'error') {
   const { data: vehicles } = await sb.from('vehicles').select('id, year, make, model, trim, nickname, slug, vehicle_public_id, garage_visibility').eq('owner_id', currentUser.id).order('created_at', { ascending: false });
   const list = document.getElementById('vehicle-list');
 
+  // Build discipline: the 10 public disciplines + each vehicle's current primary.
+  const vids = (vehicles || []).map(v => v.id);
+  const [{ data: discs }, { data: vdRows }] = await Promise.all([
+    sb.from('disciplines').select('id, name').order('sort_order'),
+    vids.length ? sb.from('vehicle_disciplines').select('vehicle_id, discipline_id').in('vehicle_id', vids).eq('is_primary', true) : Promise.resolve({ data: [] })
+  ]);
+  const primaryDisc = {};
+  (vdRows || []).forEach(r => { primaryDisc[r.vehicle_id] = r.discipline_id; });
+  const discOptions = cur => '<option value="">Not set</option>' + (discs || []).map(d =>
+    '<option value="' + esc(d.id) + '"' + (d.id === cur ? ' selected' : '') + '>' + esc(d.name) + '</option>').join('');
+  // Change = replace the primary: delete this vehicle's primary row (and any
+  // secondary row for the chosen discipline, which would collide on the
+  // primary key), then insert the new one. "Not set" only deletes.
+  list.addEventListener('change', async e => {
+    const sel = e.target.closest('.vd-select'); if (!sel) return;
+    const wrap = sel.closest('.vd'); const vid = wrap.dataset.vid; const msg = wrap.querySelector('.vd-msg');
+    const next = sel.value; const prev = primaryDisc[vid] || '';
+    sel.disabled = true; msg.className = 'vd-msg'; msg.textContent = 'Saving...';
+    let q = sb.from('vehicle_disciplines').delete().eq('vehicle_id', vid);
+    q = next ? q.or('is_primary.eq.true,discipline_id.eq.' + next) : q.eq('is_primary', true);
+    let { error } = await q;
+    if (!error && next) ({ error } = await sb.from('vehicle_disciplines').insert({ vehicle_id: vid, discipline_id: next, is_primary: true }));
+    sel.disabled = false;
+    if (error) {
+      console.error('build discipline save failed:', error);
+      // The delete may have landed before the insert failed: re-read the truth.
+      const { data: now } = await sb.from('vehicle_disciplines').select('discipline_id').eq('vehicle_id', vid).eq('is_primary', true).limit(1);
+      primaryDisc[vid] = (now && now[0] && now[0].discipline_id) || '';
+      sel.value = primaryDisc[vid];
+      msg.className = 'vd-msg err'; msg.textContent = 'Could not save the build discipline. Please try again.';
+      return;
+    }
+    primaryDisc[vid] = next;
+    msg.className = 'vd-msg ok'; msg.textContent = next ? 'Build discipline saved.' : 'Build discipline cleared.';
+  });
+
   // Tier cap: FREE/PLUS = 1, APEX = 3 (mirrors vehicle_cap_for() in the DB,
   // which is what actually enforces it inside create_vehicle).
   const cap = ((p.membership_tier || 'free').toLowerCase() === 'apex') ? 3 : 1;
@@ -455,6 +502,11 @@ function showMsg(text, type = 'error') {
         </div>
         <button type="button" class="btn btn-ghost qr-toggle" data-pid="${esc(v.vehicle_public_id || "")}" data-label="${esc(v.year)}-${esc(v.make)}-${esc(v.model)}" style="font-size:12px;padding:6px 12px;">View My Build's QR Code</button>
         <div class="qr-panel" hidden></div>
+        <div class="vd" data-vid="${esc(v.id)}">
+          <label class="vd-lbl" for="vd-${esc(v.id)}">Build discipline</label>
+          <select class="vd-select" id="vd-${esc(v.id)}">${discOptions(primaryDisc[v.id] || '')}</select>
+          <span class="vd-msg" role="status" aria-live="polite"></span>
+        </div>
         <div class="gv" data-vid="${esc(v.id)}">
           <span class="gv-lbl gv-private${v.garage_visibility === 'private' ? ' on' : ''}">Private Garage</span>
           <button type="button" class="gv-switch" role="switch" aria-checked="${v.garage_visibility === 'private' ? 'false' : 'true'}" aria-label="Garage visibility: left is Private Garage, right is Public Garage"></button>
