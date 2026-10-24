@@ -293,7 +293,7 @@
     <form id="form-pw">
       <div class="field">
         <label for="f-pw">New Password</label>
-        <input type="password" id="f-pw" placeholder="Min. 8 characters" autocomplete="new-password">
+        <input type="password" id="f-pw" placeholder="Min. 10 characters: upper, lower, number, symbol" autocomplete="new-password">
       </div>
       <div class="field">
         <label for="f-pw2">Confirm Password</label>
@@ -459,7 +459,8 @@ document.getElementById('form-pw').addEventListener('submit', async e => {
   e.preventDefault();
   const pw = document.getElementById('f-pw').value;
   const pw2 = document.getElementById('f-pw2').value;
-  if (!pw || pw.length < 8) return showMsg('Password must be at least 8 characters.');
+  // Same policy as signup (ledger 1317): 10+ with upper, lower, number and symbol.
+  if (!pw || pw.length < 10 || !/[a-z]/.test(pw) || !/[A-Z]/.test(pw) || !/[0-9]/.test(pw) || !/[^A-Za-z0-9]/.test(pw)) return showMsg('Password must be at least 10 characters and include an uppercase letter, a lowercase letter, a number and a symbol.');
   if (pw !== pw2) return showMsg('Passwords do not match.');
 
   const btn = document.getElementById('btn-pw');
