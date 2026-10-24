@@ -305,7 +305,8 @@ function initials(first, last, username) {
   const title = `${v.year} ${v.make} ${v.model}${v.trim ? ' ' + v.trim : ''}`;
   document.getElementById('page-title').textContent = title + ' — BuildBio';
 
-  const ownerName = owner ? ((owner.first_name || '') + ' ' + (owner.last_name ? owner.last_name[0] + '.' : '')).trim() : 'Owner';
+  // Fresh signups have no first or last name yet; fall back to the username so the hero never reads a bare "by" (live E2E 2026-10-24).
+  const ownerName = (owner ? ((owner.first_name || '') + ' ' + (owner.last_name ? owner.last_name[0] + '.' : '')).trim() : '') || (owner && owner.username) || 'Owner';
   const location = [owner?.location_city, owner?.location_state].filter(Boolean).join(', ');
   const ini = owner ? initials(owner.first_name, owner.last_name, owner.username) : 'BB';
 
