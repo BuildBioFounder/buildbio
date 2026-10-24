@@ -2,6 +2,9 @@
   "rewrites": [
     { "source": "/v/:pid", "destination": "/api/v/:pid" }
   ],
+  "redirects": [
+    { "source": "/go/:code", "destination": "https://bicmwjtkncjkguumbidq.supabase.co/functions/v1/go/:code", "permanent": false }
+  ],
   "headers": [
     {
       "source": "/(.*)",
