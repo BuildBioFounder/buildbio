@@ -96,6 +96,9 @@
     .snum{width:28px;height:28px;border-radius:50%;background:rgba(232,93,44,.12);border:1px solid rgba(232,93,44,.3);color:var(--orange);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
     .stxt{font-size:14px;color:var(--muted);line-height:1.6}.stxt strong{color:var(--text);font-weight:500}
     .qdw{display:flex;flex-direction:column;align-items:center;gap:20px}
+    .qwalk{margin:0;width:100%;max-width:560px;justify-self:center}
+    .qwalk img{width:100%;height:auto;display:block;border-radius:14px;border:1px solid var(--border-l);background:var(--card)}
+    .qwalk figcaption{margin-top:10px;font-size:13px;color:var(--muted);text-align:center}
     .qsticker{position:relative;width:200px;height:200px;background:var(--card);border-radius:14px;border:1px solid var(--border-l);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:18px;overflow:hidden}
     .qsticker::before{content:'';position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--orange),transparent);animation:scanline 3s ease-in-out infinite;opacity:.5}
     .qbrand{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700}.qbrand .q1{color:var(--orange)}.qbrand .q2{color:var(--olive-light)}
@@ -341,27 +344,10 @@
         <div class="sstep"><div class="snum">3</div><div class="stxt"><strong>Anyone scans it</strong> — full build profile opens instantly on their phone. No app needed.</div></div>
       </div>
     </div>
-    <div class="qdw">
-      <div class="qsticker">
-        <div class="qbrand"><span class="q1">BUILD</span><span class="q2">BIO</span></div>
-        <div class="qr">
-          <img src="/assets/qr/qr-demo-master-v8.webp" alt="BuildBio QR code — scan to view the build" style="width:100%;height:100%;display:block;"/>
-        </div>
-        <div class="qlbl">Scan for full build specs</div>
-      </div>
-      <div class="qarrow">↓</div>
-      <div class="pmock">
-        <div class="pscreen">
-          <div class="pnav"><div class="plogo"><span class="p1">BUILD</span><span class="p2">BIO</span></div></div>
-          <div class="pcont">
-            <div class="pimg">Vehicle photo</div>
-            <div class="pvname">2019 Toyota 4Runner TRD Pro</div>
-            <div class="pmod"><div class="pcat">Suspension</div><div class="pname">Fox 2.5 Coilovers</div></div>
-            <div class="pmod"><div class="pcat">Lighting</div><div class="pname">Baja Designs LP6 Pro</div></div>
-            <div class="pmod"><div class="pcat">Wheels &amp; Tires</div><div class="pname">Nitto Ridge Grappler</div></div>
-          </div>
-        </div>
-      </div>
+    <figure class="qwalk">
+      <img src="/images/bg/web/how-it-works-walkthrough.jpg" srcset="/images/bg/web/how-it-works-walkthrough-800.jpg 800w, /images/bg/web/how-it-works-walkthrough.jpg 1408w" sizes="(max-width: 900px) 100vw, 560px" width="1408" height="1056" loading="lazy" decoding="async" alt="Four panels: a hiker spots the BuildBio sticker on an orange 4Runner at a trailhead; scans it with the phone camera, which previews buildbio.app; lands on the BuildBio page and taps View Vehicle Profile; sees the 2021 Toyota 4Runner TRD Pro profile with its featured mods.">
+      <figcaption>See it. Scan it. See every mod. No app, no account needed to look.</figcaption>
+    </figure>
     </div>
   </div>
 </section>
