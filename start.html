@@ -20,7 +20,7 @@
   <meta property="og:title" content="Start Your Build — BuildBio">
   <meta property="og:description" content="Start building your vehicle profile on BuildBio. Upload photos, list your mods, and share your build with the world.">
   <meta property="og:url" content="https://buildbio.app/start.html">
-  <meta property="og:image" content="https://buildbio.app/assets/hero-street.jpg">
+  <meta property="og:image" content="https://buildbio.app/images/bg/web/overland-camp-fire.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
@@ -202,10 +202,11 @@
       .field-row{grid-template-columns:1fr}
       .mod-row{grid-template-columns:1fr}
       .mod-row-3{grid-template-columns:1fr 1fr;gap:10px}
-      .mod-row-3 .mod-remove{justify-self:end}
+      .mod-row-3 .mod-remove{grid-column:2;justify-self:end}
+      .mod-photo-btn{min-height:44px;padding:12px 16px}
       .mod-remove{width:44px;height:44px;font-size:18px}
       .mod-star{width:44px;height:44px}.mod-star svg{width:26px;height:26px}
-      .mod-photo-x{width:32px;height:32px;font-size:14px;top:2px;right:2px}
+      .mod-photo-x{width:44px;height:44px;font-size:14px;top:2px;right:2px}
       .add-mod{padding:14px 22px;font-size:14px;width:100%;justify-content:center}
       .photo-remove{width:36px;height:36px;font-size:16px}
       .photo-grid{grid-template-columns:repeat(3,1fr);gap:8px}
@@ -258,6 +259,7 @@
     <a href="/how-it-works.html" class="nl">How it works</a>
     <a href="/home.html#features" class="nl">Features</a>
     <a href="/pricing.html" class="nl">Pricing</a>
+    <a href="/shop.html#merch" class="nl">Merch</a>
     <a href="/login.html" class="nl">Log in</a>
     <a href="/signup.html" class="ncta">Create Your Free Profile</a>
     <button type="button" class="ham" aria-label="Menu" aria-expanded="false" onclick="toggleMenu()"><span></span><span></span><span></span></button>
@@ -267,6 +269,7 @@
   <a href="/how-it-works.html">How It Works</a>
   <a href="/home.html#features">Features</a>
   <a href="/pricing.html">Pricing</a>
+  <a href="/shop.html#merch">Merch</a>
   <a href="/login.html">Log In</a>
   <a href="/signup.html" class="mob-cta">Create Your Free Profile</a>
 </div>
@@ -274,10 +277,10 @@
 <!-- HERO -->
 <section class="start-hero">
   <div class="start-hero-bg">
-    <div class="start-hero-slide active" style="background-image:url('images/bg/tacoma-desert.png')"></div>
-    <div class="start-hero-slide" style="background-image:url('images/bg/street-scene.png')"></div>
-    <div class="start-hero-slide" style="background-image:url('images/bg/bronco-mud-trail.png')"></div>
-    <div class="start-hero-slide" style="background-image:url('images/bg/cars-coffee-sunset.png')"></div>
+    <div class="start-hero-slide active" style="background-image:url('/images/bg/web/tacoma-desert.jpg')"></div>
+    <div class="start-hero-slide" style="background-image:url('/images/bg/web/overland-camp-ridge.jpg')"></div>
+    <div class="start-hero-slide" style="background-image:url('/images/bg/web/bronco-mud-trail.jpg')"></div>
+    <div class="start-hero-slide" style="background-image:url('/images/bg/web/cars-coffee-sunset.jpg')"></div>
   </div>
   <div class="start-hero-overlay"></div>
   <div class="start-hero-inner">
@@ -313,20 +316,20 @@
       <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:0">One snap of the camera and anyone has instant access to your full build -- every part, every brand, easy to read, easy to research, easy to buy. <span style="color:var(--orange)">No more dead ends. No more DMs.</span> Just your build, documented.</p>
     </div>
     <div class="field">
-      <label class="field-label">Year</label>
+      <label class="field-label" for="v-year">Year</label>
       <select id="v-year">
         <option value="">Select year</option>
       </select>
     </div>
     <div class="field-row">
       <div class="field">
-        <label class="field-label">Make</label>
+        <label class="field-label" for="v-make">Make</label>
         <select id="v-make" onchange="filterModels()">
           <option value="">Select make</option>
         </select>
       </div>
       <div class="field">
-        <label class="field-label">Model</label>
+        <label class="field-label" for="v-model">Model</label>
         <select id="v-model" disabled>
           <option value="">Select make first</option>
         </select>
@@ -334,12 +337,12 @@
     </div>
     <div class="field-row">
       <div class="field">
-        <label class="field-label">Trim <span style="color:var(--dim);font-weight:400;text-transform:none;letter-spacing:0;font-family:'DM Sans',sans-serif">(optional)</span></label>
-        <input type="text" id="v-trim" placeholder="TRD Pro, Raptor, Type R...">
+        <label class="field-label" for="v-trim">Trim <span style="color:var(--dim);font-weight:400;text-transform:none;letter-spacing:0;font-family:'DM Sans',sans-serif">(optional)</span></label>
+        <input type="text" id="v-trim" autocomplete="off" placeholder="TRD Pro, Raptor, Type R...">
       </div>
       <div class="field">
-        <label class="field-label">Color</label>
-        <input type="text" id="v-color" placeholder="Cement Gray, Cavalry Blue...">
+        <label class="field-label" for="v-color">Color</label>
+        <input type="text" id="v-color" autocomplete="off" placeholder="Cement Gray, Cavalry Blue...">
       </div>
     </div>
     <div class="btn-row">
@@ -358,7 +361,7 @@
       <div id="dropContent">
         <div class="drop-icon">+</div>
         <div class="drop-text">Drop your photo here or tap to browse</div>
-        <div class="drop-hint">JPG, PNG, or HEIC. One photo.</div>
+        <div class="drop-hint">JPG or PNG. One photo.</div>
       </div>
       <div id="thumbPreview" style="display:none">
         <img id="thumbImg" style="max-width:100%;max-height:320px;border-radius:10px;display:block;margin:0 auto" alt="Profile photo">
@@ -404,17 +407,17 @@
             <select class="mod-part" onchange="handlePartSelect(this)" disabled>
               <option value="">Select category first</option>
             </select>
-            <input type="text" class="mod-part-other" placeholder="Describe your part..." style="display:none;margin-top:8px">
+            <input type="text" class="mod-part-other" autocomplete="off" placeholder="Describe your part..." style="display:none;margin-top:8px">
           </div>
         </div>
         <div class="mod-row-3">
           <div>
             <div class="mod-mini-label">Brand</div>
-            <input type="text" class="mod-brand" placeholder="Optional">
+            <input type="text" class="mod-brand" autocomplete="off" placeholder="Optional">
           </div>
           <div>
             <div class="mod-mini-label">Notes</div>
-            <input type="text" class="mod-notes" placeholder="Optional">
+            <input type="text" class="mod-notes" autocomplete="off" placeholder="Optional">
           </div>
           <button class="mod-remove" onclick="removeMod(this)" title="Remove">&times;</button>
         </div>
@@ -464,7 +467,7 @@
         <input type="text" placeholder="Username" id="save-user" autocomplete="username">
       </div>
       <button class="btn-primary" onclick="handleSave()">Save My Build</button>
-      <div class="save-terms">By signing up you agree to the <a href="/terms.html">Terms of Service</a> and <a href="/privacy.html">Privacy Policy</a>.</div>
+      <div class="save-terms">By signing up you agree to the <a href="/terms.html" class="itap">Terms of Service</a> and <a href="/privacy.html" class="itap">Privacy Policy</a>.</div>
       <button class="save-skip">Continue without saving</button>
     </div>
 
@@ -490,7 +493,7 @@
       <a href="/shop.html" class="flink">Shop</a>
       <a href="/community.html" class="flink">Community</a>
       <a href="/mission.html" class="flink">Mission</a>
-      <a href="/vehicle-profile.html" class="flink">Sample profile</a>
+      <a href="https://buildbio.app/v/457f9622" class="flink">Sample profile</a>
       <a href="/privacy.html" class="flink">Privacy</a>
       <a href="/terms.html" class="flink">Terms</a>
       <a href="/affiliate-disclosure.html" class="flink">Affiliate Disclosure</a>

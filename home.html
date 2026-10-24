@@ -18,11 +18,11 @@
   <meta property="og:site_name" content="BuildBio">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://buildbio.app/home.html">
-  <meta property="og:image" content="https://buildbio.app/assets/hero-street.jpg">
+  <meta property="og:image" content="https://buildbio.app/images/bg/web/overland-camp-fire.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="BuildBio — Your Aftermarket Blueprint">
   <meta name="twitter:description" content="The social platform for modified vehicles. Create your build profile, share via QR, earn from affiliate links.">
-  <meta name="twitter:image" content="https://buildbio.app/assets/hero-street.jpg">
+  <meta name="twitter:image" content="https://buildbio.app/images/bg/web/overland-camp-fire.jpg">
   <title>BuildBio — Your Aftermarket Blueprint</title>
   <link rel="canonical" href="https://buildbio.app/home.html">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
@@ -52,7 +52,7 @@
 
     /* HERO */
     .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:120px 28px 80px}
-    .hero-img{position:absolute;inset:0;background-image:url('https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/hero-bg.jpg');background-size:cover;background-position:center 40%;background-repeat:no-repeat}
+    .hero-img{position:absolute;inset:0;background-image:url('/images/bg/web/cars-coffee-sunset.jpg');background-size:cover;background-position:center 40%;background-repeat:no-repeat}
     .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.72) 0%,rgba(0,0,0,.60) 40%,rgba(0,0,0,.85) 100%)}
     .hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 100% 80% at 50% 50%,black 20%,transparent 80%)}
     .hc{position:relative;z-index:2;max-width:840px}
@@ -66,6 +66,8 @@
     .btnl{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;text-decoration:none;cursor:pointer;border:none;transition:opacity .15s,transform .12s}.btnl:hover{opacity:.88;transform:translateY(-2px)}
     .bpl{background:var(--orange);color:#fff}.bgl{background:rgba(255,255,255,.1);backdrop-filter:blur(8px);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2)}.bgl:hover{background:rgba(255,255,255,.18);color:#fff}
     /* Free label under primary CTA */
+    .hbtn2{display:flex;justify-content:center;margin:-8px 0 20px}
+    .bol{background:transparent;color:#fff;border:1.5px solid var(--orange);min-height:44px;justify-content:center}.bol:hover{background:rgba(232,93,44,.12)}
     .hero-free-note{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:48px;letter-spacing:.02em}
     .hstats{display:flex;gap:40px;justify-content:center;flex-wrap:wrap}
     .hstat{text-align:center}
@@ -114,7 +116,7 @@
 
     /* HOW */
     .how{padding:96px 28px;background:var(--black);position:relative;overflow:hidden}
-    .how::before{content:'';position:absolute;inset:0;background-image:url('https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/how-bg.jpg');background-size:cover;background-position:center;opacity:0.28;z-index:0}
+    .how::before{content:'';position:absolute;inset:0;background-image:url('/images/bg/web/bronco-mud-trail.jpg');background-size:cover;background-position:center;opacity:0.28;z-index:0}
     .how .sec-eye,.how .sec-h2,.how .how-g{position:relative;z-index:1}
     .sec-eye{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--olive-light);margin-bottom:14px;text-align:center}
     .sec-h2{font-family:'Barlow Condensed',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:700;text-transform:uppercase;line-height:1.05;text-align:center;margin-bottom:52px}
@@ -127,7 +129,7 @@
 
     /* PREVIEW */
     .prev{padding:96px 28px;background:var(--dark);border-top:1px solid var(--border);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
-    .prev::before{content:'';position:absolute;inset:0;background-image:url('https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/profile-bg.jpg');background-size:cover;background-position:center 30%;opacity:0.12;z-index:0}
+    .prev::before{content:'';position:absolute;inset:0;background-image:url('/images/bg/web/profile-bg.jpg');background-size:cover;background-position:center 30%;opacity:0.12;z-index:0}
     .prev-in{position:relative;z-index:1}
     .prev-in{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:center}
     .prev-h2{font-family:'Barlow Condensed',sans-serif;font-size:clamp(32px,4.5vw,50px);font-weight:700;text-transform:uppercase;line-height:1.05;margin-bottom:18px}
@@ -165,7 +167,7 @@
 
     /* PRICING */
     .pricing{padding:96px 28px;background:var(--dark);border-top:1px solid var(--border);position:relative;overflow:hidden}
-    .pricing::before{content:'';position:absolute;inset:0;background-image:url('https://bicmwjtkncjkguumbidq.supabase.co/storage/v1/object/public/images/pricing-bg.jpg');background-size:cover;background-position:center 40%;opacity:0.20;z-index:0}
+    .pricing::before{content:'';position:absolute;inset:0;background-image:url('/images/bg/web/overland-trail.jpg');background-size:cover;background-position:center 40%;opacity:0.20;z-index:0}
     .pricing .sec-eye,.pricing .sec-h2,.pricing .pg{position:relative;z-index:1}
     .pg{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:var(--max);margin:0 auto}
     .pc{background:rgba(13,13,13,0.50);border:1px solid rgba(46,46,46,0.7);border-radius:16px;padding:30px 26px;position:relative;transition:transform .2s,border-color .2s;backdrop-filter:blur(8px)}.pc:hover{transform:translateY(-4px)}
@@ -233,6 +235,7 @@
       .img-band{height:180px}
       .ncta{padding:12px 16px;font-size:13px;min-height:44px}
       .pbtn{padding:14px;min-height:44px}
+      .hbtn2 .bol{width:100%;max-width:420px;padding:14px 20px}
     }
 
     /* Inline prose links: 44px tap height (mobile audit 2026-09-15) */
@@ -263,6 +266,7 @@
     <a href="#how-it-works" class="nl">How it works</a>
     <a href="#features" class="nl">Features</a>
     <a href="#pricing" class="nl">Pricing</a>
+    <a href="/shop.html#merch" class="nl">Merch</a>
     <a href="/login.html" class="nl">Log in</a>
     <a href="/signup.html" class="ncta">Create Your Free Profile</a>
     <button type="button" class="ham" aria-label="Menu" aria-expanded="false" onclick="toggleMenu()"><span></span><span></span><span></span></button>
@@ -272,6 +276,7 @@
   <a href="#how-it-works">How It Works</a>
   <a href="#features">Features</a>
   <a href="#pricing">Pricing</a>
+  <a href="/shop.html#merch">Merch</a>
   <a href="/login.html">Log In</a>
   <a href="/signup.html" class="mob-cta">Create Your Free Profile</a>
 </div>
@@ -287,7 +292,10 @@
     <p class="hsub fu d2">BuildBio gives every modified vehicle its own <strong>public profile page</strong>. One QR code. Anyone who scans it sees every mod, every spec — instantly.</p>
     <div class="hbtns fu d3">
       <a href="/signup.html" class="btnl bpl">Create Your Free Profile</a>
-      <a href="/vehicle-profile.html" class="btnl bgl">See a live profile →</a>
+      <a href="https://buildbio.app/v/457f9622" class="btnl bgl">See a live profile →</a>
+    </div>
+    <div class="hbtn2 fu d3">
+      <a href="/start.html" class="btnl bol">Start your build, no account needed</a>
     </div>
     <div class="hero-free-note fu d3">$0 — Free to get started. No credit card required.</div>
     <div class="hstats fu d4">
@@ -316,7 +324,7 @@
       <div class="qsticker">
         <div class="qbrand"><span class="q1">BUILD</span><span class="q2">BIO</span></div>
         <div class="qr">
-          <img src="/assets/qr/qr-demo-master-v7.webp" alt="BuildBio QR code — scan to view the build" style="width:100%;height:100%;display:block;"/>
+          <img src="/assets/qr/qr-demo-master-v8.webp" alt="BuildBio QR code — scan to view the build" style="width:100%;height:100%;display:block;"/>
         </div>
         <div class="qlbl">Scan for full build specs</div>
       </div>
@@ -375,7 +383,7 @@
         <div class="fi"><div class="fck">✓</div><div><strong>For Sale toggle</strong> (PLUS — coming soon) — list your vehicle in one click</div></div>
         <div class="fi"><div class="fck">✓</div><div><strong>Multiple vehicles</strong> — daily driver, weekend build, project car — all in one place</div></div>
       </div>
-      <a href="/vehicle-profile.html" class="btnl bpl" style="display:inline-flex">See a live example →</a>
+      <a href="https://buildbio.app/v/457f9622" class="btnl bpl" style="display:inline-flex">See a live example →</a>
     </div>
     <div class="pcm">
       <div class="pcmh">
@@ -512,7 +520,7 @@
       <a href="/shop.html" class="flink">Shop</a>
       <a href="/community.html" class="flink">Community</a>
       <a href="/mission.html" class="flink">Mission</a>
-      <a href="/vehicle-profile.html" class="flink">Sample profile</a>
+      <a href="https://buildbio.app/v/457f9622" class="flink">Sample profile</a>
       <a href="/privacy.html" class="flink">Privacy</a>
       <a href="/terms.html" class="flink">Terms</a>
       <a href="/affiliate-disclosure.html" class="flink">Affiliate Disclosure</a>

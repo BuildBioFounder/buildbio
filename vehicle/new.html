@@ -490,16 +490,18 @@ document.getElementById('form-vehicle').addEventListener('submit', async e => {
     bmp.close && bmp.close();
     return await new Promise((ok, no) => c.toBlob(b => b ? ok(b) : no(new Error('encode failed')), 'image/jpeg', quality));
   }
-  let primaryPhoto = null;
+  let primaryPhoto = null, photoErr = null;
   for (let i = 0; i < photoFiles.length; i++) {
     let file = photoFiles[i], ext = 'jpg', type = 'image/jpeg';
     try { file = await shrinkImage(photoFiles[i]); }
     catch (e) {
-      if (photoFiles[i].size > 5 * 1024 * 1024) { console.warn('photo skipped, could not decode and over 5 MB:', photoFiles[i].name); continue; }
+      if (photoFiles[i].size > 5 * 1024 * 1024) { console.warn('photo skipped, could not decode and over 5 MB:', photoFiles[i].name); photoErr = photoErr || 'this photo format could not be read on this device. Try a JPG or PNG'; continue; }
       ext = photoFiles[i].name.split('.').pop(); type = photoFiles[i].type;
     }
-    const path = `vehicles/${vehicle.id}/${i}.${ext}`;
+    // Storage RLS: the folder after vehicles/ must be the uploader's auth.uid().
+    const path = `vehicles/${currentUser.id}/${vehicle.id}-${i}.${ext}`;
     const { error: upErr } = await sb.storage.from('images').upload(path, file, { contentType: type, upsert: true });
+    if (upErr) { console.error('photo upload failed:', upErr); photoErr = photoErr || (upErr.message || 'upload failed'); }
     if (!upErr && i === 0) {
       const { data: urlData } = sb.storage.from('images').getPublicUrl(path);
       primaryPhoto = urlData.publicUrl;
@@ -520,8 +522,14 @@ document.getElementById('form-vehicle').addEventListener('submit', async e => {
   }
 
   window.__vehicleSubmitKey = null; // creation confirmed — next add-vehicle gets a fresh key
-  showMsg('Vehicle created! Redirecting...', 'success');
-  setTimeout(() => { window.location.href = `/vehicle-profile.html?id=${vehicle.id}`; }, 1500);
+  if (photoErr) {
+    // The vehicle itself saved; only the photo did not. Say so, then go on.
+    showMsg('Vehicle created, but the photo did not upload (' + photoErr + '). You can add it from your profile. Redirecting...', 'error');
+    setTimeout(() => { window.location.href = `/vehicle-profile.html?id=${vehicle.id}`; }, 5000);
+  } else {
+    showMsg('Vehicle created! Redirecting...', 'success');
+    setTimeout(() => { window.location.href = `/vehicle-profile.html?id=${vehicle.id}`; }, 1500);
+  }
 });
 
 // Sign Out (shared nav, shared-components §2)
