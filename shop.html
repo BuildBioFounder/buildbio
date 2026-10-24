@@ -204,7 +204,7 @@
     .merch-email::placeholder{color:var(--dim)}
     .merch-consent{display:flex;align-items:flex-start;gap:12px;min-height:44px;padding:10px 0;font-size:14px;line-height:1.5;color:var(--muted);cursor:pointer}
     .merch-consent input{flex:0 0 auto;width:22px;height:22px;margin:0;accent-color:var(--orange);cursor:pointer}
-    .merch-hp{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
+    .merch-hp{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
     .merch-btn{justify-content:center;width:100%;min-height:48px;font-size:16px}
     .merch-btn[disabled]{opacity:.6;cursor:wait;transform:none}
     .merch-err{font-size:14px;line-height:1.5;color:#F2A27F;margin:0}
@@ -270,7 +270,7 @@
 </section>
 
 <!-- MERCH SIGNUP (founder 2026-10-23: merch coming soon, sign up for launch updates) -->
-<section id="merch" class="sec-alt merch-sec">
+<section id="merch" class="sec-alt merch-sec" style="position:relative">
   <div class="sec sec-center">
     <div class="sec-eyebrow fu">BB MERCH</div>
     <h2 class="sec-h2 fu d1">CUSTOM BUILDBIO MERCH.<br><em>COMING SOON.</em></h2>
@@ -411,7 +411,7 @@
 
 <!-- IMAGE BAND -->
 <div class="img-band">
-  <div class="img-band-img" style="background-image:url('images/bg/bronco-mud-trail.png');background-position:center 45%"></div>
+  <div class="img-band-img" style="background-image:url('/images/bg/web/bronco-mud-trail.jpg');background-position:center 45%"></div>
   <div class="img-band-overlay"></div>
   <div class="img-band-content">
     <div class="img-band-label">BUILT NOT BOUGHT</div>
