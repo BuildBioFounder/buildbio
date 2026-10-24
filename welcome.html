@@ -122,6 +122,12 @@
     .draft-alt { display: none; margin-top: 12px; background: transparent; border: 1px solid var(--border); border-radius: 8px; color: var(--text-dim); font-family: var(--font-body); font-size: 15px; padding: 10px 16px; cursor: pointer; width: 100%; }
     .draft-alt.show { display: block; }
 
+    /* SOCIALS NUDGE (founder instruction 2026-10-24): one quiet line, no button */
+    .socials-nudge { font-size: 14px; line-height: 1.6; color: var(--text-dim); margin-top: 20px; }
+    .socials-nudge a { color: var(--orange); text-decoration: none; padding: 13px 0; }   /* inline padding = 44px tap area without opening a gap in the line */
+    .socials-nudge a:hover { text-decoration: underline; }
+    .draft-card .socials-nudge { margin-top: 14px; }
+
     /* ── Mobile-first base (founder standard 2026-08-16) ──────────────────
        Appended last so it wins the cascade. */
     body { font-size: 16px; }
@@ -175,6 +181,7 @@
       <button type="button" class="cta-btn" id="btn-publish">Publish My Build</button>
       <button type="button" class="draft-alt" id="btn-publish-nophoto">Publish without the photo</button>
       <div class="draft-status" id="draft-status" role="status" aria-live="polite"></div>
+      <p class="socials-nudge">Add your Instagram, X, YouTube, TikTok or Facebook so people who scan your build can follow you. <a href="/account.html">Add your socials</a></p>
     </div>
 
     <div class="status-card">
@@ -196,6 +203,7 @@
       Add Your First Vehicle
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </a>
+    <p class="socials-nudge" id="socials-nudge">Add your Instagram, X, YouTube, TikTok or Facebook so people who scan your build can follow you. <a href="/account.html">Add your socials</a></p>
 
     <div class="resend-section" id="resend-section">
       <p class="resend-text">Haven't received the confirmation email? Check your spam folder, or request a new one.</p>
@@ -306,6 +314,7 @@ function showDraftCard(user, existing) {
   card.classList.add('show');
   // The draft card is the next step, so the generic CTA steps aside.
   document.getElementById('cta').style.display = 'none';
+  document.getElementById('socials-nudge').style.display = 'none';   // the card carries its own copy of the line
 }
 
 document.getElementById('btn-resend').addEventListener('click', async () => {
