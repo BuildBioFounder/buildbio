@@ -98,8 +98,14 @@
     .acc-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
 
     .qr-section { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
-    .qr-img { width: 80px; height: 80px; border-radius: 8px; background: #fff; padding: 4px; }
-    .qr-img img { width: 100%; height: 100%; }
+    /* Sticker QR (founder 2026-10-24): the master sticker frame with the live code
+       (generate-qr style=core) composited into its white square: 25.36% offset,
+       49.28% span of the 1:1 art. Round crop so the frame's black corners never read
+       as a hard square on soft-black. 168px on phones keeps the code at ~83px. */
+    .qr-img { position: relative; flex-shrink: 0; width: 168px; height: 168px; border-radius: 50%; overflow: hidden; background: #000; }
+    .qr-img .qr-frame { position: absolute; left: 0; top: 0; width: 100%; height: 100%; max-width: none; display: block; }
+    .qr-img .qr-core { position: absolute; left: 25.36%; top: 25.36%; width: 49.28%; height: 49.28%; max-width: none; display: block; }
+    @media (min-width: 769px) { .qr-img { width: 200px; height: 200px; } }
     .qr-text { font-size: 12px; color: var(--text-muted); }
     .qr-text a { color: var(--orange); text-decoration: none; }
 
@@ -324,7 +330,9 @@ function initials(first, last, username) {
 
   // generate-qr constructs the profile URL server-side from the vehicle id (the
   // endpoint no longer accepts an arbitrary target). Pass the public id explicitly.
-  const qrUrl = `${SUPABASE_URL}/functions/v1/generate-qr?v=${encodeURIComponent(v.vehicle_public_id)}&size=200`;
+  const qrUrl = `${SUPABASE_URL}/functions/v1/generate-qr?v=${encodeURIComponent(v.vehicle_public_id)}&size=300&style=core`;
+  // style=core (generate-qr v15) returns only the modules + BB mark; the sticker
+  // frame art is composited around it in .qr-img below.
 
   // Check if current user is owner
   const { data: { session } } = await sb.auth.getSession();
@@ -447,7 +455,7 @@ function initials(first, last, username) {
         </div>
         ${v.accuracy_confirmed_date ? '<div class="accuracy"><div class="acc-dot"></div>Last confirmed accurate: ' + new Date(v.accuracy_confirmed_date).toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'}) + '</div>' : ''}
         <div class="qr-section">
-          <div class="qr-img"><img src="${qrUrl}" alt="QR Code"></div>
+          <div class="qr-img"><img class="qr-frame" src="/assets/qr/sticker-frame-600.webp" alt="" aria-hidden="true" width="600" height="600"><img class="qr-core" src="${qrUrl}" alt="BuildBio sticker QR code for this build" width="300" height="300"></div>
           <div class="qr-text">Scan this code to view this profile<br>on any device.</div>
         </div>
         ${socialHtml}

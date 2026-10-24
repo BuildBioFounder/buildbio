@@ -177,21 +177,27 @@
      Photos") and offered as a PNG download for Android and desktop. */
   .qr-panel { flex-basis:100%; margin-top:12px; padding:16px; border:1px solid var(--border,#2E2E2E);
               border-radius:10px; background:#141414; display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
-  .qr-panel img { width:180px; height:180px; border-radius:10px; background:#fff; padding:6px; flex:0 0 auto; }
+  /* Sticker QR (founder 2026-10-24): master sticker frame with the live code
+     (generate-qr style=core) composited into its white square — 25.36% offset,
+     49.28% span of the 1:1 art. Round crop hides the frame's black corners. */
+  .qr-sticker { position:relative; width:180px; height:180px; flex:0 0 auto; border-radius:50%; overflow:hidden; background:#000; }
+  .qr-sticker .qr-frame { position:absolute; left:0; top:0; width:100%; height:100%; max-width:none; display:block; }
+  .qr-sticker .qr-core { position:absolute; left:25.36%; top:25.36%; width:49.28%; height:49.28%; max-width:none; display:block; }
+  .qr-panel .qr-sticker { width:200px; height:200px; }
   .qr-panel .qr-side { flex:1 1 200px; min-width:0; display:flex; flex-direction:column; gap:10px; }
   .qr-panel .qr-hint { font-size:12.5px; line-height:1.5; color:var(--text-muted,#B4B2A9); }
   .qr-panel .qr-actions { display:flex; gap:8px; flex-wrap:wrap; }
   .qr-panel .qr-soon { display:inline-flex; align-items:center; padding:6px 12px; border-radius:999px; background:var(--dark-2); border:1px solid rgba(122,140,80,.35); color:var(--olive-light); font-size:11.5px; font-weight:600; letter-spacing:.02em; line-height:1.2; cursor:default; user-select:none; }
   .qr-panel .qr-err { font-size:12.5px; color:#E85D2C; }
   .qr-panel .qr-wallet[hidden] { display:none; }
-  .qr-panel img { cursor: zoom-in; }
+  .qr-panel .qr-sticker { cursor: zoom-in; }
   /* Full-screen QR (founder ruling 2026-09-22): tap the code in Account Settings and it
      fills the phone, alone, like a photo in the gallery, so the owner can hold it up for
      a prospect to scan. White ground for contrast; the vehicle name so the owner knows
      which build they are showing. Tap anywhere, Esc, or the back gesture closes it. */
   .qr-full { position: fixed; inset: 0; z-index: 9999; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 16px; cursor: zoom-out; }
   .qr-full[hidden] { display: none; }
-  .qr-full img { width: min(92vw, 92vh, 720px); height: auto; aspect-ratio: 1 / 1; display: block; }
+  .qr-full .qr-sticker { width: min(92vw, 80vh, 720px); height: auto; aspect-ratio: 1 / 1; }
   .qr-full .qr-full-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: clamp(18px, 4.5vw, 26px); letter-spacing: 0.04em; text-transform: uppercase; color: #0d0d0d; text-align: center; }
   .qr-full .qr-full-hint { font-size: 12px; color: #6b6b6b; text-align: center; }   /* .btn is inline-flex, which would beat the hidden attribute */
 
@@ -238,7 +244,7 @@
   <div class="msg" id="msg"></div>
 
   <div class="qr-full" id="qr-full" hidden role="dialog" aria-modal="true" aria-label="Your QR code, full screen">
-    <img id="qr-full-img" alt="QR code, full screen">
+    <div class="qr-sticker"><img class="qr-frame" src="/assets/qr/sticker-frame-1254.webp" alt="" aria-hidden="true" width="1254" height="1254" loading="lazy"><img class="qr-core" id="qr-full-img" alt="BuildBio sticker QR code, full screen"></div>
     <div class="qr-full-name" id="qr-full-name"></div>
     <div class="qr-full-hint">Hold this up for them to scan. Tap anywhere to close.</div>
   </div>
@@ -623,13 +629,30 @@ document.querySelectorAll('#btn-logout, #btn-logout-m').forEach(el => el.addEven
    normally taint it, because the QR embeds the BuildBio logo from storage as an
    external <image>. So the logo is fetched separately and inlined as a data URI
    first; the canvas then stays clean and toBlob works. If that fetch fails we
-   fall back to the no_logo variant rather than handing back a broken file. */
+   fall back to the no_logo variant rather than handing back a broken file.
+
+   Sticker design (founder 2026-10-24): generate-qr v15 style=core returns only
+   the modules + quiet zone with the BB mark already inlined as a data URI. The
+   master sticker frame (same-origin webp, so the canvas stays untainted) is
+   drawn first at 1254x1254, then the core into its white square: 618px at
+   offset 318 (25.36% / 49.28% of the art). */
 (function () {
-  var QR_DISPLAY = 512, QR_EXPORT = 1024;
+  var QR_DISPLAY = 512, QR_CORE_EXPORT = 800;
+  var STICKER_PX = 1254, STICKER_CORE_X = 318, STICKER_CORE_PX = 618;
+  var STICKER_FRAME_EXPORT = '/assets/qr/sticker-frame-1254.webp';
 
   function qrEndpoint(pid, size, noLogo) {
     return SUPABASE_URL + '/functions/v1/generate-qr?v=' + encodeURIComponent(pid) +
-           '&size=' + size + (noLogo ? '&no_logo=true' : '');
+           '&size=' + size + '&style=core' + (noLogo ? '&no_logo=true' : '');
+  }
+
+  function loadImg(src) {
+    return new Promise(function (ok, no) {
+      var i = new Image();
+      i.onload = function () { ok(i); };
+      i.onerror = function () { no(new Error('image decode: ' + src.slice(0, 40))); };
+      i.src = src;
+    });
   }
 
   async function inlineLogo(svgText) {
@@ -650,18 +673,14 @@ document.querySelectorAll('#btn-logout, #btn-logout-m').forEach(el => el.addEven
   async function svgToPngBlob(svgText) {
     var url = URL.createObjectURL(new Blob([svgText], { type: 'image/svg+xml' }));
     try {
-      var img = await new Promise(function (ok, no) {
-        var i = new Image();
-        i.onload = function () { ok(i); };
-        i.onerror = function () { no(new Error('svg decode')); };
-        i.src = url;
-      });
+      var both = await Promise.all([loadImg(STICKER_FRAME_EXPORT), loadImg(url)]);
       var c = document.createElement('canvas');
-      c.width = QR_EXPORT; c.height = QR_EXPORT;
+      c.width = STICKER_PX; c.height = STICKER_PX;
       var ctx = c.getContext('2d');
+      ctx.drawImage(both[0], 0, 0, STICKER_PX, STICKER_PX);
       ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, QR_EXPORT, QR_EXPORT);
-      ctx.drawImage(img, 0, 0, QR_EXPORT, QR_EXPORT);
+      ctx.fillRect(STICKER_CORE_X, STICKER_CORE_X, STICKER_CORE_PX, STICKER_CORE_PX);
+      ctx.drawImage(both[1], STICKER_CORE_X, STICKER_CORE_X, STICKER_CORE_PX, STICKER_CORE_PX);
       return await new Promise(function (ok) { c.toBlob(ok, 'image/png'); });
     } finally { URL.revokeObjectURL(url); }
   }
@@ -669,10 +688,11 @@ document.querySelectorAll('#btn-logout, #btn-logout-m').forEach(el => el.addEven
   async function buildPng(pid) {
     var svgText;
     try {
-      var r = await fetch(qrEndpoint(pid, QR_EXPORT, false));
-      svgText = await inlineLogo(await r.text());
+      var r = await fetch(qrEndpoint(pid, QR_CORE_EXPORT, false));
+      if (!r.ok) throw new Error('core ' + r.status);
+      svgText = await inlineLogo(await r.text());   // no-op for style=core (mark is already a data URI)
     } catch (e) {
-      var r2 = await fetch(qrEndpoint(pid, QR_EXPORT, true));   // logo-less fallback
+      var r2 = await fetch(qrEndpoint(pid, QR_CORE_EXPORT, true));   // logo-less fallback
       svgText = await r2.text();
     }
     return svgToPngBlob(svgText);
@@ -683,8 +703,8 @@ document.querySelectorAll('#btn-logout, #btn-logout-m').forEach(el => el.addEven
     var full = document.getElementById('qr-full'), img = document.getElementById('qr-full-img'), name = document.getElementById('qr-full-name');
     function close() { if (full.hidden) return; full.hidden = true; document.body.style.overflow = ''; if (history.state && history.state.qrFull) history.back(); }
     document.addEventListener('click', function (e) {
-      var q = e.target.closest('.qr-panel img.qr-img');
-      if (q) { img.src = qrEndpoint(q.dataset.pid, QR_EXPORT, false); name.textContent = q.dataset.name || ''; full.hidden = false; document.body.style.overflow = 'hidden'; history.pushState({ qrFull: 1 }, ''); return; }
+      var q = e.target.closest('.qr-panel .qr-sticker');
+      if (q) { img.src = qrEndpoint(q.dataset.pid, QR_CORE_EXPORT, false); name.textContent = q.dataset.name || ''; full.hidden = false; document.body.style.overflow = 'hidden'; history.pushState({ qrFull: 1 }, ''); return; }
       if (e.target.closest('#qr-full')) close();
     });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
@@ -708,7 +728,10 @@ document.querySelectorAll('#btn-logout, #btn-logout-m').forEach(el => el.addEven
     }
 
     panel.innerHTML =
-      '<img alt="QR code for this vehicle — tap to show full screen" class="qr-img" data-pid="' + pid + '" data-name="' + (btn.dataset.label || '').replace(/-/g, ' ') + '" src="' + qrEndpoint(pid, QR_DISPLAY, false) + '">' +
+      '<div class="qr-sticker" data-pid="' + pid + '" data-name="' + (btn.dataset.label || '').replace(/-/g, ' ') + '">' +
+        '<img class="qr-frame" src="/assets/qr/sticker-frame-600.webp" alt="" aria-hidden="true" width="600" height="600">' +
+        '<img class="qr-core" alt="BuildBio sticker QR code for this vehicle — tap to show full screen" src="' + qrEndpoint(pid, QR_DISPLAY, false) + '" width="512" height="512">' +
+      '</div>' +
       '<div class="qr-side">' +
         '<p class="qr-hint"><strong>On your phone:</strong> press and hold the code, then choose Add to Photos or Download image.</p>' +
         '<div class="qr-actions">' +
