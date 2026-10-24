@@ -390,10 +390,10 @@ function initials(first, last, username) {
     const pf = BBSocials.PLATFORMS[k];
     const l = BBSocials.link(k, owner[pf.col]);
     if (!l) return;
-    socials.push(`<a href="${esc(safeUrl(l.url))}" class="social-pill" target="_blank" rel="noopener noreferrer" aria-label="${esc(pf.name + ' ' + l.label)}">${BBSocials.ICONS[k]}<span class="sp-name">${esc(pf.name)}</span><span class="sp-handle">${esc(l.label)}</span></a>`);
+    socials.push(`<a href="${esc(safeUrl(l.url))}" class="social-pill" target="_blank" rel="noopener noreferrer" aria-label="${esc(pf.name + ' ' + l.label)}">${BBSocials.ICONS[k]}<span class="sp-name">${esc(pf.name)}</span></a>`);
   });
   if (socials.length > 0) {
-    socialHtml = `<section class="social-section"><div class="social-label">Find ${esc(owner?.first_name || owner?.username || 'the owner')} on</div><div class="social-pills">${socials.join('')}</div></section>`;
+    socialHtml = `<section class="social-section"><div class="social-label">Follow this build on</div><div class="social-pills">${socials.join('')}</div></section>`;
   }
 
   // Other builds on the same account. The QR that brought the visitor here
