@@ -163,6 +163,14 @@
     .save-skip{font-size:13px;color:var(--dim);margin-top:16px;cursor:pointer;transition:color .15s;background:none;border:none;font-family:'DM Sans',sans-serif}
     .save-skip:hover{color:var(--muted)}
 
+    /* BUILD DISCIPLINE (founder 2026-10-24): optional single-select chip row, radiogroup semantics */
+    .disc-chips{display:flex;flex-wrap:wrap;gap:8px}
+    .disc-chip{min-height:44px;padding:0 16px;border-radius:22px;background:var(--card);border:1px solid var(--border-l);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.2;cursor:pointer;transition:border-color .15s,background .15s,color .15s;max-width:100%}
+    .disc-chip:hover{border-color:rgba(232,93,44,.5);color:var(--text)}
+    .disc-chip[aria-checked="true"]{border-color:var(--orange);background:rgba(232,93,44,.15);color:var(--text)}
+    .disc-chip:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+    .preview-disc{display:inline-block;margin:2px 0 8px;padding:3px 10px;border-radius:999px;border:1px solid rgba(232,93,44,.45);background:rgba(232,93,44,.1);color:var(--orange);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+
     /* DRAFT (bb_draft_v1): resume banner + phone-only note */
     .draft-banner{background:var(--card);border:1px solid var(--border-l);border-left:3px solid var(--orange);border-radius:14px;padding:18px 20px;margin-bottom:28px}
     .draft-banner-text{font-size:15px;color:var(--text);line-height:1.5;margin-bottom:4px}
@@ -367,6 +375,10 @@
         <input type="text" id="v-color" autocomplete="off" placeholder="Cement Gray, Cavalry Blue...">
       </div>
     </div>
+    <div class="field">
+      <div class="field-label" id="disc-label">What kind of build is it? <span style="color:var(--dim);font-weight:400;text-transform:none;letter-spacing:0;font-family:'DM Sans',sans-serif">(optional)</span></div>
+      <div class="disc-chips" id="discChips" role="radiogroup" aria-labelledby="disc-label"></div>
+    </div>
     <div class="btn-row">
       <button class="btn-primary" onclick="goStep(2)">Next</button>
     </div>
@@ -471,6 +483,7 @@
       </div>
       <div class="preview-body">
         <div class="preview-vehicle" id="previewVehicle"><em>YOUR</em> BUILD</div>
+        <div class="preview-disc" id="previewDisc" style="display:none"></div>
         <div class="preview-trim" id="previewTrim"></div>
         <div id="previewModsWrap" style="display:none">
           <div class="preview-section-label">Modifications</div>
@@ -611,6 +624,43 @@
     });
     var other=document.createElement('option');other.value='Other';other.textContent='Other';ml.appendChild(other);
   };
+
+  // Build discipline chips (optional, single-select). Static list from
+  // bb-draft.js, so the no-account builder needs no network.
+  var selectedDiscipline='';
+  var discWrap=document.getElementById('discChips');
+  BBDraft.DISCIPLINES.forEach(function(d){
+    var b=document.createElement('button');
+    b.type='button';b.className='disc-chip';b.setAttribute('role','radio');
+    b.setAttribute('aria-checked','false');b.dataset.slug=d.slug;b.textContent=d.name;
+    discWrap.appendChild(b);
+  });
+  function discChips(){return Array.prototype.slice.call(discWrap.querySelectorAll('.disc-chip'));}
+  function setDiscipline(slug){
+    selectedDiscipline=BBDraft.disciplineName(slug)?slug:'';
+    var chips=discChips(),any=false;
+    chips.forEach(function(c){var on=c.dataset.slug===selectedDiscipline;c.setAttribute('aria-checked',on?'true':'false');c.tabIndex=on?0:-1;if(on)any=true;});
+    if(!any&&chips[0])chips[0].tabIndex=0;   // roving tabindex: one tab stop for the group
+  }
+  function pickDiscipline(slug){
+    setDiscipline(slug);
+    // Bubble a change so the draft autosave (onEdit) picks it up like any other field.
+    discWrap.dispatchEvent(new Event('change',{bubbles:true}));
+  }
+  discWrap.addEventListener('click',function(e){
+    var c=e.target.closest('.disc-chip');if(!c)return;
+    pickDiscipline(c.dataset.slug===selectedDiscipline?'':c.dataset.slug);   // tap again to clear
+  });
+  discWrap.addEventListener('keydown',function(e){
+    var chips=discChips(),i=chips.indexOf(document.activeElement);if(i<0)return;
+    var n=null;
+    if(e.key==='ArrowRight'||e.key==='ArrowDown')n=(i+1)%chips.length;
+    else if(e.key==='ArrowLeft'||e.key==='ArrowUp')n=(i-1+chips.length)%chips.length;
+    else if(e.key==='Home')n=0;else if(e.key==='End')n=chips.length-1;
+    if(n===null)return;
+    e.preventDefault();chips[n].focus();pickDiscipline(chips[n].dataset.slug);
+  });
+  setDiscipline('');
 
   // Photo handling (single profile photo)
   var profilePhoto=null;
@@ -865,6 +915,9 @@
     if(color)trimLine=color+(trim?' / '+trim:'');
     else trimLine=trim;
     document.getElementById('previewTrim').textContent=trimLine;
+    var discName=BBDraft.disciplineName(selectedDiscipline);
+    var pd=document.getElementById('previewDisc');
+    pd.textContent=discName||'';pd.style.display=discName?'inline-block':'none';
 
     // Profile photo
     var hero=document.getElementById('previewHero');
@@ -981,7 +1034,8 @@
         make:document.getElementById('v-make').value,
         model:document.getElementById('v-model').value,
         trim:document.getElementById('v-trim').value.trim(),
-        color:document.getElementById('v-color').value.trim()
+        color:document.getElementById('v-color').value.trim(),
+        discipline:selectedDiscipline||''
       },
       photo:profilePhoto?{dataUrl:profilePhoto,name:profilePhotoName||'photo.jpg'}:null,
       mods:mods,
@@ -1052,6 +1106,7 @@
     }
     document.getElementById('v-trim').value=v.trim||'';
     document.getElementById('v-color').value=v.color||'';
+    setDiscipline(v.discipline||'');
 
     if(d.photo&&d.photo.dataUrl){profilePhoto=d.photo.dataUrl;profilePhotoName=d.photo.name||'photo.jpg';showThumb();}
 
@@ -1097,6 +1152,7 @@
       saveNow();
     }else{
       photosDropped=false;
+      setDiscipline('');
       BBDraft.clear();
     }
   }

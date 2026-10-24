@@ -279,9 +279,11 @@ function showDraftCard(user, existing) {
   const alt = document.getElementById('btn-publish-nophoto');
   const status = document.getElementById('draft-status');
 
-  document.getElementById('draft-vehicle').textContent = target
+  const discName = BBDraft.disciplineName && BBDraft.disciplineName(v.discipline);   // build discipline, when picked
+  document.getElementById('draft-vehicle').textContent = (target
     ? 'Add to your ' + [target.year, target.make, target.model].filter(Boolean).join(' ')
-    : (BBDraft.hasVehicle(draft) ? [v.year, v.make, v.model, v.trim].filter(Boolean).join(' ') : 'Vehicle details not finished');
+    : (BBDraft.hasVehicle(draft) ? [v.year, v.make, v.model, v.trim].filter(Boolean).join(' ') : 'Vehicle details not finished'))
+    + (discName ? ' · ' + discName : '');
   document.getElementById('draft-meta').textContent =
     mods + (mods === 1 ? ' mod' : ' mods') + ' · ' +
     (target && target.primary_photo ? 'your current profile photo stays' : (draft.photo ? 'profile photo included' : 'no profile photo')) +

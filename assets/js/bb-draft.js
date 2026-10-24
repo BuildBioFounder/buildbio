@@ -3,10 +3,11 @@
    account) and welcome.html (publishes it once the account exists). Also
    loadable in Node for the unit test (module.exports).
 
-   Shape: { version:1, savedAt, vehicle:{year,make,model,trim,color},
+   Shape: { version:1, savedAt, vehicle:{year,make,model,trim,color,discipline?},
             photo:{dataUrl,name}|null,
             mods:[{category,brand,part,notes,rating,photo:{dataUrl}|null}],
-            photosDropped?, localOnly?, publish?:{key,vehicleId,photoDone,modsDone} }
+            photosDropped?, localOnly?, publish?:{key,vehicleId,photoDone,modsDone,disciplineDone} }
+   vehicle.discipline is a disciplines.slug (optional); see DISCIPLINES below.
 
    Every storage access is wrapped: if localStorage is blocked (private mode,
    quota, disabled) the builder keeps working and the draft simply is not kept. */
@@ -16,6 +17,27 @@
   var KEY = 'bb_draft_v1';
   var MAX_CHARS = Math.floor(4.5 * 1024 * 1024);   // ~4.5 MB of serialized JSON
   var PHOTO_MAX = 1600, PHOTO_FALLBACK_MAX = 1200, JPEG_Q = 0.82;
+
+  /* Build disciplines (founder 2026-10-24). Static mirror of the public
+     `disciplines` table (slug + name, sort_order) so the no-account builder
+     and the welcome card need no network. publish() resolves the slug to the
+     live row id, so a renamed or reordered row never breaks a publish. */
+  var DISCIPLINES = [
+    { slug: 'daily-street', name: 'Daily / Street' },
+    { slug: 'desert-baja', name: 'Desert / Baja' },
+    { slug: 'drag', name: 'Drag' },
+    { slug: 'drift', name: 'Drift' },
+    { slug: 'overland', name: 'Overland' },
+    { slug: 'pavement-princess', name: 'Pavement Princess' },
+    { slug: 'rock-crawl', name: 'Rock Crawl' },
+    { slug: 'show-stance', name: 'Show / Stance' },
+    { slug: 'tow-rig-work-truck', name: 'Tow Rig / Work Truck' },
+    { slug: 'track-time-attack', name: 'Track / Time Attack' }
+  ];
+  function disciplineName(slug) {
+    for (var i = 0; i < DISCIPLINES.length; i++) if (DISCIPLINES[i].slug === slug) return DISCIPLINES[i].name;
+    return null;
+  }
 
   function storage() {
     try { var s = root.localStorage; return s || null; } catch (e) { return null; }
@@ -80,7 +102,7 @@
   function hasContent(d) {
     if (!d) return false;
     var v = d.vehicle || {};
-    return !!(v.year || v.make || v.model || v.trim || v.color || d.photo || publishableMods(d).length);
+    return !!(v.year || v.make || v.model || v.trim || v.color || v.discipline || d.photo || publishableMods(d).length);
   }
 
   function relativeTime(ts, now) {
@@ -151,7 +173,9 @@
      never creates a second vehicle or a duplicate mod. Resolves { vehicleId,
      photoSkipped }; rejects with an Error whose .step names the failed step.
      opts.skipPhoto publishes without the profile photo. opts.existingVehicle
-     ({id, primary_photo}) adds to a vehicle the account already has. */
+     ({id, primary_photo}) adds to a vehicle the account already has.
+     The discipline step (vehicle_disciplines) runs after the vehicle and before
+     the photo and mods; it is best-effort and never rejects the publish. */
   function publish(sb, user, draft, onProgress, opts) {
     opts = opts || {};
     var say = onProgress || function () {};
@@ -160,6 +184,32 @@
     var P = d.publish;
     function persist() { writeRaw(d); }
     function fail(step, msg) { var e = new Error(msg); e.step = step; throw e; }
+
+    /* Primary build discipline. Skipped when the draft has none, when a
+       previous attempt already finished it, or when the vehicle already has a
+       primary (existing-vehicle branch: never overwrite the owner's choice).
+       Any failure is logged and swallowed so the photo and mods still publish. */
+    function linkDiscipline(vid) {
+      var slug = d.vehicle && d.vehicle.discipline;
+      if (!slug || P.disciplineDone) return Promise.resolve();
+      function done() { P.disciplineDone = true; persist(); }
+      return Promise.resolve().then(function () {
+        return sb.from('vehicle_disciplines').select('discipline_id').eq('vehicle_id', vid).eq('is_primary', true).limit(1);
+      }).then(function (r) {
+        if (r.error) throw new Error(r.error.message);
+        if (r.data && r.data.length) return done();
+        return Promise.resolve(sb.from('disciplines').select('id').eq('slug', slug).limit(1)).then(function (r2) {
+          if (r2.error) throw new Error(r2.error.message);
+          if (!r2.data || !r2.data.length) throw new Error('unknown discipline ' + slug);
+          return Promise.resolve(sb.from('vehicle_disciplines').insert({ vehicle_id: vid, discipline_id: r2.data[0].id, is_primary: true })).then(function (r3) {
+            if (r3.error && r3.error.code !== '23505') throw new Error(r3.error.message);   // 23505 = already linked
+            done();
+          });
+        });
+      }).catch(function (e) {
+        try { root.console.warn('[bb-draft] build discipline not saved:', e && e.message ? e.message : e); } catch (_) {}
+      });
+    }
 
     return Promise.resolve().then(function () {
       if (P.vehicleId) return { id: P.vehicleId, primary_photo: P.hadPhoto ? 'x' : null };
@@ -184,6 +234,8 @@
         P.vehicleId = r.data.id; P.hadPhoto = false; persist();
         return r.data;
       });
+    }).then(function (vehicle) {
+      return linkDiscipline(vehicle.id).then(function () { return vehicle; });
     }).then(function (vehicle) {
       var vid = vehicle.id;
       var photoSkipped = false;
@@ -250,7 +302,7 @@
   }
 
   var api = {
-    KEY: KEY, MAX_CHARS: MAX_CHARS, PHOTO_MAX: PHOTO_MAX, PHOTO_FALLBACK_MAX: PHOTO_FALLBACK_MAX, JPEG_Q: JPEG_Q,
+    KEY: KEY, MAX_CHARS: MAX_CHARS, DISCIPLINES: DISCIPLINES, disciplineName: disciplineName, PHOTO_MAX: PHOTO_MAX, PHOTO_FALLBACK_MAX: PHOTO_FALLBACK_MAX, JPEG_Q: JPEG_Q,
     read: read, save: save, writeRaw: writeRaw, clear: clear, fit: fit, serialize: serialize,
     hasVehicle: hasVehicle, hasContent: hasContent, publishableMods: publishableMods, relativeTime: relativeTime,
     downscaleDataUrl: downscaleDataUrl, downscaleFile: downscaleFile, dataUrlToBlob: dataUrlToBlob,
