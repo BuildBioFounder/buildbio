@@ -13,8 +13,19 @@ const NO_CACHE = {
 // or oversized input is rejected before it ever reaches the database.
 const PUBLIC_ID_RE = /^[0-9a-f]{8}$/i;
 
+// Where the visit came from (qr_scans.source). Only a bare hit, which is what a
+// camera scan of the sticker produces, counts as a QR scan. BuildBio's own links
+// tag themselves: ?src=email (welcome email), ?src=share (a link the member sends
+// out), ?src=web (on-site links). Anything else, including no src, records 'qr'.
+const TAGGED_SOURCES = new Set(['email', 'share', 'web']);
+function scanSource(src) {
+  const s = typeof src === 'string' ? src.toLowerCase() : '';
+  return TAGGED_SOURCES.has(s) ? s : 'qr';
+}
+
 module.exports = async (req, res) => {
-  const { pid } = req.query;
+  const { pid, src } = req.query;
+  const source = scanSource(Array.isArray(src) ? src[0] : src);
 
   if (process.env.BOLO_RESOLVER_KILLSWITCH === 'true') {
     res.writeHead(307, { ...NO_CACHE, Location: '/vehicle-status-unavailable.html' });
@@ -86,7 +97,7 @@ module.exports = async (req, res) => {
             'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
             'Prefer': 'return=minimal',
           },
-          body: JSON.stringify({ vehicle_id: v.vehicle_id }),
+          body: JSON.stringify({ vehicle_id: v.vehicle_id, source }),
           signal: scanController.signal,
         });
       } finally {
