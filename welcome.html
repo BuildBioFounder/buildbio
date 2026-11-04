@@ -227,6 +227,7 @@ function toggleMenu(){var h=document.querySelector('.ham'),m=document.getElement
 document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('click',function(){var h=document.querySelector('.ham');h.classList.remove('open');h.setAttribute('aria-expanded','false');document.getElementById('mobMenu').classList.remove('open');document.body.style.overflow=''})});
 </script>
 
+<script src="/assets/js/bb-funnel.js"></script>
 <script src="/assets/js/supabase.js"></script>
 <script src="/assets/js/bb-draft.js"></script>
 <script>
@@ -240,6 +241,7 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
     window.location.href = 'signup.html';
     return;
   }
+  if (window.bbFunnel) window.bbFunnel.track('account_created');
 
   const user = session.user;
   const username = user.user_metadata?.username || 'builder';

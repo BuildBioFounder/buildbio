@@ -93,8 +93,18 @@
     });
   }
 
+  /* Build-funnel beacon (assets/js/bb-funnel.js), when the page loaded it.
+     Absent in Node and on pages without the beacon: then a no-op. */
+  function funnel(step) {
+    try { if (root.bbFunnel && root.bbFunnel.track) root.bbFunnel.track(step); } catch (e) {}
+  }
+
   function save(draft, opts) {
-    return fit(draft, opts).then(function (d) { return writeRaw(d) ? d : null; }, function () { return null; });
+    return fit(draft, opts).then(function (d) {
+      if (!writeRaw(d)) return null;
+      funnel('draft_saved');   // bb-funnel sends it once per session
+      return d;
+    }, function () { return null; });
   }
 
   function hasVehicle(d) { return !!(d && d.vehicle && d.vehicle.year && d.vehicle.make && d.vehicle.model); }
@@ -232,6 +242,7 @@
           ? 'Your account already has its vehicle profile. Additional vehicle profiles are coming soon.'
           : r.error.message);
         P.vehicleId = r.data.id; P.hadPhoto = false; persist();
+        funnel('vehicle_published');
         return r.data;
       });
     }).then(function (vehicle) {
