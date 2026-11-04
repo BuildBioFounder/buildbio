@@ -691,6 +691,7 @@ document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('
 </script>
 
 <!-- Supabase JS -->
+<script src="/assets/js/bb-funnel.js" data-bb-step="signup_open"></script>
 <script src="/assets/js/supabase.js"></script>
 <script>
 const SUPABASE_URL  = 'https://bicmwjtkncjkguumbidq.supabase.co';
@@ -773,6 +774,7 @@ usernameInput.addEventListener('input', () => {
 // ── Sign Up ──
 document.getElementById('form-signup').addEventListener('submit', async e => {
   e.preventDefault();
+  if (window.bbFunnel) window.bbFunnel.track('signup_submit');   // every tap, before validation
   clearMsg();
   const username = document.getElementById('signup-username').value.trim();
   const email    = document.getElementById('signup-email').value.trim();
