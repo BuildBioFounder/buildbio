@@ -569,6 +569,19 @@ const SUPABASE_URL  = 'https://bicmwjtkncjkguumbidq.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_vt_RE80rfii-6Pb6wtPLhA_t_hyYiTE';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
+// ?next= return path (claim.html, 2026-11-03). Only a path on this same site is accepted:
+// must start with a single "/" and resolve to this origin, so it can never bounce off-site.
+function safeNext() {
+  try {
+    const raw = new URLSearchParams(window.location.search).get('next');
+    if (!raw || !/^\/(?![\/\\])/.test(raw)) return null;
+    const u = new URL(raw, window.location.origin);
+    return u.origin === window.location.origin ? u.pathname + u.search + u.hash : null;
+  } catch (e) { return null; }
+}
+const NEXT = safeNext();
+if (NEXT) document.querySelectorAll('.form-subheading a[href="/signup.html"]').forEach(a => { a.href = '/signup.html?next=' + encodeURIComponent(NEXT); });
+
 function showMsg(text, type = 'error') {
   const el = document.getElementById('msg');
   el.textContent = text;
@@ -601,6 +614,7 @@ document.getElementById('form-login').addEventListener('submit', async e => {
   setLoading(btn, false);
 
   if (error) return showMsg(error.message);
+  if (NEXT) { window.location.href = NEXT; return; }
 
   const { data: vehicles } = await sb.from('vehicles').select('id').eq('owner_id', data.user.id).limit(1);
   if (vehicles && vehicles.length > 0) {
@@ -612,7 +626,9 @@ document.getElementById('form-login').addEventListener('submit', async e => {
 
 // A member with no vehicle yet but a builder draft saved on this phone goes to welcome.html,
 // where the draft is published (feat/start-draft-persist). Otherwise the Add Vehicle page.
+// A pending claim (claim.html saved its token, bb_claim_t) goes back to the claim page first.
 function noVehicleTarget() {
+  try { const t = localStorage.getItem('bb_claim_t'); if (t) return '/claim.html?t=' + encodeURIComponent(t); } catch (e) {}
   try { if (localStorage.getItem('bb_draft_v1')) return '/welcome.html'; } catch (e) {}
   return 'vehicle/new.html';
 }
@@ -620,6 +636,7 @@ function noVehicleTarget() {
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
   if (session) {
+    if (NEXT) { window.location.href = NEXT; return; }
     const { data: vehicles } = await sb.from('vehicles').select('id').eq('owner_id', session.user.id).limit(1);
     if (vehicles && vehicles.length > 0) {
       window.location.href = 'account.html';

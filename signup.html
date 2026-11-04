@@ -697,6 +697,20 @@ const SUPABASE_URL  = 'https://bicmwjtkncjkguumbidq.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_vt_RE80rfii-6Pb6wtPLhA_t_hyYiTE';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
+// ?next= return path (claim.html, 2026-11-03). Only a path on this same site is accepted:
+// must start with a single "/" and resolve to this origin, so it can never bounce off-site.
+function safeNext() {
+  try {
+    const raw = new URLSearchParams(window.location.search).get('next');
+    if (!raw || !/^\/(?![\/\\])/.test(raw)) return null;
+    const u = new URL(raw, window.location.origin);
+    return u.origin === window.location.origin ? u.pathname + u.search + u.hash : null;
+  } catch (e) { return null; }
+}
+const NEXT = safeNext();
+const withNext = path => NEXT ? path + '?next=' + encodeURIComponent(NEXT) : path;
+if (NEXT) document.querySelectorAll('.form-subheading a[href="/login.html"]').forEach(a => { a.href = withNext('/login.html'); });
+
 // ── Tab switching ──
 document.querySelectorAll('.auth-tab').forEach(tab => {
   tab.addEventListener('click', () => {
@@ -793,7 +807,7 @@ document.getElementById('form-signup').addEventListener('submit', async e => {
   const { data, error } = await sb.auth.signUp({
     email,
     password,
-    options: { data: { username }, emailRedirectTo: window.location.origin + '/welcome.html' }
+    options: { data: { username }, emailRedirectTo: window.location.origin + (NEXT || '/welcome.html') }
   });
   setLoading(btn, false);
 
@@ -809,7 +823,7 @@ document.getElementById('form-signup').addEventListener('submit', async e => {
     showMsg('An account with this email already exists. Try signing in or resetting your password.', 'error');
   } else if (data.session) {
     // Email confirmation is off (or auto-confirmed): the account is live now.
-    window.location.href = '/welcome.html';
+    window.location.href = NEXT || '/welcome.html';
   } else {
     // Confirmation required. Replace the form with a clear next step instead of
     // clearing it and leaving a one-line message (tester-kit finding, 2026-09-22).
@@ -818,7 +832,7 @@ document.getElementById('form-signup').addEventListener('submit', async e => {
       '<div class="confirm-panel">' +
         '<h2 style="font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:26px;text-transform:uppercase;margin:0 0 10px">Check your email</h2>' +
         '<p style="color:var(--text-dim,#B4B2A9);line-height:1.6;margin:0 0 18px">A confirmation link is on its way to <strong style="color:var(--text,#fff);font-weight:500">' + esc(email) + '</strong>. Open it on this phone, then sign in and add your first build.</p>' +
-        '<a href="/login.html" class="btn btn-primary" style="display:inline-flex;min-height:44px;align-items:center">Go to sign in</a>' +
+        '<a href="' + esc(withNext('/login.html')) + '" class="btn btn-primary" style="display:inline-flex;min-height:44px;align-items:center">Go to sign in</a>' +
         '<p style="font-size:12px;color:var(--text-muted,#6B6B6B);margin:16px 0 0">Nothing after a minute? Check spam, then sign in — the sign-in page can resend it.</p>' +
       '</div>';
     form.scrollIntoView({ block: 'start', behavior: 'smooth' });
@@ -840,7 +854,7 @@ document.getElementById('form-login').addEventListener('submit', async e => {
   setLoading(btn, false);
 
   if (error) return showMsg(error.message);
-  window.location.href = 'account.html';
+  window.location.href = NEXT || 'account.html';
 });
 
 // ── Forgot Password ──
@@ -864,7 +878,7 @@ function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&l
   const e = q.get('email'), u = q.get('username');
   if (e) document.getElementById('signup-email').value = e;
   if (u) document.getElementById('signup-username').value = u;
-  if (e || u) history.replaceState(null, '', '/signup.html');   // keep the address bar clean
+  if (e || u) history.replaceState(null, '', withNext('/signup.html'));   // keep the address bar clean (next survives)
 })();
 
 // ── Redirect if already signed in ──
@@ -873,6 +887,7 @@ function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&l
   if (session) {
     var target = 'account.html';
     try { if (localStorage.getItem('bb_draft_v1')) target = '/welcome.html'; } catch (e) {}
+    if (NEXT) target = NEXT;
     window.location.href = target;
   }
 })();
