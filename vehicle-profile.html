@@ -298,7 +298,7 @@ function initials(first, last, username) {
 
   const { data: owner } = await sb.from('profiles').select('*').eq('id', v.owner_id).single();
   const { data: mods } = await sb.from('modifications').select('*').eq('vehicle_id', v.id).order('category').order('created_at');
-  const { data: scans } = await sb.from('qr_scans').select('id').eq('vehicle_id', v.id);
+  const { data: scans } = await sb.from('qr_scans').select('id').eq('vehicle_id', v.id).eq('source', 'qr');   // QR scans only; email and shared-link visits carry their own source
   const { data: vd } = await sb.from('vehicle_disciplines').select('disciplines(name)').eq('vehicle_id', v.id).eq('is_primary', true).limit(1);
   const discName = vd && vd[0] && vd[0].disciplines ? vd[0].disciplines.name : '';   // primary build discipline, if any
   const scanCount = scans ? scans.length : 0;
