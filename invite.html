@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZRDDXMNK05"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZRDDXMNK05');
+</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildBio — Claim Invites</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+  <link rel="apple-touch-icon" href="/favicon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #E85D2C;
+      --orange-dim: #B84820;
+      --olive: #5C6B3A;
+      --olive-light: #7A8C50;
+      --black: #0D0D0D;
+      --dark: #0D0D0D;
+      --dark-2: #161616;
+      --dark-3: #1E1E1E;
+      --dark-4: #2A2A2A;
+      --border: rgba(255,255,255,0.08);
+      --text: #fff;
+      --text-dim: #B4B2A9;
+      --muted: #B4B2A9;
+      --dim: #6B6B6B;
+      --max: 1160px;
+      --font-display: 'Barlow Condensed', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--black);
+      color: var(--text);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+
+    /* ─── SHARED NAV (docs/shared-components-20260922.md §2) ─── */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav .logo{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:22px;letter-spacing:.3px;line-height:1;text-decoration:none;display:flex;align-items:baseline;gap:0;margin:0}
+    .logo-mark{height:30px;width:auto;margin-right:10px;align-self:center;flex-shrink:0}
+    .nav .logo .BL{font-size:28px;color:var(--orange)}.nav .logo .rb{color:var(--orange)}.nav .logo .BL2{font-size:28px;color:var(--olive-light)}.nav .logo .rb2{color:var(--olive-light)}
+    .nav-r{display:flex;align-items:center;gap:24px}
+    .nl{color:var(--muted);font-size:13px;text-decoration:none;transition:color .15s}.nl:hover{color:var(--text)}
+    .ncta{background:var(--orange);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;transition:opacity .15s,transform .1s;display:inline-flex;align-items:center}.ncta:hover{opacity:.88;transform:translateY(-1px)}
+    /* HAMBURGER MENU */
+    .ham{display:none;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;padding:11px;margin-right:-11px;z-index:301;background:none;border:none}
+    .ham span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:transform .3s,opacity .3s}
+    .ham.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .ham.open span:nth-child(2){opacity:0}
+    .ham.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    .mob-menu{position:fixed;inset:0;z-index:300;background:linear-gradient(to bottom,#E85D2C,#5C6B3A);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;opacity:0;pointer-events:none;transition:opacity .3s}
+    .mob-menu.open{opacity:1;pointer-events:auto}
+    .mob-menu a{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;text-transform:uppercase;color:#fff;text-decoration:none;padding:16px 0;letter-spacing:.04em;transition:opacity .15s}
+    .mob-menu a:hover{opacity:.8}
+    .mob-menu .mob-cta{margin-top:20px;background:rgba(0,0,0,.25);padding:16px 40px;border-radius:12px;font-size:22px}
+    @media(max-width:640px){
+      .nav{padding:0 16px}
+      .nav-r .nl{display:none}
+      .nav-r .ncta{display:none}
+      .ham{display:flex}
+    }
+
+    /* ─── MICRO-FOOTER (docs/shared-components-20260922.md §3) ─── */
+    .mfoot{max-width:var(--max,1160px);margin:32px auto 0;padding:18px 28px;border-top:1px solid var(--border);display:flex;gap:18px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--dim,#6B6B6B)}
+    .mfoot a{color:var(--muted,#B4B2A9);text-decoration:none;padding:12px 0;display:inline-flex;align-items:center}
+    .mfoot a:hover{color:var(--text,#fff)}
+    @media(max-width:640px){.mfoot{padding:16px}}
+
+    /* ─── LINE-SETTING (Typography Law §2, ledger 1560) ─── */
+    h1,h2,h3,.h1,.eyebrow,.page-title,.form-heading,.hero-tagline{text-wrap:balance}
+    p,li,.hint,.blurb,.sub,.lead,.form-subheading,.hero-sub,.legal{text-wrap:pretty}
+
+    /* ─── TYPE WEIGHTS (Typography Law v2) ─── */
+    strong{font-weight:500}
+    h3{font-family:'Barlow Condensed',sans-serif;font-weight:700}
+
+    .page {
+      min-height: 100vh;
+      padding-top: 58px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media (max-width: 768px) {
+      .page { grid-template-columns: 1fr; }
+      .hero { display: none; }
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: var(--dark-2);
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(160deg, rgba(232,93,44,0.15) 0%, transparent 50%),
+        linear-gradient(to bottom, rgba(13,13,13,0) 60%, rgba(13,13,13,0.95) 100%);
+      z-index: 1;
+    }
+
+    .hero-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.45;
+      display: block;
+    }
+
+    .hero-content {
+      position: absolute; inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 48px;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 4vw, 52px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .hero-tagline span { color: var(--orange); }
+
+    .hero-sub {
+      font-size: 15px;
+      color: var(--text-dim);
+      line-height: 1.6;
+      max-width: 360px;
+    }
+
+    .form-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 48px 40px;
+      background: var(--dark);
+      position: relative;
+    }
+
+    .form-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 1px; height: 100%;
+      background: linear-gradient(to bottom, transparent, var(--border) 20%, var(--border) 80%, transparent);
+    }
+
+    /* SUBTLE BG (founder ruling 2026-10-16): blueprint texture at 12% behind the form */
+    .form-panel::after{content:'';position:absolute;inset:0;background:url('images/bg/web/turbo-b-mark.jpg') center/cover no-repeat;opacity:.26;z-index:0;pointer-events:none}
+    .form-inner{position:relative;z-index:1}
+
+    .form-inner {
+      width: 100%;
+      max-width: 400px;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 40px;
+      text-decoration: none;
+    }
+
+    .bbmark {
+      width: 44px; height: 44px;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .logo-wordmark {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text);
+    }
+
+    .form-heading {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+
+    .form-subheading {
+      font-size: 14px;
+      color: var(--text-dim);
+      margin-bottom: 32px;
+    }
+
+    .form-subheading a {
+      color: var(--orange);
+      text-decoration: none;
+    }
+
+    .form-subheading a {
+      padding: 12px 0;
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+    }
+
+    .form-subheading a:hover { text-decoration: underline; }
+
+    .sso-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .sso-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--dark-3);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .sso-btn:hover {
+      background: var(--dark-4);
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    .sso-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .divider-text {
+      font-size: 12px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--dark-3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      transition: all 0.2s;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .field input::placeholder { color: #555; }
+
+    .field input:focus {
+      border-color: var(--orange);
+      background: var(--dark-4);
+      box-shadow: 0 0 0 3px rgba(232,93,44,0.1);
+    }
+
+    .field input.error { border-color: #e05555; }
+
+    .field-pw { position: relative; }
+    .field-pw input { padding-right: 52px; }
+    .pw-toggle {
+      position: absolute;
+      right: 4px; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 0;
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pw-toggle:hover { color: var(--text); }
+
+    .forgot-row {
+      text-align: right;
+      margin-bottom: 16px;
+    }
+
+    .forgot-row a {
+      font-size: 13px;
+      color: var(--text-dim);
+      text-decoration: none;
+    }
+
+    .forgot-row a:hover {
+      color: var(--orange);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--orange);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      background: var(--orange-dim);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(232,93,44,0.3);
+    }
+
+    .submit-btn:active:not(:disabled) { transform: translateY(0); }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-spinner {
+      display: none;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      position: absolute;
+      right: 16px; top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .submit-btn.loading .btn-spinner { display: block; }
+
+    @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+
+    .msg {
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .msg.error {
+      background: rgba(224,85,85,0.12);
+      border: 1px solid rgba(224,85,85,0.3);
+      color: #f07070;
+    }
+
+    .msg.success {
+      background: rgba(92,107,58,0.2);
+      border: 1px solid rgba(92,107,58,0.4);
+      color: #a8c070;
+    }
+
+    .msg.show { display: block; }
+
+    .legal {
+      font-size: 11px;
+      color: #555;
+      text-align: center;
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+
+    .legal a {
+      color: #666;
+      text-decoration: none;
+      padding: 12px 0;
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+    }
+    .legal a:hover { color: var(--text-dim); text-decoration: underline; }
+
+    @media(max-width:480px){
+      .form-panel{padding:32px 20px}
+      .forgot-row a{padding:12px 0;display:inline-flex;align-items:center;min-height:44px}
+    }
+
+    /* ── Mobile-first base (founder standard 2026-08-16) ──────────────────
+       Appended last so it wins the cascade. */
+    body { font-size: 16px; }
+    input, select, textarea { font-size: 16px !important; }
+    img { max-width: 100%; height: auto; }
+    .btn, .mod-btn, button, select { min-height: 44px; }
+    .nav .logo { padding: 8px 0; }                 /* 28px wordmark -> 44px tap height */
+    .footer .fl2 { padding: 7px 0; display: inline-flex; align-items: baseline; }
+    a.nl, a.flink, .mfoot a { min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
+
+    /* ─── INVITE PAGE (founder tool, 2026-11-03) ─── */
+    .page{display:block;padding:58px 16px 0}
+    .inv{max-width:640px;margin:0 auto;padding:28px 0 8px;position:relative;z-index:1}
+    .inv h1{font-family:var(--font-display);font-weight:700;font-size:30px;text-transform:uppercase;margin:0 0 6px}
+    .inv .lead{font-size:15px;color:var(--text-dim);line-height:1.6;margin:0 0 18px}
+    .inv-status{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+    .pill{font-size:12px;letter-spacing:.04em;padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:var(--dark-2);color:var(--text-dim)}
+    .pill.ok{border-color:rgba(122,140,80,.5);color:#a8c070}
+    .pill.warn{border-color:rgba(232,93,44,.5);color:var(--orange)}
+    .inv-box{background:var(--dark-2);border:1px solid var(--border);border-radius:12px;padding:18px;margin:0 0 24px}
+    .inv-box h2{font-family:var(--font-display);font-weight:700;font-size:20px;text-transform:uppercase;margin:0 0 14px}
+    .field select{width:100%;padding:12px 14px;background:var(--dark-3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font-body);font-size:16px;-webkit-appearance:none;appearance:none}
+    .hint{font-size:13px;color:var(--dim);line-height:1.6;margin:10px 0 0}
+    .claim-row{border-top:1px solid var(--border);padding:14px 0;display:flex;flex-direction:column;gap:6px}
+    .claim-row:first-of-type{border-top:none;padding-top:0}
+    .cr-veh{font-family:var(--font-display);font-weight:700;font-size:18px;text-transform:uppercase}
+    .cr-meta{font-size:14px;color:var(--text-dim);line-height:1.5;word-break:break-word}
+    .cr-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .cr-actions button{min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--border);background:var(--dark-3);color:var(--text);font-family:var(--font-body);font-size:14px;cursor:pointer}
+    .cr-actions button.primary{background:var(--orange);border-color:var(--orange);color:#fff}
+    .st{display:inline-block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:var(--dark-4);color:var(--text-dim)}
+    .st.sent,.st.pending{color:var(--orange)}
+    .st.claimed{color:#a8c070}
+    [hidden]{display:none !important}
+    @media(min-width:769px){.page{padding:58px 28px 0}}
+  </style>
+</head>
+<body>
+
+<!-- NAV (docs/shared-components-20260922.md §2) -->
+<nav class="nav">
+  <a href="/" class="logo"><img src="/images/brand/double-b-mark-128.png" alt="" class="logo-mark" height="30" decoding="async"><span class="BL">B</span><span class="rb">UILD</span><span class="BL2">B</span><span class="rb2">IO</span></a>
+  <div class="nav-r">
+    <a href="/how-it-works.html" class="nl">How it works</a>
+    <a href="/home.html#features" class="nl">Features</a>
+    <a href="/pricing.html" class="nl">Pricing</a>
+    <a href="/shop.html#merch" class="nl">Merch</a>
+    <a href="/search.html" class="nl">Search</a>
+    <a href="/login.html" class="nl">Log in</a>
+    <a href="/signup.html" class="ncta">Create Your Free Profile</a>
+    <button type="button" class="ham" aria-label="Menu" aria-expanded="false" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="/how-it-works.html">How It Works</a>
+  <a href="/home.html#features">Features</a>
+  <a href="/pricing.html">Pricing</a>
+  <a href="/shop.html#merch">Merch</a>
+  <a href="/search.html">Search</a>
+  <a href="/login.html">Log In</a>
+  <a href="/signup.html" class="mob-cta">Create Your Free Profile</a>
+</div>
+
+<div class="page">
+  <!-- Founder-only. Anyone not signed in with an allowlisted email sees an empty page;
+       the claim-invite edge function enforces the same allowlist server-side. -->
+  <main class="inv" id="inv" hidden>
+    <h1>Claim invites</h1>
+    <p class="lead">Send a pre-built profile to its owner. They get one email with a link to take it over. Links last 30 days.</p>
+
+    <div class="inv-status" id="inv-status"></div>
+    <div class="msg" id="msg"></div>
+
+    <section class="inv-box">
+      <h2>New invite</h2>
+      <form id="form-invite" novalidate>
+        <div class="field">
+          <label for="inv-vehicle">Pre-built vehicle</label>
+          <select id="inv-vehicle"></select>
+        </div>
+        <div class="field">
+          <label for="inv-email">Owner's email</label>
+          <input type="email" id="inv-email" placeholder="owner@example.com" autocomplete="off" inputmode="email">
+        </div>
+        <div class="field">
+          <label for="inv-name">Owner's name (optional)</label>
+          <input type="text" id="inv-name" placeholder="First and last name" autocomplete="off" maxlength="80">
+        </div>
+        <button type="submit" class="submit-btn" id="btn-send">
+          Send invite
+          <span class="btn-spinner"></span>
+        </button>
+      </form>
+      <p class="hint">To pre-build a profile: sign in as seeds@buildbio.app, build it with Start a build, then sign back in here. Seed builds stay unlisted until claimed. Sending a new invite for a vehicle withdraws its earlier one.</p>
+    </section>
+
+    <section class="inv-box">
+      <h2>Invites</h2>
+      <div id="inv-list"></div>
+    </section>
+  </main>
+</div>
+
+<!-- MICRO-FOOTER (docs/shared-components-20260922.md §3) -->
+<footer class="mfoot">
+  <span>© 2026 BuildBio</span>
+  <a href="/terms.html">Terms</a>
+  <a href="/privacy.html">Privacy</a>
+</footer>
+
+<script>
+function toggleMenu(){var h=document.querySelector('.ham'),m=document.getElementById('mobMenu');h.classList.toggle('open');m.classList.toggle('open');h.setAttribute('aria-expanded',m.classList.contains('open')?'true':'false');document.body.style.overflow=m.classList.contains('open')?'hidden':''}
+document.querySelectorAll('#mobMenu a').forEach(function(a){a.addEventListener('click',function(){var h=document.querySelector('.ham');h.classList.remove('open');h.setAttribute('aria-expanded','false');document.getElementById('mobMenu').classList.remove('open');document.body.style.overflow=''})});
+</script>
+
+<script src="/assets/js/supabase.js"></script>
+<script>
+/* invite.html (2026-11-03): founder tool for pre-built profile claims. Talks only to the
+   claim-invite edge function (list / create / resend / revoke); profile_claims and app_config
+   are service-role only, so nothing here reads them directly. */
+const SUPABASE_URL  = 'https://bicmwjtkncjkguumbidq.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_vt_RE80rfii-6Pb6wtPLhA_t_hyYiTE';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+const FOUNDER_EMAILS = ['founder@buildbio.app', 'blakesking@gmail.com'];   // same list as claim-invite
+
+const $ = id => document.getElementById(id);
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function showMsg(text, type = 'error') { const el = $('msg'); el.textContent = text; el.className = 'msg ' + type + ' show'; }
+function clearMsg() { $('msg').className = 'msg'; }
+const vLabel = v => [v.year, v.make, v.model].filter(Boolean).join(' ') + (v.nickname ? ' "' + v.nickname + '"' : '');
+const day = s => s ? new Date(s).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+
+let session = null;
+let vehicles = [];
+
+async function call(body) {
+  const r = await fetch(SUPABASE_URL + '/functions/v1/claim-invite', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + session.access_token },
+    body: JSON.stringify(body)
+  });
+  const res = await r.json().catch(() => ({}));
+  return { status: r.status, res };
+}
+
+function render(d) {
+  vehicles = d.vehicles || [];
+  const pills = [
+    d.seed_configured ? '<span class="pill ok">Seed account linked</span>' : '<span class="pill warn">Seed account not set (app_config.seed_owner_uid)</span>',
+    d.smtp_configured ? '<span class="pill ok">Email sending on</span>' : '<span class="pill warn">Email secret missing: invites stay pending</span>',
+    '<span class="pill">' + (d.open || 0) + ' of ' + (d.max_open || 50) + ' open</span>'
+  ];
+  $('inv-status').innerHTML = pills.join('');
+
+  const claimedIds = new Set((d.claims || []).filter(c => c.status === 'claimed').map(c => c.vehicle_id));
+  const sel = $('inv-vehicle');
+  sel.innerHTML = vehicles.length
+    ? vehicles.map(v => '<option value="' + esc(v.id) + '">' + esc(vLabel(v)) + ' · ' + esc(v.vehicle_public_id) + '</option>').join('')
+    : '<option value="">No pre-built vehicles yet</option>';
+  sel.disabled = !vehicles.length;
+
+  const byId = Object.fromEntries(vehicles.map(v => [v.id, v]));
+  const rows = (d.claims || []).map(c => {
+    const v = byId[c.vehicle_id];
+    const open = c.status === 'pending' || c.status === 'sent';
+    const lapsed = open && Date.parse(c.expires_at) <= Date.now();
+    const st = lapsed ? 'expired' : c.status;
+    const when = c.status === 'claimed' ? 'Claimed ' + day(c.claimed_at) + (c.email_mismatch ? ' (different email)' : '')
+      : c.status === 'sent' ? 'Sent ' + day(c.sent_at) + ' · expires ' + day(c.expires_at)
+      : 'Created ' + day(c.created_at);
+    return '<div class="claim-row">' +
+      '<div class="cr-veh">' + esc(v ? vLabel(v) : (c.status === 'claimed' ? 'Claimed build' : 'Vehicle')) + '</div>' +
+      '<div class="cr-meta"><span class="st ' + esc(st) + '">' + esc(st) + '</span> ' + esc(c.invited_email) + (c.invited_name ? ' · ' + esc(c.invited_name) : '') + '</div>' +
+      '<div class="cr-meta">' + esc(when) + '</div>' +
+      (open ? '<div class="cr-actions">' +
+        '<button type="button" class="primary" data-act="resend" data-id="' + esc(c.id) + '">Resend</button>' +
+        '<button type="button" data-act="revoke" data-id="' + esc(c.id) + '">Withdraw</button></div>' : '') +
+      '</div>';
+  });
+  $('inv-list').innerHTML = rows.length ? rows.join('') : '<p class="hint" style="margin:0">No invites yet.</p>';
+}
+
+async function refresh() {
+  const { status, res } = await call({ action: 'list' });
+  if (status === 401 || status === 403) { $('inv').hidden = true; return; }
+  if (!res.ok) return showMsg(res.error || 'Could not load invites.');
+  render(res);
+}
+
+$('form-invite').addEventListener('submit', async e => {
+  e.preventDefault();
+  clearMsg();
+  const vehicle_id = $('inv-vehicle').value;
+  const email = $('inv-email').value.trim();
+  const name = $('inv-name').value.trim();
+  if (!vehicle_id) return showMsg('Pick a pre-built vehicle first.');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showMsg('Enter a valid email.');
+  const btn = $('btn-send');
+  btn.disabled = true; btn.classList.add('loading');
+  const { status, res } = await call({ action: 'create', vehicle_id, email, name });
+  btn.disabled = false; btn.classList.remove('loading');
+  if (res.ok) {
+    showMsg('Invite sent to ' + email + '.', 'success');
+    $('inv-email').value = ''; $('inv-name').value = '';
+  } else if (status === 503 && res.claim_id) {
+    showMsg('Invite saved but not sent: ' + (res.error || 'email is not configured') + '. Use Resend once email is on.');
+  } else {
+    showMsg(res.error || 'Could not send the invite.');
+  }
+  refresh();
+});
+
+$('inv-list').addEventListener('click', async e => {
+  const b = e.target.closest('button[data-act]');
+  if (!b) return;
+  clearMsg();
+  if (b.dataset.act === 'revoke' && !confirm('Withdraw this invite? Its link stops working.')) return;
+  b.disabled = true;
+  const { res } = await call({ action: b.dataset.act, claim_id: b.dataset.id });
+  if (res.ok) showMsg(b.dataset.act === 'resend' ? 'Sent again with a fresh 30-day link. The earlier link no longer works.' : 'Invite withdrawn.', 'success');
+  else showMsg(res.error || 'That did not work.');
+  refresh();
+});
+
+(async () => {
+  const { data } = await sb.auth.getSession();
+  session = data.session;
+  const email = (session && session.user && session.user.email || '').toLowerCase();
+  if (!session || !FOUNDER_EMAILS.includes(email)) return;   // show nothing
+  $('inv').hidden = false;
+  refresh();
+})();
+</script>
+</body>
+</html>
