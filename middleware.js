@@ -10,7 +10,10 @@
 export default function middleware(req) {
   const url = new URL(req.url);
   if (url.pathname === '/' || url.pathname === '/index.html') {
-    return Response.redirect(new URL('/home.html', url), 307);
+    // Keep the query string (?src=ig etc.) so a root-level attribution link still reaches the funnel beacon (GTM strategy v1, 2026-11-20).
+    const home = new URL('/home.html', url);
+    home.search = url.search;
+    return Response.redirect(home, 307);
   }
 }
 
